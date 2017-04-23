@@ -1,0 +1,1615 @@
+-------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\rbjoe\Dropbox\Kugejl\8. semester\Public Economics\Public_economics\Co
+> de\Stata output\log.txt
+  log type:  text
+ opened on:  23 Apr 2017, 19:37:11
+
+.                                                         
+. ********************************************************************************
+. 
+. ********************************************************************************
+. *VARIABLE GROUPS
+. ********************************************************************************
+. local y "ln_FDIInc_Out_Total"
+
+. local yy "ln_FDIInc_Out_Equity ln_FDIInc_Out_Dividends ln_FDIInc_Out_Reinvested ln_FDIInc
+> _Out_Debt"
+
+. local Y "FDIInc_Out_Total FDIInc_Out_Equity FDIInc_Out_Dividends FDIInc_Out_Reinvested FD
+> IInc_Out_Debt"
+
+. local Gravity_Nlog "GDP GDP_j distw"
+
+. local Gravity "ln_GDP ln_GDP_j ln_distw"
+
+. local Independent1 "Haven CIT_RATE HavenCIT_RATE"
+
+. local Independent2 "Small_Haven Large_Haven CIT_RATE Small_HavenCIT_RATE Large_HavenCIT_R
+> ATE"
+
+. local Control1 "contig comlang_off colony comcol" //EXCE
+
+. 
+. ********************************************************************************
+. 
+. 
+. ********************************************************************************
+. *GENERATE VARIABLES
+. ********************************************************************************
+. *Interaction terms 
+. gen HavenCIT_RATE = Haven*CIT_RATE
+
+. label variable HavenCIT_RATE "Haven.CIT_Rate "
+
+. gen Small_HavenCIT_RATE = Small_Haven*CIT_RATE
+
+. label variable Small_HavenCIT_RATE "Small Haven.CIT_Rate "
+
+. gen Large_HavenCIT_RATE = Large_Haven*CIT_RATE
+
+. label variable Large_HavenCIT_RATE "Large Haven.CIT_Rate "
+
+. 
+. 
+. *Encode assigns numerical values to each group in a variable
+. 
+. encode(COU), gen(COU_Tal)
+
+. encode(COUNTERPART_AREA), gen(COUNTERPART_AREA_Tal)
+
+. encode(Pair), gen(Pair_Tal)
+
+. 
+. *Create necessary logged variables
+. foreach var in `Y' `Gravity_Nlog' {
+  2. gen ln_`var' = log(`var')
+  3. }
+(20317 missing values generated)
+(21979 missing values generated)
+(22558 missing values generated)
+(22786 missing values generated)
+(23431 missing values generated)
+(1940 missing values generated)
+(1570 missing values generated)
+
+. 
+. *Create first differenced variables
+. sort Pair_Tal obsTime
+
+. foreach var in FDIInc_Out_Total FDIInc_Inw_Total ln_FDIInc_Out_Total ln_FDIInc_Inw_Total 
+> `Control_OLS1' {
+  2.         cap by Pair_Tal: generate dif`var'=`var'[_n]-`var'[_n-1]
+  3. }
+
+. 
+. ********************************************************************************
+. 
+. ********************************************************************************
+. *LABELS 
+. ********************************************************************************
+. 
+. label variable FDIInc_Out_Total                 "FDI income - Total (Outwards)"
+
+. label variable FDIInc_Out_Dividends     "FDI income - Dividends (Outwards)"
+
+. label variable FDIInc_Out_Equity                "FDI income - Income on Equity (Outwards)
+> "
+
+. label variable FDIInc_Out_Debt                  "FDI income - Interests from income on de
+> bt (Outwards)"
+
+. label variable FDIInc_Out_Reinvested    "FDI income - Reinvested earnings (Outwards)"
+
+. label variable FDIInc_Inw_Total                 "FDI income - Total (Inwards)"
+
+. label variable FDIInc_Inw_Dividends     "FDI income - Dividends (Inwards)"
+
+. label variable FDIInc_Inw_Equity                "FDI income - Income on Equity (Inwards)"
+
+. label variable FDIInc_Inw_Debt                  "FDI income - Interests from income on de
+> bt (Inwards)"
+
+. label variable FDIInc_Inw_Reinvested    "FDI income - Reinvested earnings (Inwards)"
+
+. label variable ln_GDP_j                                 "ln(GDP_i)"     
+
+. label variable ln_GDP_j                                 "$\ln(GDP_j)$"  
+
+. ********************************************************************************
+. 
+. ********************************************************************************
+. *ANALYSIS
+. ********************************************************************************
+. *Without OECD tax havens. 
+. *drop if COU == "LUX" // Luxembourg (no real obs)
+. *drop if COU == "IRL" // Ireland
+. 
+. *Panel
+. xtset Pair_Tal obsTime, yearly
+       panel variable:  Pair_Tal (unbalanced)
+        time variable:  obsTime, 2005 to 2015, but with gaps
+                delta:  1 year
+
+. 
+. *drop if Haven==0
+. 
+. /*
+> *Breusch-Pagan test
+> predict uhat, residuals
+> gen uhat2=uhat*uhat
+> regress uhat2  `Gravity' `Independent1' `Control1' b2015.obsTime
+> test  `Gravity' `Independent1' `Control1' 
+> */
+. 
+. *TJEK OP PÅ OM DU BOR BRUGE CLUSTERED STD ERRORS
+. 
+. *FIGURE ONE. 
+. regress `y' `Gravity' `Independent1' `Control1', robust
+
+Linear regression                                      Number of obs =    5850
+                                                       F( 10,  5839) =  764.42
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.5400
+                                                       Root MSE      =   2.124
+
+-------------------------------------------------------------------------------
+              |               Robust
+ln_FDIInc_O~l |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       ln_GDP |   .9758984   .0199772    48.85   0.000     .9367357    1.015061
+     ln_GDP_j |   .8373337   .0142389    58.81   0.000     .8094203    .8652472
+     ln_distw |  -.7922294    .031113   -25.46   0.000    -.8532223   -.7312365
+        Haven |   2.597662   .3265126     7.96   0.000     1.957577    3.237748
+     CIT_RATE |   .0331154   .0040447     8.19   0.000     .0251863    .0410446
+HavenCIT_RATE |  -.0300395   .0124773    -2.41   0.016    -.0544996   -.0055794
+       contig |   .2119134   .1102904     1.92   0.055    -.0042966    .4281234
+  comlang_off |   .7885908   .1001485     7.87   0.000     .5922627     .984919
+       colony |   1.236284   .1132668    10.91   0.000     1.014239    1.458329
+       comcol |   2.587183   .3194545     8.10   0.000     1.960934    3.213432
+        _cons |  -14.66616   .3661631   -40.05   0.000    -15.38397   -13.94834
+-------------------------------------------------------------------------------
+
+.         test CIT_RATE + HavenCIT_RATE=0
+
+ ( 1)  CIT_RATE + HavenCIT_RATE = 0
+
+       F(  1,  5839) =    0.07
+            Prob > F =    0.7964
+
+.                 scalar p1 = r(p)
+
+.         outreg2 using OLS, replace ctitle("Basic") ///
+>                                                         tex(frag pretty) word label alpha
+> (0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+>                                                          addstat("Adj. R-squared", e(r2_a
+> ),"No haven effect (p)", p1)  ///
+>                                                          dec(3) keep(`Gravity' `Independe
+> nt1' `Control1')
+OLS.tex
+OLS.rtf
+dir : seeout
+
+. 
+. *areg `y' `Gravity' `Independent1' `Control1', absorb(obsTime) vce(robust) noomitted     
+>                                                 
+.                                                          
+. regress `y' `Gravity' `Independent1' `Control1' b2015.obsTime, robust
+
+Linear regression                                      Number of obs =    5850
+                                                       F( 20,  5829) =  385.08
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.5417
+                                                       Root MSE      =  2.1219
+
+-------------------------------------------------------------------------------
+              |               Robust
+ln_FDIInc_O~l |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       ln_GDP |   .9548974   .0212678    44.90   0.000     .9132046    .9965901
+     ln_GDP_j |    .837207   .0142738    58.65   0.000     .8092251    .8651889
+     ln_distw |  -.7815055    .031248   -25.01   0.000    -.8427632   -.7202478
+        Haven |   2.600598   .3267194     7.96   0.000     1.960107     3.24109
+     CIT_RATE |   .0349367   .0042483     8.22   0.000     .0266085    .0432649
+HavenCIT_RATE |  -.0301388   .0124733    -2.42   0.016    -.0545912   -.0056865
+       contig |   .1828767   .1112541     1.64   0.100    -.0352227     .400976
+  comlang_off |   .8055406   .0999727     8.06   0.000     .6095571    1.001524
+       colony |   1.248122   .1134757    11.00   0.000     1.025667    1.470576
+       comcol |     2.5567   .3169843     8.07   0.000     1.935293    3.178107
+              |
+      obsTime |
+        2005  |   .3321679   .1320131     2.52   0.012     .0733732    .5909625
+        2006  |   .3832011   .1214114     3.16   0.002     .1451897    .6212126
+        2007  |   .3578983   .1235434     2.90   0.004     .1157074    .6000892
+        2008  |   .2764767   .1341991     2.06   0.039     .0133966    .5395568
+        2009  |   .3857825   .1320981     2.92   0.004     .1268213    .6447437
+        2010  |   .3854296   .1369758     2.81   0.005     .1169062    .6539531
+        2011  |   .0621814   .1194354     0.52   0.603    -.1719563    .2963192
+        2012  |  -.0020751   .1129659    -0.02   0.985    -.2235302    .2193799
+        2013  |  -.0360357     .08555    -0.42   0.674    -.2037454     .131674
+        2014  |   .0192037    .086644     0.22   0.825    -.1506507    .1890581
+              |
+        _cons |  -14.55935   .3711886   -39.22   0.000    -15.28702   -13.83168
+-------------------------------------------------------------------------------
+
+.         test CIT_RATE + HavenCIT_RATE=0
+
+ ( 1)  CIT_RATE + HavenCIT_RATE = 0
+
+       F(  1,  5829) =    0.16
+            Prob > F =    0.6885
+
+.                         scalar p1 = r(p)
+
+.         outreg2 using OLS, append ctitle("Yearly") ///
+>                                                         tex(frag pretty) word label alpha
+> (0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+>                                                          addstat("Adj. R-squared", e(r2_a
+> ),"No haven effect (p)", p1)  ///
+>                                                          dec(3) keep(`Gravity' `Independe
+> nt1' `Control1')
+OLS.tex
+OLS.rtf
+dir : seeout
+
+.                                                 
+. 
+. *regress `y' `Gravity' `Independent1' `Control1' b2015.obsTime b6.COU_Tal, robust // Refe
+> rence group: Germany (most observations)                                                 
+>                       
+. areg `y' `Gravity' `Independent1' `Control1' b2015.obsTime, absorb(COU_Tal) vce(robust)
+
+Linear regression, absorbing indicators           Number of obs   =       5850
+                                                  F(  20,   5803) =     280.61
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.6376
+                                                  Adj R-squared   =     0.6347
+                                                  Root MSE        =     1.8913
+
+-------------------------------------------------------------------------------
+              |               Robust
+ln_FDIInc_O~l |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       ln_GDP |   1.434591   .5612539     2.56   0.011     .3343236    2.534858
+     ln_GDP_j |   .8197255   .0137293    59.71   0.000     .7928109    .8466401
+     ln_distw |  -.8401813   .0282876   -29.70   0.000    -.8956355   -.7847271
+        Haven |   2.567681   .3162404     8.12   0.000     1.947732     3.18763
+     CIT_RATE |   .0596435   .0137751     4.33   0.000     .0326393    .0866478
+HavenCIT_RATE |   -.029198   .0121259    -2.41   0.016    -.0529693   -.0054267
+       contig |    .377188   .1097616     3.44   0.001     .1620143    .5923617
+  comlang_off |    .670639   .0998146     6.72   0.000     .4749651    .8663128
+       colony |    .968142   .0993027     9.75   0.000     .7734716    1.162812
+       comcol |   3.156365   .3847705     8.20   0.000     2.402071    3.910659
+              |
+      obsTime |
+        2005  |   .3450687   .1884733     1.83   0.067    -.0244093    .7145467
+        2006  |   .3777742   .1672893     2.26   0.024     .0498248    .7057237
+        2007  |   .2935261   .1636305     1.79   0.073    -.0272507    .6143029
+        2008  |    .381559   .1521433     2.51   0.012     .0833015    .6798166
+        2009  |    .543105   .1422543     3.82   0.000     .2642335    .8219764
+        2010  |   .6025759   .1417374     4.25   0.000     .3247177     .880434
+        2011  |   .3092219   .1266953     2.44   0.015      .060852    .5575919
+        2012  |   .1674478     .11751     1.42   0.154    -.0629156    .3978112
+        2013  |  -.1012514   .0951952    -1.06   0.288    -.2878696    .0853667
+        2014  |   .0350412   .1036855     0.34   0.735    -.1682211    .2383034
+              |
+        _cons |  -21.17785   7.866042    -2.69   0.007    -36.59822   -5.757473
+--------------+----------------------------------------------------------------
+      COU_Tal |   absorbed                                      (27 categories)
+
+.         test CIT_RATE + HavenCIT_RATE=0
+
+ ( 1)  CIT_RATE + HavenCIT_RATE = 0
+
+       F(  1,  5803) =    3.05
+            Prob > F =    0.0809
+
+.                         scalar p1 = r(p)
+
+.         outreg2 using OLS, append ctitle("Investor") ///
+>                                                         tex(frag pretty) word label alpha
+> (0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+>                                                          addstat("Adj. R-squared", e(r2_a
+> ),"No haven effect (p)", p1)  ///
+>                                                          dec(3) keep(`Gravity' `Independe
+> nt1' `Control1')                                                
+OLS.tex
+OLS.rtf
+dir : seeout
+
+.                                                  
+. *regress `y' `Gravity' `Independent1' `Control1' b2015.obsTime b6.COU_Tal  b59.COUNTERPAR
+> T_AREA_Tal, robust //Reference group: Germany
+. 
+. 
+. areg `y' `Gravity' `Independent1' `Control1' b2015.obsTime  b6.COU_Tal, absorb(COUNTERPAR
+> T_AREA_Ta) vce(robust) // Reference group: Germany (most observations)                   
+>                                                                        
+note: Haven omitted because of collinearity
+note: 5.COU_Tal omitted because of collinearity
+note: 11.COU_Tal omitted because of collinearity
+note: 21.COU_Tal omitted because of collinearity
+note: 27.COU_Tal omitted because of collinearity
+
+Linear regression, absorbing indicators           Number of obs   =       5850
+                                                  F(  45,   5601) =     173.11
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7348
+                                                  Adj R-squared   =     0.7231
+                                                  Root MSE        =     1.6466
+
+-------------------------------------------------------------------------------
+              |               Robust
+ln_FDIInc_O~l |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       ln_GDP |   1.409007    .493234     2.86   0.004     .4420777    2.375937
+     ln_GDP_j |   .3154953   .1655039     1.91   0.057    -.0089566    .6399472
+     ln_distw |  -1.091422   .0508707   -21.45   0.000    -1.191149   -.9916961
+        Haven |          0  (omitted)
+     CIT_RATE |   .0431969    .012321     3.51   0.000      .019043    .0673508
+HavenCIT_RATE |  -.0137146   .0105639    -1.30   0.194    -.0344239    .0069947
+       contig |   .1762039   .1112791     1.58   0.113    -.0419463    .3943542
+  comlang_off |   .5872983   .0984322     5.97   0.000      .394333    .7802636
+       colony |   1.005906   .1051935     9.56   0.000     .7996864    1.212126
+       comcol |   3.529387    .406463     8.68   0.000     2.732562    4.326212
+              |
+      obsTime |
+        2005  |    .056872   .1822738     0.31   0.755    -.3004552    .4141992
+        2006  |   .1538836    .154871     0.99   0.320    -.1497236    .4574908
+        2007  |   .1558551    .141416     1.10   0.270    -.1213751    .4330854
+        2008  |   .2303314   .1273435     1.81   0.071    -.0193112    .4799741
+        2009  |   .3853792   .1262246     3.05   0.002     .1379301    .6328284
+        2010  |   .5055944   .1186106     4.26   0.000     .2730716    .7381172
+        2011  |   .2764938   .1075048     2.57   0.010     .0657427    .4872448
+        2012  |   .1396473   .0994706     1.40   0.160    -.0553535    .3346482
+        2013  |  -.0959081   .0840624    -1.14   0.254     -.260703    .0688867
+        2014  |   .0410105   .0913466     0.45   0.653    -.1380641    .2200852
+              |
+      COU_Tal |
+         AUS  |   1.183794   1.039003     1.14   0.255    -.8530537    3.220642
+         AUT  |   1.806765   .4827942     3.74   0.000     .8603008    2.753228
+         BEL  |   1.160273   .5948729     1.95   0.051     -.005908    2.326455
+         CAN  |   1.868636   1.115228     1.68   0.094    -.3176428    4.054914
+         CHE  |          0  (empty)
+         DEU  |   .7300848   1.461641     0.50   0.617    -2.135299    3.595468
+         DNK  |   2.243088   .3962283     5.66   0.000     1.466327    3.019849
+         ESP  |     1.8546   1.028024     1.80   0.071    -.1607246    3.869925
+         EST  |    1.68437   1.097646     1.53   0.125    -.4674423    3.836182
+         FIN  |          0  (empty)
+         FRA  |   .7674952   1.385948     0.55   0.580      -1.9495    3.484491
+         GBR  |   1.423428   1.352464     1.05   0.293    -1.227925    4.074781
+         GRC  |   .5763786   .3511073     1.64   0.101    -.1119278    1.264685
+         HUN  |   2.112613   .3898328     5.42   0.000      1.34839    2.876836
+         IRL  |   2.213503   .3702585     5.98   0.000     1.487652    2.939353
+         ISL  |   2.989096   1.293539     2.31   0.021      .453259    5.524933
+         ITA  |  -.4899218   1.205696    -0.41   0.685    -2.853553     1.87371
+         JPN  |   1.424614   1.606181     0.89   0.375    -1.724124    4.573352
+         KOR  |   .9125269   1.016892     0.90   0.370    -1.080976     2.90603
+         LUX  |          0  (empty)
+         LVA  |   1.984635   1.039553     1.91   0.056    -.0532912    4.022562
+         NLD  |   3.892614   .7765439     5.01   0.000     2.370287    5.414941
+         NOR  |   1.913568   .5390843     3.55   0.000     .8567536    2.970382
+         NZL  |   .7482028   .4387212     1.71   0.088    -.1118608    1.608266
+         POL  |  -.5051821   .5678169    -0.89   0.374    -1.618323    .6079592
+         PRT  |          0  (empty)
+         SVK  |  -.9132314   .7318136    -1.25   0.212     -2.34787     .521407
+         SVN  |   1.454895   .7719704     1.88   0.060    -.0584662    2.968256
+         SWE  |   2.661516    .583556     4.56   0.000      1.51752    3.805512
+         USA  |  -.2245655   2.256797    -0.10   0.921    -4.648763    4.199632
+              |
+        _cons |  -13.20241   6.286041    -2.10   0.036    -25.52549   -.8793329
+--------------+----------------------------------------------------------------
+COUNTERPART~l |   absorbed                                     (204 categories)
+
+.         test CIT_RATE + HavenCIT_RATE=0
+
+ ( 1)  CIT_RATE + HavenCIT_RATE = 0
+
+       F(  1,  5601) =    3.66
+            Prob > F =    0.0557
+
+.                         scalar p1 = r(p)
+
+.         outreg2 using OLS, append ctitle("Partner") ///
+>                                                         tex(frag pretty) word label alpha
+> (0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+>                                                          addstat("Adj. R-squared", e(r2_a
+> ),"No haven effect (p)", p1)  ///
+>                                                          dec(3) keep(`Gravity' `Independe
+> nt1' `Control1')
+OLS.tex
+OLS.rtf
+dir : seeout
+
+. 
+. 
+. *regress `y' `Gravity' `Independent1' `Control1' b2015.obsTime b6.COU_Tal  b59.COUNTERPAR
+> T_AREA_Tal  b1017.Pair_Tal //Reference group: Germany-France (most observations, large fl
+> ow)
+. 
+. 
+. areg `y' `Gravity' `Independent1' `Control1' b2015.obsTime, absorb(Pair_Tal) vce(robust) 
+note: ln_distw omitted because of collinearity
+note: Haven omitted because of collinearity
+note: contig omitted because of collinearity
+note: comlang_off omitted because of collinearity
+note: colony omitted because of collinearity
+note: comcol omitted because of collinearity
+
+Linear regression, absorbing indicators           Number of obs   =       5850
+                                                  F(  14,   3975) =       7.37
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.9490
+                                                  Adj R-squared   =     0.9250
+                                                  Root MSE        =     0.8568
+
+-------------------------------------------------------------------------------
+              |               Robust
+ln_FDIInc_O~l |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       ln_GDP |   .5665671    .242879     2.33   0.020     .0903881    1.042746
+     ln_GDP_j |   .1807535   .1550146     1.17   0.244     -.123162     .484669
+     ln_distw |          0  (omitted)
+        Haven |          0  (omitted)
+     CIT_RATE |   .0232355   .0083659     2.78   0.006     .0068336    .0396374
+HavenCIT_RATE |  -.0221981    .019263    -1.15   0.249    -.0599645    .0155682
+       contig |          0  (omitted)
+  comlang_off |          0  (omitted)
+       colony |          0  (omitted)
+       comcol |          0  (omitted)
+              |
+      obsTime |
+        2005  |  -.1149812   .1308494    -0.88   0.380    -.3715193     .141557
+        2006  |   .0846327   .1123457     0.75   0.451    -.1356279    .3048933
+        2007  |   .2787049   .0949518     2.94   0.003     .0925461    .4648638
+        2008  |    .216169   .0933317     2.32   0.021     .0331866    .3991514
+        2009  |   .2539433   .0852399     2.98   0.003     .0868252    .4210614
+        2010  |   .4200979   .0747398     5.62   0.000     .2735659    .5666299
+        2011  |   .3200204   .0573635     5.58   0.000     .2075558     .432485
+        2012  |   .2034703   .0572328     3.56   0.000     .0912619    .3156787
+        2013  |   .0294424   .0439836     0.67   0.503    -.0567901    .1156749
+        2014  |   .1274761     .04492     2.84   0.005     .0394078    .2155445
+              |
+        _cons |  -7.001186   3.731284    -1.88   0.061     -14.3166    .3142237
+--------------+----------------------------------------------------------------
+     Pair_Tal |   absorbed                                    (1861 categories)
+
+.         test CIT_RATE + HavenCIT_RATE=0
+
+ ( 1)  CIT_RATE + HavenCIT_RATE = 0
+
+       F(  1,  3975) =    0.00
+            Prob > F =    0.9555
+
+.                 scalar p1 = r(p)
+
+.         outreg2 using OLS, append ctitle("Pairs") ///
+>                                                         tex(frag pretty) word label alpha
+> (0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+>                                                          addstat("Adj. R-squared", e(r2_a
+> ),"No haven effect (p)", p1)  ///
+>                                                          dec(3) keep(`Gravity' `Independe
+> nt1' `Control1')
+OLS.tex
+OLS.rtf
+dir : seeout
+
+. 
+. *****************************************************************************************
+> ****************
+. *****************************************************************************************
+> ****************
+. *****************************************************************************************
+> ****************
+. *****************************************************************************************
+> ****************
+. *****************************************************************************************
+> ****************
+.                                                  
+. *FIGURE TWO. Size of havens 
+. ta COUNTERPART_AREA_Tal Small_Haven // Tjek om nogen skifter status
+
+COUNTERPAR |      Small_Haven
+    T_AREA |         0          1 |     Total
+-----------+----------------------+----------
+       ABW |         0        112 |       112 
+       AFG |       109          0 |       109 
+       AGO |       109          0 |       109 
+       AIA |         0        109 |       109 
+       ALB |       111          0 |       111 
+       AND |         0        110 |       110 
+       ANT |         0         51 |        51 
+       ARE |       117          0 |       117 
+       ARG |       118          0 |       118 
+       ARM |       110          0 |       110 
+       ASM |       103          0 |       103 
+       ATA |       107          0 |       107 
+       ATF |       107          0 |       107 
+       ATG |         0        111 |       111 
+       AUS |       114          0 |       114 
+       AUT |       115          0 |       115 
+       AZE |       111          0 |       111 
+       BDI |       109          0 |       109 
+       BEL |       118          0 |       118 
+       BEN |       109          0 |       109 
+       BES |         0        105 |       105 
+       BFA |       109          0 |       109 
+       BGD |       109          0 |       109 
+       BGR |       116          0 |       116 
+       BHR |       112          0 |       112 
+       BHS |         0        115 |       115 
+       BIH |       111          0 |       111 
+       BLR |       111          0 |       111 
+       BLZ |         0        110 |       110 
+       BMU |         0        115 |       115 
+       BOL |       110          0 |       110 
+       BRA |       121          0 |       121 
+       BRB |         0        113 |       113 
+       BRN |       109          0 |       109 
+       BTN |       109          0 |       109 
+       BVT |       102          0 |       102 
+       BWA |       109          0 |       109 
+       CAF |       110          0 |       110 
+       CAN |       121          0 |       121 
+       CCK |       102          0 |       102 
+       CHE |       119          0 |       119 
+       CHL |       119          0 |       119 
+       CHN |       121          0 |       121 
+       CIV |       109          0 |       109 
+       CMR |       109          0 |       109 
+       COD |       109          0 |       109 
+       COG |       109          0 |       109 
+       COK |         0        108 |       108 
+       COL |       112          0 |       112 
+       COM |       109          0 |       109 
+       CPV |       109          0 |       109 
+       CRI |       112          0 |       112 
+       CUB |       111          0 |       111 
+       CUW |         0        110 |       110 
+       CXR |       107          0 |       107 
+       CYM |         0        117 |       117 
+       CYP |       116          0 |       116 
+       CZE |       113          0 |       113 
+       DEU |       110          0 |       110 
+       DJI |       109          0 |       109 
+       DMA |         0        109 |       109 
+       DNK |       114          0 |       114 
+       DOM |       112          0 |       112 
+       DZA |       111          0 |       111 
+       ECU |       111          0 |       111 
+       EGY |       116          0 |       116 
+       ERI |       109          0 |       109 
+       ESP |       118          0 |       118 
+       EST |       110          0 |       110 
+       ETH |       110          0 |       110 
+       FIN |       116          0 |       116 
+       FJI |       113          0 |       113 
+       FRA |       110          0 |       110 
+       FRO |       104          0 |       104 
+       FSM |       107          0 |       107 
+       GAB |       109          0 |       109 
+       GBR |       123          0 |       123 
+       GEO |       111          0 |       111 
+       GGY |         0        110 |       110 
+       GHA |       112          0 |       112 
+       GIB |         0        111 |       111 
+       GIN |       109          0 |       109 
+       GMB |       109          0 |       109 
+       GNB |       109          0 |       109 
+       GNQ |       109          0 |       109 
+       GRC |       113          0 |       113 
+       GRD |         0        111 |       111 
+       GRL |       109          0 |       109 
+       GTM |       111          0 |       111 
+       GUM |       104          0 |       104 
+       GUY |       109          0 |       109 
+       HKG |       121          0 |       121 
+       HMD |       102          0 |       102 
+       HND |       112          0 |       112 
+       HRV |       116          0 |       116 
+       HTI |       109          0 |       109 
+       HUN |       112          0 |       112 
+       IDN |       118          0 |       118 
+       IMN |         0        108 |       108 
+       IND |       121          0 |       121 
+       IOT |       107          0 |       107 
+       IRL |       115          0 |       115 
+       IRN |       111          0 |       111 
+       IRQ |       109          0 |       109 
+       ISL |       112          0 |       112 
+       ISR |       115          0 |       115 
+       ITA |       118          0 |       118 
+       JAM |       110          0 |       110 
+       JEY |         0        107 |       107 
+       JOR |       112          0 |       112 
+       JPN |       124          0 |       124 
+       KAZ |       112          0 |       112 
+       KEN |       109          0 |       109 
+       KGZ |       110          0 |       110 
+       KHM |       110          0 |       110 
+       KIR |       108          0 |       108 
+       KNA |         0        109 |       109 
+       KOR |       118          0 |       118 
+       KWT |       111          0 |       111 
+       LAO |       109          0 |       109 
+       LBN |       110          0 |       110 
+       LBR |       113          0 |       113 
+       LBY |       111          0 |       111 
+       LCA |         0        111 |       111 
+       LIE |         0        114 |       114 
+       LKA |       112          0 |       112 
+       LSO |       109          0 |       109 
+       LTU |       115          0 |       115 
+       LUX |       118          0 |       118 
+       LVA |       112          0 |       112 
+       MAC |       109          0 |       109 
+       MAR |       115          0 |       115 
+       MDA |       111          0 |       111 
+       MDG |       109          0 |       109 
+       MDV |         0        111 |       111 
+       MEX |       121          0 |       121 
+       MHL |         0        109 |       109 
+       MKD |       111          0 |       111 
+       MLI |       109          0 |       109 
+       MLT |       116          0 |       116 
+       MMR |       110          0 |       110 
+       MNE |       111          0 |       111 
+       MNG |       112          0 |       112 
+       MNP |       102          0 |       102 
+       MOZ |       112          0 |       112 
+       MRT |       109          0 |       109 
+       MSR |         0        104 |       104 
+       MUS |       114          0 |       114 
+       MWI |       110          0 |       110 
+       MYS |       119          0 |       119 
+       NAM |       111          0 |       111 
+       NCL |       105          0 |       105 
+       NER |       109          0 |       109 
+       NFK |       102          0 |       102 
+       NGA |       115          0 |       115 
+       NIC |       112          0 |       112 
+       NIU |         0        102 |       102 
+       NLD |       118          0 |       118 
+       NOR |       116          0 |       116 
+       NPL |       109          0 |       109 
+       NRU |         0        107 |       107 
+       NZL |       118          0 |       118 
+       OMN |       112          0 |       112 
+       PAK |       111          0 |       111 
+       PAN |       115          0 |       115 
+       PCN |       107          0 |       107 
+       PER |       114          0 |       114 
+       PHL |       120          0 |       120 
+       PLW |       107          0 |       107 
+       PNG |       113          0 |       113 
+       POL |       113          0 |       113 
+       PRK |       109          0 |       109 
+       PRT |       111          0 |       111 
+       PRY |       112          0 |       112 
+       PSE |       104          0 |       104 
+       PYF |       110          0 |       110 
+       QAT |       111          0 |       111 
+       ROM |       116          0 |       116 
+       RUS |       120          0 |       120 
+       RWA |       109          0 |       109 
+       SAU |       117          0 |       117 
+       SCG |        45          0 |        45 
+       SDN |       109          0 |       109 
+       SEN |       109          0 |       109 
+       SGP |       121          0 |       121 
+       SGS |       102          0 |       102 
+       SHN |       109          0 |       109 
+       SLB |       111          0 |       111 
+       SLE |       111          0 |       111 
+       SLV |       110          0 |       110 
+       SMR |       111          0 |       111 
+       SOM |       109          0 |       109 
+       SRB |       112          0 |       112 
+       SSD |       109          0 |       109 
+       STP |       109          0 |       109 
+       SUR |       111          0 |       111 
+       SVK |       115          0 |       115 
+       SVN |       109          0 |       109 
+       SWE |       118          0 |       118 
+       SWZ |       109          0 |       109 
+       SXM |         0        105 |       105 
+       SYC |         0        111 |       111 
+       SYR |       111          0 |       111 
+       TCA |         0        106 |       106 
+       TCD |       109          0 |       109 
+       TGO |       109          0 |       109 
+       THA |       121          0 |       121 
+       TJK |       109          0 |       109 
+       TKL |       102          0 |       102 
+       TKM |       109          0 |       109 
+       TLS |       110          0 |       110 
+       TON |       108          0 |       108 
+       TTO |       112          0 |       112 
+       TUN |       111          0 |       111 
+       TUR |       119          0 |       119 
+       TUV |       107          0 |       107 
+       TWN |       121          0 |       121 
+       TZA |       109          0 |       109 
+       UGA |       109          0 |       109 
+       UKR |       112          0 |       112 
+       UMI |       104          0 |       104 
+       URY |       117          0 |       117 
+       USA |       121          0 |       121 
+       UZB |       109          0 |       109 
+       VAT |       109          0 |       109 
+       VCT |         0        110 |       110 
+       VEN |       117          0 |       117 
+       VGB |         0        110 |       110 
+       VIR |       104          0 |       104 
+       VNM |       114          0 |       114 
+       VUT |         0        109 |       109 
+       WLF |       102          0 |       102 
+       WSM |         0        111 |       111 
+       YEM |       109          0 |       109 
+       ZAF |       118          0 |       118 
+       ZMB |       110          0 |       110 
+       ZWE |       109          0 |       109 
+-----------+----------------------+----------
+     Total |    22,576      3,671 |    26,247 
+
+
+. 
+. regress `y' `Gravity' `Independent2' `Control1', robust
+
+Linear regression                                      Number of obs =    5850
+                                                       F( 12,  5837) =  652.87
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.5418
+                                                       Root MSE      =  2.1204
+
+-------------------------------------------------------------------------------------
+                    |               Robust
+ln_FDIInc_Out_Total |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------+----------------------------------------------------------------
+             ln_GDP |   .9749961   .0199664    48.83   0.000     .9358545    1.014138
+           ln_GDP_j |   .8563095    .014815    57.80   0.000     .8272665    .8853524
+           ln_distw |  -.7959937   .0310084   -25.67   0.000    -.8567816   -.7352058
+        Small_Haven |   3.753566   .5532327     6.78   0.000     2.669024    4.838107
+        Large_Haven |   1.905314   .3874585     4.92   0.000     1.145752    2.664877
+           CIT_RATE |    .032922    .004025     8.18   0.000     .0250315    .0408125
+Small_HavenCIT_RATE |  -.0620487    .022863    -2.71   0.007    -.1068686   -.0172287
+Large_HavenCIT_RATE |  -.0092622   .0141597    -0.65   0.513    -.0370205     .018496
+             contig |   .2068847   .1101391     1.88   0.060    -.0090288    .4227982
+        comlang_off |   .7941854    .098882     8.03   0.000       .60034    .9880308
+             colony |   1.225623    .112738    10.87   0.000     1.004615    1.446632
+             comcol |   2.602747   .3214407     8.10   0.000     1.972604    3.232889
+              _cons |  -14.84762   .3727081   -39.84   0.000    -15.57827   -14.11698
+-------------------------------------------------------------------------------------
+
+.         test CIT_RATE + Small_HavenCIT_RATE=0
+
+ ( 1)  CIT_RATE + Small_HavenCIT_RATE = 0
+
+       F(  1,  5837) =    1.67
+            Prob > F =    0.1966
+
+.                 scalar p1 = r(p)
+
+.         test CIT_RATE + Large_HavenCIT_RATE=0
+
+ ( 1)  CIT_RATE + Large_HavenCIT_RATE = 0
+
+       F(  1,  5837) =    3.01
+            Prob > F =    0.0827
+
+.                 scalar p2 = r(p)
+
+.         outreg2 using OLS_Size, replace ctitle("Basic") ///
+>                                                         tex(frag pretty) word label alpha
+> (0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+>                                                          addstat("No small haven effect (
+> p)", p1,"No large haven effect (p)", p2)  ///
+>                                                          dec(3) keep(`Independent2') noco
+> ns nor2 noobs ///
+>                                                          addnote("Intercept, GDP, distanc
+> e and common variables featured in all models")
+OLS_Size.tex
+OLS_Size.rtf
+dir : seeout
+
+. 
+. regress `y' `Gravity' `Independent2' `Control1' b2015.obsTime, robust
+
+Linear regression                                      Number of obs =    5850
+                                                       F( 22,  5827) =  359.21
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.5435
+                                                       Root MSE      =  2.1182
+
+-------------------------------------------------------------------------------------
+                    |               Robust
+ln_FDIInc_Out_Total |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------+----------------------------------------------------------------
+             ln_GDP |    .953867   .0212452    44.90   0.000     .9122185    .9955154
+           ln_GDP_j |   .8570071   .0148564    57.69   0.000      .827883    .8861312
+           ln_distw |  -.7850965   .0311442   -25.21   0.000    -.8461508   -.7240423
+        Small_Haven |   3.723715   .5520129     6.75   0.000     2.641565    4.805865
+        Large_Haven |   1.924697    .388874     4.95   0.000      1.16236    2.687035
+           CIT_RATE |   .0346698   .0042286     8.20   0.000     .0263802    .0429595
+Small_HavenCIT_RATE |  -.0602163   .0228157    -2.64   0.008    -.1049435    -.015489
+Large_HavenCIT_RATE |  -.0102437   .0142023    -0.72   0.471    -.0380854     .017598
+             contig |   .1783866   .1110644     1.61   0.108    -.0393408    .3961141
+        comlang_off |   .8098263   .0986305     8.21   0.000     .6164738    1.003179
+             colony |   1.237768   .1129582    10.96   0.000     1.016328    1.459208
+             comcol |    2.57329   .3190614     8.07   0.000     1.947811    3.198768
+                    |
+            obsTime |
+              2005  |   .3375301   .1324175     2.55   0.011     .0779426    .5971175
+              2006  |   .3947415   .1204496     3.28   0.001     .1586157    .6308673
+              2007  |   .3663945   .1229794     2.98   0.003     .1253092    .6074798
+              2008  |   .2721593   .1344235     2.02   0.043     .0086395    .5356792
+              2009  |   .3883396   .1316652     2.95   0.003     .1302269    .6464524
+              2010  |   .3806754   .1370566     2.78   0.005     .1119935    .6493572
+              2011  |   .0669511    .118724     0.56   0.573    -.1657921    .2996942
+              2012  |  -.0037377   .1126207    -0.03   0.974     -.224516    .2170407
+              2013  |  -.0374919   .0855196    -0.44   0.661    -.2051421    .1301583
+              2014  |   .0168419   .0864884     0.19   0.846    -.1527074    .1863912
+                    |
+              _cons |  -14.74834   .3777262   -39.05   0.000    -15.48882   -14.00786
+-------------------------------------------------------------------------------------
+
+.         test CIT_RATE + Small_HavenCIT_RATE=0
+
+ ( 1)  CIT_RATE + Small_HavenCIT_RATE = 0
+
+       F(  1,  5827) =    1.28
+            Prob > F =    0.2581
+
+.                         scalar p1 = r(p)
+
+.         test CIT_RATE + Large_HavenCIT_RATE=0
+
+ ( 1)  CIT_RATE + Large_HavenCIT_RATE = 0
+
+       F(  1,  5827) =    3.19
+            Prob > F =    0.0742
+
+.                 scalar p2 = r(p)                        
+
+.         outreg2 using OLS_Size, append ctitle("Yearly") ///
+>                                                         tex(frag pretty) word label alpha
+> (0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+>                                                          addstat("No small haven effect (
+> p)", p1,"No large haven effect (p)", p2)  ///
+>                                                          dec(3) keep(`Independent2') noco
+> ns nor2 noobs ///
+>                                                          addnote("Intercept, GDP, distanc
+> e and common variables featured in all models")
+warning: addnote ignored in appended columns
+OLS_Size.tex
+OLS_Size.rtf
+dir : seeout
+
+.                                                          
+. areg `y' `Gravity' `Independent2' `Control1' b2015.obsTime, absorb(COU_Tal) vce(robust)
+
+Linear regression, absorbing indicators           Number of obs   =       5850
+                                                  F(  22,   5801) =     268.14
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.6394
+                                                  Adj R-squared   =     0.6364
+                                                  Root MSE        =     1.8868
+
+-------------------------------------------------------------------------------------
+                    |               Robust
+ln_FDIInc_Out_Total |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------+----------------------------------------------------------------
+             ln_GDP |   1.415091     .55903     2.53   0.011     .3191841    2.510999
+           ln_GDP_j |   .8439696   .0143192    58.94   0.000     .8158987    .8720405
+           ln_distw |  -.8436788   .0281647   -29.96   0.000    -.8988921   -.7884656
+        Small_Haven |   3.360561   .5379598     6.25   0.000     2.305959    4.415163
+        Large_Haven |   2.066073    .382223     5.41   0.000     1.316774    2.815373
+           CIT_RATE |   .0592994   .0137393     4.32   0.000     .0323652    .0862336
+Small_HavenCIT_RATE |  -.0430429   .0219801    -1.96   0.050     -.086132    .0000463
+Large_HavenCIT_RATE |  -.0171604   .0141275    -1.21   0.225    -.0448557    .0105348
+             contig |   .3802378   .1095038     3.47   0.001     .1655695    .5949061
+        comlang_off |   .6648919   .0981197     6.78   0.000     .4725406    .8572431
+             colony |   .9613125   .0992296     9.69   0.000     .7667854     1.15584
+             comcol |   3.143134   .3876032     8.11   0.000     2.383287    3.902981
+                    |
+            obsTime |
+              2005  |   .3530027   .1884017     1.87   0.061    -.0163349    .7223404
+              2006  |   .3937168   .1664703     2.37   0.018     .0673729    .7200606
+              2007  |    .307745   .1632351     1.89   0.059    -.0122568    .6277468
+              2008  |   .3860694   .1517993     2.54   0.011     .0884861    .6836527
+              2009  |   .5533883   .1416887     3.91   0.000     .2756256    .8311511
+              2010  |   .6010396   .1416858     4.24   0.000     .3232826    .8787966
+              2011  |   .3100373   .1258241     2.46   0.014     .0633752    .5566994
+              2012  |   .1626942   .1169779     1.39   0.164    -.0666262    .3920146
+              2013  |  -.1024701   .0946215    -1.08   0.279    -.2879636    .0830234
+              2014  |   .0337014   .1029684     0.33   0.743    -.1681551    .2355579
+                    |
+              _cons |  -21.16246   7.835513    -2.70   0.007    -36.52299   -5.801932
+--------------------+----------------------------------------------------------------
+            COU_Tal |   absorbed                                      (27 categories)
+
+.         test CIT_RATE + Small_HavenCIT_RATE=0
+
+ ( 1)  CIT_RATE + Small_HavenCIT_RATE = 0
+
+       F(  1,  5801) =    0.42
+            Prob > F =    0.5185
+
+.                         scalar p1 = r(p)
+
+.         test CIT_RATE + Large_HavenCIT_RATE=0
+
+ ( 1)  CIT_RATE + Large_HavenCIT_RATE = 0
+
+       F(  1,  5801) =    4.98
+            Prob > F =    0.0257
+
+.                 scalar p2 = r(p)                        
+
+.         outreg2 using OLS_Size, append ctitle("Investor") ///
+>                                                         tex(frag pretty) word label alpha
+> (0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+>                                                          addstat("No small haven effect (
+> p)", p1,"No large haven effect (p)", p2)  ///
+>                                                          dec(3) keep(`Independent2') noco
+> ns nor2 noobs ///
+>                                                          addnote("Intercept, GDP, distanc
+> e and common variables featured in all models")                                 
+warning: addnote ignored in appended columns
+OLS_Size.tex
+OLS_Size.rtf
+dir : seeout
+
+.                                                  
+. areg `y' `Gravity' `Independent2' `Control1' b2015.obsTime  b6.COU_Tal, absorb(COUNTERPAR
+> T_AREA_Ta) vce(robust) // Reference group: Germany (most observations)                   
+>                                                                        
+note: Small_Haven omitted because of collinearity
+note: Large_Haven omitted because of collinearity
+note: 5.COU_Tal omitted because of collinearity
+note: 11.COU_Tal omitted because of collinearity
+note: 21.COU_Tal omitted because of collinearity
+note: 27.COU_Tal omitted because of collinearity
+
+Linear regression, absorbing indicators           Number of obs   =       5850
+                                                  F(  46,   5600) =     169.22
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7349
+                                                  Adj R-squared   =     0.7231
+                                                  Root MSE        =     1.6466
+
+-------------------------------------------------------------------------------------
+                    |               Robust
+ln_FDIInc_Out_Total |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------+----------------------------------------------------------------
+             ln_GDP |   1.407695   .4931329     2.85   0.004     .4409635    2.374427
+           ln_GDP_j |   .3181445   .1654248     1.92   0.055    -.0061522    .6424413
+           ln_distw |  -1.096137   .0510181   -21.49   0.000    -1.196152   -.9961217
+        Small_Haven |          0  (omitted)
+        Large_Haven |          0  (omitted)
+           CIT_RATE |   .0434226   .0123551     3.51   0.000     .0192019    .0676434
+Small_HavenCIT_RATE |  -.0257631    .017945    -1.44   0.151    -.0609422    .0094159
+Large_HavenCIT_RATE |  -.0085169   .0127489    -0.67   0.504    -.0335096    .0164758
+             contig |   .1685823   .1115549     1.51   0.131    -.0501086    .3872731
+        comlang_off |   .5940702   .0986192     6.02   0.000     .4007384    .7874021
+             colony |   1.004422   .1053237     9.54   0.000      .797947    1.210897
+             comcol |   3.521218   .4067053     8.66   0.000     2.723918    4.318518
+                    |
+            obsTime |
+              2005  |   .0619771   .1824663     0.34   0.734    -.2957277    .4196818
+              2006  |   .1580354   .1553196     1.02   0.309    -.1464512     .462522
+              2007  |   .1601703   .1417635     1.13   0.259    -.1177411    .4380817
+              2008  |   .2331507   .1277122     1.83   0.068    -.0172148    .4835161
+              2009  |   .3879421   .1263905     3.07   0.002     .1401677    .6357166
+              2010  |   .5076655   .1186905     4.28   0.000      .274986    .7403449
+              2011  |   .2767352   .1075762     2.57   0.010     .0658441    .4876262
+              2012  |    .139905   .0994575     1.41   0.160    -.0550703    .3348803
+              2013  |  -.0959998   .0840376    -1.14   0.253     -.260746    .0687464
+              2014  |   .0409528   .0912995     0.45   0.654    -.1380297    .2199353
+                    |
+            COU_Tal |
+               AUS  |   1.177063   1.038799     1.13   0.257    -.8593847    3.213511
+               AUT  |    1.80554   .4825735     3.74   0.000     .8595088    2.751571
+               BEL  |   1.152387   .5947699     1.94   0.053    -.0135926    2.318367
+               CAN  |   1.870067   1.115053     1.68   0.094    -.3158692    4.056003
+               CHE  |          0  (empty)
+               DEU  |    .731274   1.461332     0.50   0.617    -2.133502     3.59605
+               DNK  |   2.243059   .3959882     5.66   0.000     1.466769    3.019349
+               ESP  |   1.846221   1.027982     1.80   0.073    -.1690228    3.861465
+               EST  |   1.685238    1.09734     1.54   0.125    -.4659743     3.83645
+               FIN  |          0  (empty)
+               FRA  |   .7539643   1.385764     0.54   0.586    -1.962671      3.4706
+               GBR  |   1.426065   1.352154     1.05   0.292    -1.224681     4.07681
+               GRC  |   .5783668   .3509517     1.65   0.099    -.1096347    1.266368
+               HUN  |   2.113317   .3895972     5.42   0.000     1.349556    2.877079
+               IRL  |   2.213418   .3697844     5.99   0.000     1.488497    2.938338
+               ISL  |   2.989196   1.293185     2.31   0.021     .4540513    5.524341
+               ITA  |   -.485266   1.205383    -0.40   0.687    -2.848284    1.877752
+               JPN  |   1.429207   1.605907     0.89   0.374    -1.718992    4.577407
+               KOR  |   .9172927   1.016636     0.90   0.367    -1.075707    2.910293
+               LUX  |          0  (empty)
+               LVA  |   1.996544   1.039429     1.92   0.055    -.0411391    4.034228
+               NLD  |   3.894509   .7763209     5.02   0.000     2.372619    5.416399
+               NOR  |   1.916018   .5388946     3.56   0.000     .8595756     2.97246
+               NZL  |   .7517668   .4384576     1.71   0.086      -.10778    1.611314
+               POL  |  -.5045232    .567623    -0.89   0.374    -1.617284     .608238
+               PRT  |          0  (empty)
+               SVK  |  -.9146756   .7318692    -1.25   0.211    -2.349423    .5200717
+               SVN  |   1.452386   .7717698     1.88   0.060    -.0605821    2.965354
+               SWE  |   2.663771   .5833656     4.57   0.000     1.520149    3.807394
+               USA  |  -.2168015   2.256328    -0.10   0.923     -4.64008    4.206477
+                    |
+              _cons |  -13.17744   6.283535    -2.10   0.036     -25.4956   -.8592762
+--------------------+----------------------------------------------------------------
+COUNTERPART_AREA_~l |   absorbed                                     (204 categories)
+
+.         test CIT_RATE + Small_HavenCIT_RATE=0
+
+ ( 1)  CIT_RATE + Small_HavenCIT_RATE = 0
+
+       F(  1,  5600) =    0.71
+            Prob > F =    0.3997
+
+.                         scalar p1 = r(p)
+
+.         test CIT_RATE + Large_HavenCIT_RATE=0
+
+ ( 1)  CIT_RATE + Large_HavenCIT_RATE = 0
+
+       F(  1,  5600) =    4.16
+            Prob > F =    0.0415
+
+.                 scalar p2 = r(p)                        
+
+.         outreg2 using OLS_Size, append ctitle("Partner") ///
+>                                                         tex(frag pretty) word label alpha
+> (0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+>                                                          addstat("No small haven effect (
+> p)", p1,"No large haven effect (p)", p2)  ///
+>                                                          dec(3) keep(`Independent2') noco
+> ns nor2 noobs ///
+>                                                          addnote("Intercept, GDP, distanc
+> e and common variables featured in all models")
+warning: addnote ignored in appended columns
+OLS_Size.tex
+OLS_Size.rtf
+dir : seeout
+
+. 
+. areg `y' `Gravity' `Independent2' `Control1' b2015.obsTime, absorb(Pair_Tal) vce(robust) 
+note: ln_distw omitted because of collinearity
+note: Small_Haven omitted because of collinearity
+note: Large_Haven omitted because of collinearity
+note: contig omitted because of collinearity
+note: comlang_off omitted because of collinearity
+note: colony omitted because of collinearity
+note: comcol omitted because of collinearity
+
+Linear regression, absorbing indicators           Number of obs   =       5850
+                                                  F(  15,   3974) =       7.12
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.9491
+                                                  Adj R-squared   =     0.9251
+                                                  Root MSE        =     0.8565
+
+-------------------------------------------------------------------------------------
+                    |               Robust
+ln_FDIInc_Out_Total |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------+----------------------------------------------------------------
+             ln_GDP |   .5689266   .2427765     2.34   0.019     .0929484    1.044905
+           ln_GDP_j |   .2091141   .1533484     1.36   0.173    -.0915347     .509763
+           ln_distw |          0  (omitted)
+        Small_Haven |          0  (omitted)
+        Large_Haven |          0  (omitted)
+           CIT_RATE |   .0229044   .0083257     2.75   0.006     .0065814    .0392274
+Small_HavenCIT_RATE |  -.0540895   .0365405    -1.48   0.139    -.1257295    .0175505
+Large_HavenCIT_RATE |  -.0015992   .0193772    -0.08   0.934    -.0395894     .036391
+             contig |          0  (omitted)
+        comlang_off |          0  (omitted)
+             colony |          0  (omitted)
+             comcol |          0  (omitted)
+                    |
+            obsTime |
+              2005  |  -.0894042   .1289876    -0.69   0.488    -.3422922    .1634838
+              2006  |    .103159   .1109717     0.93   0.353    -.1144078    .3207258
+              2007  |   .2916054   .0939199     3.10   0.002     .1074697    .4757412
+              2008  |   .2217461   .0932422     2.38   0.017     .0389391    .4045531
+              2009  |   .2629267   .0847504     3.10   0.002     .0967684    .4290849
+              2010  |   .4252977   .0742967     5.72   0.000     .2796344     .570961
+              2011  |   .3208083   .0573572     5.59   0.000      .208356    .4332606
+              2012  |   .2030315   .0572155     3.55   0.000      .090857     .315206
+              2013  |   .0269397   .0439268     0.61   0.540    -.0591814    .1130609
+              2014  |   .1242376   .0448529     2.77   0.006     .0363007    .2121745
+                    |
+              _cons |  -7.361631   3.715763    -1.98   0.048    -14.64661     -.07665
+--------------------+----------------------------------------------------------------
+           Pair_Tal |   absorbed                                    (1861 categories)
+
+.         test CIT_RATE + Small_HavenCIT_RATE=0
+
+ ( 1)  CIT_RATE + Small_HavenCIT_RATE = 0
+
+       F(  1,  3974) =    0.74
+            Prob > F =    0.3907
+
+.                 scalar p1 = r(p)
+
+.         test CIT_RATE + Large_HavenCIT_RATE=0
+
+ ( 1)  CIT_RATE + Large_HavenCIT_RATE = 0
+
+       F(  1,  3974) =    1.30
+            Prob > F =    0.2541
+
+.                 scalar p2 = r(p)                
+
+.         outreg2 using OLS_Size, append ctitle("Pairs") ///
+>                                                         tex(frag pretty) word label alpha
+> (0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+>                                                          addstat("No small haven effect (
+> p)", p1,"No large haven effect (p)", p2)  ///
+>                                                          dec(3) keep(`Independent2') noco
+> ns nor2 noobs ///
+>                                                          addnote("Intercept, GDP, distanc
+> e and common variables featured in all models")
+warning: addnote ignored in appended columns
+OLS_Size.tex
+OLS_Size.rtf
+dir : seeout
+
+. 
+.                                                          
+. *****************************************************************************************
+> ****************
+. *****************************************************************************************
+> ****************
+. *****************************************************************************************
+> ****************
+. *****************************************************************************************
+> ****************
+. *****************************************************************************************
+> ****************
+. 
+. cap erase OLS_Types.rtf
+
+. cap erase OLS_Types.tex
+
+. cap erase OLS_Types.txt
+
+. 
+. /*
+>         & \multicolumn{2}{c}{Equity} & \multicolumn{2}{c}{Dividends} & \multicolumn{2}{c}
+> {Reinvested earnings} &\multicolumn{2}{c}{Debt income}  \\
+>         \cline{2-9}
+> */
+.                                                  
+. *FIGURE THREE. TYPES OF FDI
+. foreach y in `yy' {
+  2. areg `y' `Gravity' `Independent1' `Control1' b2015.obsTime, absorb(COU_Tal) vce(robust
+> )
+  3.         test CIT_RATE + HavenCIT_RATE=0
+  4.                         scalar p1 = r(p)
+  5.         outreg2 using OLS_Types, append ctitle("Investor") ///
+>                                                         tex(frag pretty) word label alpha
+> (0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+>                                                          addstat("No haven effect (p)", p
+> 1)  ///
+>                                                          dec(3) keep(`Gravity' `Independe
+> nt1')
+  6.                                                          
+. areg `y' `Gravity' `Independent1' `Control1' b2015.obsTime, absorb(Pair_Tal) vce(robust) 
+  7.         test CIT_RATE + HavenCIT_RATE=0
+  8.                 scalar p1 = r(p)
+  9.         outreg2 using OLS_Types, append ctitle("Pairs") ///
+>                                                         tex(frag pretty) word label alpha
+> (0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+>                                                          addstat("No haven effect (p)", p
+> 1)  ///
+>                                                          dec(3) keep(`Gravity' `Independe
+> nt1')
+ 10. }
+
+Linear regression, absorbing indicators           Number of obs   =       4226
+                                                  F(  20,   4182) =     177.94
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.6313
+                                                  Adj R-squared   =     0.6275
+                                                  Root MSE        =     1.8554
+
+-------------------------------------------------------------------------------
+              |               Robust
+ln_FDIInc_O~y |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       ln_GDP |   .7982963   .8231815     0.97   0.332    -.8155769    2.412169
+     ln_GDP_j |   .7387076   .0168742    43.78   0.000     .7056251    .7717901
+     ln_distw |  -.8141017   .0317076   -25.68   0.000    -.8762655   -.7519378
+        Haven |    2.54975   .3384328     7.53   0.000     1.886242    3.213258
+     CIT_RATE |   .0471745   .0131905     3.58   0.000     .0213141    .0730348
+HavenCIT_RATE |  -.0360849   .0131735    -2.74   0.006     -.061912   -.0102578
+       contig |   .5557811   .1176259     4.72   0.000     .3251718    .7863903
+  comlang_off |   .5608098    .126114     4.45   0.000     .3135592    .8080603
+       colony |   .8127775   .1314725     6.18   0.000     .5550214    1.070534
+       comcol |   2.954526   .4091908     7.22   0.000     2.152294    3.756757
+              |
+      obsTime |
+        2005  |   .3180925   .1968124     1.62   0.106    -.0677644    .7039494
+        2006  |   .3370485   .1693461     1.99   0.047     .0050402    .6690569
+        2007  |   .2835408   .1686211     1.68   0.093    -.0470463    .6141278
+        2008  |   .3436211   .1830347     1.88   0.061    -.0152241    .7024663
+        2009  |   .4014827   .1467014     2.74   0.006       .11387    .6890954
+        2010  |   .4748177    .147544     3.22   0.001      .185553    .7640824
+        2011  |   .2630187   .1779618     1.48   0.139     -.085881    .6119184
+        2012  |   .0887356   .1516207     0.59   0.558    -.2085215    .3859927
+        2013  |  -.1097511   .1413983    -0.78   0.438    -.3869669    .1674647
+        2014  |   .0493222   .1530927     0.32   0.747    -.2508208    .3494653
+              |
+        _cons |  -11.32051   11.24245    -1.01   0.314    -33.36169    10.72067
+--------------+----------------------------------------------------------------
+      COU_Tal |   absorbed                                      (24 categories)
+
+ ( 1)  CIT_RATE + HavenCIT_RATE = 0
+
+       F(  1,  4182) =    0.39
+            Prob > F =    0.5338
+OLS_Types.tex
+OLS_Types.rtf
+dir : seeout
+note: ln_distw omitted because of collinearity
+note: Haven omitted because of collinearity
+note: contig omitted because of collinearity
+note: comlang_off omitted because of collinearity
+note: colony omitted because of collinearity
+note: comcol omitted because of collinearity
+
+Linear regression, absorbing indicators           Number of obs   =       4226
+                                                  F(  14,   2885) =       5.56
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.9452
+                                                  Adj R-squared   =     0.9198
+                                                  Root MSE        =     0.8611
+
+-------------------------------------------------------------------------------
+              |               Robust
+ln_FDIInc_O~y |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       ln_GDP |   .6351725   .4223035     1.50   0.133    -.1928746     1.46322
+     ln_GDP_j |   .2287849   .1652215     1.38   0.166    -.0951793    .5527491
+     ln_distw |          0  (omitted)
+        Haven |          0  (omitted)
+     CIT_RATE |   .0317339   .0083882     3.78   0.000     .0152864    .0481815
+HavenCIT_RATE |  -.0246576   .0190853    -1.29   0.196    -.0620798    .0127646
+       contig |          0  (omitted)
+  comlang_off |          0  (omitted)
+       colony |          0  (omitted)
+       comcol |          0  (omitted)
+              |
+      obsTime |
+        2005  |  -.0655355   .1342359    -0.49   0.625    -.3287435    .1976725
+        2006  |   .0929871   .1131506     0.82   0.411     -.128877    .3148513
+        2007  |    .211892   .0996414     2.13   0.034     .0165166    .4072675
+        2008  |   .2003866   .1078792     1.86   0.063    -.0111414    .4119146
+        2009  |   .2481293   .0958144     2.59   0.010     .0602576     .436001
+        2010  |   .4088763   .0800532     5.11   0.000     .2519091    .5658435
+        2011  |   .3489402   .0944331     3.70   0.000     .1637771    .5341033
+        2012  |   .2328209   .0793704     2.93   0.003     .0771925    .3884493
+        2013  |  -.0164714   .0726699    -0.23   0.821    -.1589615    .1260188
+        2014  |   .0496426    .076902     0.65   0.519    -.1011458     .200431
+              |
+        _cons |  -8.646601   6.044467    -1.43   0.153    -20.49851    3.205308
+--------------+----------------------------------------------------------------
+     Pair_Tal |   absorbed                                    (1327 categories)
+
+ ( 1)  CIT_RATE + HavenCIT_RATE = 0
+
+       F(  1,  2885) =    0.14
+            Prob > F =    0.7067
+OLS_Types.tex
+OLS_Types.rtf
+dir : seeout
+
+Linear regression, absorbing indicators           Number of obs   =       3652
+                                                  F(  20,   3608) =     139.80
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.6264
+                                                  Adj R-squared   =     0.6219
+                                                  Root MSE        =     1.8276
+
+-------------------------------------------------------------------------------
+              |               Robust
+ln_FDIInc_O~s |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       ln_GDP |   .5936829   .9186686     0.65   0.518    -1.207479    2.394844
+     ln_GDP_j |   .7558657   .0190729    39.63   0.000     .7184709    .7932605
+     ln_distw |  -.7266995   .0338085   -21.49   0.000    -.7929852   -.6604137
+        Haven |   2.421256   .3689112     6.56   0.000     1.697961    3.144552
+     CIT_RATE |   .0782728     .01444     5.42   0.000     .0499614    .1065841
+HavenCIT_RATE |  -.0271334   .0144952    -1.87   0.061    -.0555531    .0012863
+       contig |    .562571   .1167361     4.82   0.000     .3336956    .7914464
+  comlang_off |   .3483612   .1379816     2.52   0.012     .0778314     .618891
+       colony |   .5671992   .1324002     4.28   0.000     .3076125     .826786
+       comcol |    2.86767   .5443236     5.27   0.000     1.800457    3.934882
+              |
+      obsTime |
+        2005  |   .1369692   .2150708     0.64   0.524    -.2847033    .5586417
+        2006  |   .1893291   .1861307     1.02   0.309    -.1756028     .554261
+        2007  |   .0644374   .1926114     0.33   0.738    -.3132006    .4420754
+        2008  |   .8197251   .1991243     4.12   0.000     .4293177    1.210132
+        2009  |   .8840447   .1495025     5.91   0.000     .5909268    1.177163
+        2010  |   .8044937    .154758     5.20   0.000     .5010718    1.107916
+        2011  |   .8277556   .1822706     4.54   0.000     .4703918    1.185119
+        2012  |   .2672485    .156087     1.71   0.087    -.0387791    .5732761
+        2013  |  -.0726351   .1450679    -0.50   0.617    -.3570584    .2117882
+        2014  |  -.0176231   .1655705    -0.11   0.915    -.3422442    .3069979
+              |
+        _cons |  -10.64807   12.76744    -0.83   0.404    -35.68019    14.38406
+--------------+----------------------------------------------------------------
+      COU_Tal |   absorbed                                      (24 categories)
+
+ ( 1)  CIT_RATE + HavenCIT_RATE = 0
+
+       F(  1,  3608) =    6.68
+            Prob > F =    0.0098
+OLS_Types.tex
+OLS_Types.rtf
+dir : seeout
+note: ln_distw omitted because of collinearity
+note: Haven omitted because of collinearity
+note: contig omitted because of collinearity
+note: comlang_off omitted because of collinearity
+note: colony omitted because of collinearity
+note: comcol omitted because of collinearity
+
+Linear regression, absorbing indicators           Number of obs   =       3652
+                                                  F(  14,   2607) =      13.30
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.9130
+                                                  Adj R-squared   =     0.8781
+                                                  Root MSE        =     1.0375
+
+-------------------------------------------------------------------------------
+              |               Robust
+ln_FDIInc_O~s |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       ln_GDP |    1.56718   .5462878     2.87   0.004     .4959785    2.638382
+     ln_GDP_j |  -.0699322   .2045226    -0.34   0.732    -.4709753    .3311109
+     ln_distw |          0  (omitted)
+        Haven |          0  (omitted)
+     CIT_RATE |   .0576359    .009203     6.26   0.000       .03959    .0756818
+HavenCIT_RATE |  -.0088349   .0233002    -0.38   0.705    -.0545237    .0368539
+       contig |          0  (omitted)
+  comlang_off |          0  (omitted)
+       colony |          0  (omitted)
+       comcol |          0  (omitted)
+              |
+      obsTime |
+        2005  |  -.3478929   .1572558    -2.21   0.027    -.6562517   -.0395341
+        2006  |   -.192912   .1406519    -1.37   0.170    -.4687126    .0828886
+        2007  |  -.2817965    .122873    -2.29   0.022     -.522735    -.040858
+        2008  |   .3793185   .1365378     2.78   0.006     .1115851    .6470519
+        2009  |   .4618602    .113092     4.08   0.000     .2401011    .6836193
+        2010  |   .5115566   .1123191     4.55   0.000     .2913128    .7318003
+        2011  |   .5981117   .1203619     4.97   0.000     .3620972    .8341262
+        2012  |   .3094098   .0963942     3.21   0.001     .1203929    .4984267
+        2013  |  -.1348928   .0915913    -1.47   0.141    -.3144919    .0447063
+        2014  |  -.1155291   .1012037    -1.14   0.254    -.3139769    .0829188
+              |
+        _cons |  -18.80226   7.783294    -2.42   0.016    -34.06432   -3.540202
+--------------+----------------------------------------------------------------
+     Pair_Tal |   absorbed                                    (1031 categories)
+
+ ( 1)  CIT_RATE + HavenCIT_RATE = 0
+
+       F(  1,  2607) =    4.71
+            Prob > F =    0.0301
+OLS_Types.tex
+OLS_Types.rtf
+dir : seeout
+
+Linear regression, absorbing indicators           Number of obs   =       3444
+                                                  F(  20,   3399) =     120.68
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.6246
+                                                  Adj R-squared   =     0.6197
+                                                  Root MSE        =     1.7783
+
+-------------------------------------------------------------------------------
+              |               Robust
+ln_FDIInc_O~d |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       ln_GDP |   .3889426   .7097511     0.55   0.584    -1.002639    1.780525
+     ln_GDP_j |   .6605762   .0184185    35.86   0.000     .6244637    .6966888
+     ln_distw |  -.7175116   .0353657   -20.29   0.000    -.7868517   -.6481715
+        Haven |    2.62872   .3607573     7.29   0.000     1.921397    3.336043
+     CIT_RATE |   .0073011   .0152715     0.48   0.633    -.0226412    .0372434
+HavenCIT_RATE |  -.0376587   .0140904    -2.67   0.008    -.0652851   -.0100322
+       contig |   .5263394   .1320316     3.99   0.000     .2674701    .7852087
+  comlang_off |   .6562627   .1162228     5.65   0.000     .4283891    .8841363
+       colony |   .7035964   .1218189     5.78   0.000     .4647507    .9424421
+       comcol |   2.648925   .4430271     5.98   0.000     1.780299    3.517552
+              |
+      obsTime |
+        2005  |   .3143951   .2269217     1.39   0.166    -.1305217    .7593119
+        2006  |   .3287412   .2041176     1.61   0.107    -.0714644    .7289468
+        2007  |   .3963326   .1897057     2.09   0.037     .0243838    .7682815
+        2008  |  -.1295016   .1744285    -0.74   0.458     -.471497    .2124939
+        2009  |   .1413789   .1540997     0.92   0.359    -.1607585    .4435162
+        2010  |    .267425   .1605855     1.67   0.096    -.0474288    .5822788
+        2011  |   .1676501   .1488168     1.13   0.260    -.1241293    .4594295
+        2012  |   .0378377   .1372056     0.28   0.783    -.2311762    .3068516
+        2013  |   .0479803   .1181212     0.41   0.685    -.1836155    .2795761
+        2014  |   .1034954   .1309862     0.79   0.430    -.1533242     .360315
+              |
+        _cons |  -4.851085   9.887532    -0.49   0.624     -24.2372    14.53503
+--------------+----------------------------------------------------------------
+      COU_Tal |   absorbed                                      (25 categories)
+
+ ( 1)  CIT_RATE + HavenCIT_RATE = 0
+
+       F(  1,  3399) =    2.11
+            Prob > F =    0.1466
+OLS_Types.tex
+OLS_Types.rtf
+dir : seeout
+note: ln_distw omitted because of collinearity
+note: Haven omitted because of collinearity
+note: contig omitted because of collinearity
+note: comlang_off omitted because of collinearity
+note: colony omitted because of collinearity
+note: comcol omitted because of collinearity
+
+Linear regression, absorbing indicators           Number of obs   =       3444
+                                                  F(  14,   2217) =       3.70
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.9377
+                                                  Adj R-squared   =     0.9033
+                                                  Root MSE        =     0.8967
+
+-------------------------------------------------------------------------------
+              |               Robust
+ln_FDIInc_O~d |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       ln_GDP |   .2585564   .3967046     0.65   0.515    -.5193951    1.036508
+     ln_GDP_j |   .4186205   .1907844     2.19   0.028     .0444856    .7927554
+     ln_distw |          0  (omitted)
+        Haven |          0  (omitted)
+     CIT_RATE |  -.0148177   .0139262    -1.06   0.287    -.0421274     .012492
+HavenCIT_RATE |  -.0551789   .0193894    -2.85   0.004    -.0932021   -.0171557
+       contig |          0  (omitted)
+  comlang_off |          0  (omitted)
+       colony |          0  (omitted)
+       comcol |          0  (omitted)
+              |
+      obsTime |
+        2005  |   .2904385   .1918879     1.51   0.130    -.0858603    .6667374
+        2006  |   .4137739   .1848319     2.24   0.025     .0513121    .7762357
+        2007  |   .5667475   .1677263     3.38   0.001     .2378305    .8956645
+        2008  |  -.1218343   .1361404    -0.89   0.371    -.3888104    .1451418
+        2009  |   .1168694   .1173584     1.00   0.319    -.1132744    .3470133
+        2010  |   .3045608   .1113257     2.74   0.006     .0862473    .5228743
+        2011  |   .2469034    .085046     2.90   0.004     .0801252    .4136816
+        2012  |    .079535   .0786472     1.01   0.312     -.074695    .2337649
+        2013  |   .0602635   .0656825     0.92   0.359    -.0685422    .1890693
+        2014  |   .1056076   .0717094     1.47   0.141    -.0350171    .2462322
+              |
+        _cons |  -4.754964   5.957113    -0.80   0.425    -16.43707     6.92714
+--------------+----------------------------------------------------------------
+     Pair_Tal |   absorbed                                    (1213 categories)
+
+ ( 1)  CIT_RATE + HavenCIT_RATE = 0
+
+       F(  1,  2217) =   10.08
+            Prob > F =    0.0015
+OLS_Types.tex
+OLS_Types.rtf
+dir : seeout
+
+Linear regression, absorbing indicators           Number of obs   =       2785
+                                                  F(  20,   2741) =      81.32
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.5917
+                                                  Adj R-squared   =     0.5853
+                                                  Root MSE        =     1.8509
+
+-------------------------------------------------------------------------------
+              |               Robust
+ln_FDIInc_O~t |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       ln_GDP |   2.686885    1.24594     2.16   0.031     .2438096    5.129961
+     ln_GDP_j |   .6826881   .0241086    28.32   0.000     .6354153    .7299609
+     ln_distw |  -.7765094   .0387288   -20.05   0.000    -.8524501   -.7005688
+        Haven |   1.275346   .4738815     2.69   0.007     .3461446    2.204547
+     CIT_RATE |   .1253501   .0968068     1.29   0.195    -.0644715    .3151718
+HavenCIT_RATE |   .0020439   .0186176     0.11   0.913    -.0344619    .0385498
+       contig |   .4550734   .1328718     3.42   0.001     .1945344    .7156124
+  comlang_off |  -.1489823    .199103    -0.75   0.454    -.5393894    .2414248
+       colony |   .3811173    .181576     2.10   0.036     .0250777     .737157
+       comcol |   2.048808   .3998091     5.12   0.000      1.26485    2.832766
+              |
+      obsTime |
+        2005  |  -.2434238   1.101314    -0.22   0.825    -2.402913    1.916065
+        2006  |  -.1737663   1.088388    -0.16   0.873    -2.307911    1.960378
+        2007  |  -.2281699    1.05702    -0.22   0.829    -2.300806    1.844466
+        2008  |   .9793326   .2526801     3.88   0.000     .4838699    1.474795
+        2009  |   1.210757   .2030009     5.96   0.000     .8127068    1.608807
+        2010  |    1.17247   .1697231     6.91   0.000     .8396723    1.505269
+        2011  |   .3022893   .2476837     1.22   0.222    -.1833763     .787955
+        2012  |  -.1232312   .1806768    -0.68   0.495    -.4775076    .2310452
+        2013  |  -.2000092   .2023666    -0.99   0.323    -.5968157    .1967972
+        2014  |  -.3493248   .2187866    -1.60   0.110    -.7783281    .0796786
+              |
+        _cons |  -40.87328   16.78501    -2.44   0.015    -73.78583   -7.960731
+--------------+----------------------------------------------------------------
+      COU_Tal |   absorbed                                      (24 categories)
+
+ ( 1)  CIT_RATE + HavenCIT_RATE = 0
+
+       F(  1,  2741) =    1.68
+            Prob > F =    0.1952
+OLS_Types.tex
+OLS_Types.rtf
+dir : seeout
+note: ln_distw omitted because of collinearity
+note: Haven omitted because of collinearity
+note: contig omitted because of collinearity
+note: comlang_off omitted because of collinearity
+note: colony omitted because of collinearity
+note: comcol omitted because of collinearity
+
+Linear regression, absorbing indicators           Number of obs   =       2785
+                                                  F(  14,   1867) =       5.19
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.9398
+                                                  Adj R-squared   =     0.9103
+                                                  Root MSE        =     0.8608
+
+-------------------------------------------------------------------------------
+              |               Robust
+ln_FDIInc_O~t |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+       ln_GDP |   2.260954   .6733295     3.36   0.001     .9403959    3.581511
+     ln_GDP_j |   .3831677   .1933771     1.98   0.048     .0039097    .7624257
+     ln_distw |          0  (omitted)
+        Haven |          0  (omitted)
+     CIT_RATE |   .0941325   .0556633     1.69   0.091    -.0150364    .2033014
+HavenCIT_RATE |   .0735056   .0549808     1.34   0.181    -.0343246    .1813359
+       contig |          0  (omitted)
+  comlang_off |          0  (omitted)
+       colony |          0  (omitted)
+       comcol |          0  (omitted)
+              |
+      obsTime |
+        2005  |  -.8378287    .654343    -1.28   0.201    -2.121149     .445492
+        2006  |  -.9378209   .6410753    -1.46   0.144    -2.195121    .3194787
+        2007  |  -.8581813   .6097604    -1.41   0.159    -2.054065    .3377024
+        2008  |   .1681655   .1469877     1.14   0.253     -.120112     .456443
+        2009  |   .3375731   .1546107     2.18   0.029     .0343451    .6408011
+        2010  |   .3808431   .1197775     3.18   0.001     .1459313    .6157549
+        2011  |  -.0351376   .1326085    -0.26   0.791    -.2952141    .2249389
+        2012  |  -.1263072   .1070045    -1.18   0.238    -.3361683    .0835538
+        2013  |  -.2136327   .1061403    -2.01   0.044    -.4217988   -.0054666
+        2014  |  -.2410287     .11238    -2.14   0.032    -.4614322   -.0206251
+              |
+        _cons |  -36.72776   9.372925    -3.92   0.000    -55.11027   -18.34525
+--------------+----------------------------------------------------------------
+     Pair_Tal |   absorbed                                     (904 categories)
+
+ ( 1)  CIT_RATE + HavenCIT_RATE = 0
+
+       F(  1,  1867) =    4.97
+            Prob > F =    0.0260
+OLS_Types.tex
+OLS_Types.rtf
+dir : seeout
+
+. 
+. *****************************************************************************************
+> ****************
+.                                                          
+.                                                          
+. log close
+      name:  <unnamed>
+       log:  C:\Users\rbjoe\Dropbox\Kugejl\8. semester\Public Economics\Public_economics\Co
+> de\Stata output\log.txt
+  log type:  text
+ closed on:  23 Apr 2017, 19:37:19
+-------------------------------------------------------------------------------------------
