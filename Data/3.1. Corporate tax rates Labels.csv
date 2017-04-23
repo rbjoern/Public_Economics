@@ -1,0 +1,6 @@
+"CORP_TAX","CORP_TAX_label.en"
+"CIT_RATE","Corporate income tax rate"
+"STAT_CIT_RATE_EXCLU_SURTAX","Statutory corporate income tax rate exclusive of surtax"
+"ADJ_CIT_RATE","Corporate income tax rate less deductions for sub-national taxes"
+"SUB_CENT_GOV_CIT_RATE","Sub-central government corporate income tax rate"
+"TAR_CIT_RATE","Targeted corporate tax rates"

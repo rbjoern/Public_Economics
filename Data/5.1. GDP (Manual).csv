@@ -1,0 +1,27 @@
+value,date,indicatorID,indicator,iso2c,country,iso3c
+2742000000,2005,https://www.cia.gov/library/publications/the-world-factbook/fields/2195.html,GDP (current US$),NA,Guernsey,GGY
+3183418395,2011,https://www.gov.gg/CHttpHandler.ashx?id=2667&p=0,GDP (current US$),NA,Guernsey,GGY
+3506313574,2012,https://www.gov.gg/CHttpHandler.ashx?id=2667&p=0,GDP (current US$),NA,Guernsey,GGY
+3774467342,2013,https://www.gov.gg/CHttpHandler.ashx?id=2667&p=0,GDP (current US$),NA,Guernsey,GGY
+3619495643,2014,https://www.gov.gg/CHttpHandler.ashx?id=2667&p=0,GDP (current US$),NA,Guernsey,GGY
+3489876395,2015,https://www.gov.gg/CHttpHandler.ashx?id=2667&p=0,GDP (current US$),NA,Guernsey,GGY
+229000000,2005,http://data.un.org/CountryProfile.aspx?crName=Anguilla#Economic,GDP (current US$),NA,Anguilla,AIA
+175400000,2009,https://www.cia.gov/library/publications/the-world-factbook/fields/2195.html,GDP (current US$),NA,Anguilla,AIA
+268000000,2010,http://data.un.org/CountryProfile.aspx?crName=Anguilla#Economic,GDP (current US$),NA,Anguilla,AIA
+311000000,2014,http://data.un.org/CountryProfile.aspx?crName=Anguilla#Economic,GDP (current US$),NA,Anguilla,AIA
+183000000,2005,http://data.un.org/CountryProfile.aspx?crName=Cook%20Islands#Economic,GDP (current US$),NA,Cook Islands,COK
+255000000,2010,http://data.un.org/CountryProfile.aspx?crName=Cook%20Islands#Economic,GDP (current US$),NA,Cook Islands,COK
+311000000,2014,http://data.un.org/CountryProfile.aspx?crName=Cook%20Islands#Economic,GDP (current US$),NA,Cook Islands,COK
+5771000000,2012,https://www.cia.gov/library/publications/the-world-factbook/fields/2195.html#je,GDP (current US$),NA,Jersey,JEY
+5771000000,2013,https://www.cia.gov/library/publications/the-world-factbook/fields/2195.html#je,GDP (current US$),NA,Jersey,JEY
+6031336274,2015,https://www.gov.je/Government/JerseyInFigures/BusinessEconomy/Pages/NationalAccounts.aspx#anchor-4,GDP (current US$),NA,Jersey,JEY
+49000000,2005,http://data.un.org/CountryProfile.aspx?crName=Montserrat,GDP (current US$),NA,Montserrat,MSR
+56000000,2010,http://data.un.org/CountryProfile.aspx?crName=Montserrat,GDP (current US$),NA,Montserrat,MSR
+63000000,2014,http://data.un.org/CountryProfile.aspx?crName=Montserrat,GDP (current US$),NA,Montserrat,MSR
+10010000,2005,https://www.cia.gov/library/publications/the-world-factbook/geos/ne.html,GDP (current US$),NA,Niue,NIU
+364200000,2012,https://www.rijksdienstcn.com/en/archief/mei-2014/gross-domestic-product-bonaire-21-thousand-dollars-per-capita/gross-domestic-product-bonaire-21-thousand-dollars-per-capita,GDP (current US$),NA,"Bonaire, Saint Eustatius and Saba",BES
+3930672288,2005,http://data.un.org/Data.aspx?q=Netherlands+Antilles&d=SNAAMA&f=grID%3A101%3BcurrID%3AUSD%3BpcFlag%3A1%3BcrID%3A530,GDP (current US$),NA,Netherlands Antilles,ANT
+4061679561,2006,http://data.un.org/Data.aspx?q=Netherlands+Antilles&d=SNAAMA&f=grID%3A101%3BcurrID%3AUSD%3BpcFlag%3A1%3BcrID%3A530,GDP (current US$),NA,Netherlands Antilles,ANT
+4182696678,2007,http://data.un.org/Data.aspx?q=Netherlands+Antilles&d=SNAAMA&f=grID%3A101%3BcurrID%3AUSD%3BpcFlag%3A1%3BcrID%3A530,GDP (current US$),NA,Netherlands Antilles,ANT
+4398620277,2008,http://data.un.org/Data.aspx?q=Netherlands+Antilles&d=SNAAMA&f=grID%3A101%3BcurrID%3AUSD%3BpcFlag%3A1%3BcrID%3A530,GDP (current US$),NA,Netherlands Antilles,ANT
+4313249853,2009,http://data.un.org/Data.aspx?q=Netherlands+Antilles&d=SNAAMA&f=grID%3A101%3BcurrID%3AUSD%3BpcFlag%3A1%3BcrID%3A530,GDP (current US$),NA,Netherlands Antilles,ANT

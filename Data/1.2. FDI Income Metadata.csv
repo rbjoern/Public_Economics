@@ -1,0 +1,5 @@
+"MEASURE","MEASURE_label.en","ACCOUNTING_ENTRY","ACCOUNTING_ENTRY_label.en","LEVEL_COUNTERPART","LEVEL_COUNTERPART_label.en","TIME_FORMAT","TIME_FORMAT_label.en","UNIT","UNIT_label.en","POWERCODE","POWERCODE_label.en","OBS_STATUS","OBS_STATUS_label.en"
+"USD","US Dollar","NET","Net","IMC","Immediate counterpart (Immediate investor or immediate host)","P1Y","Annual","USD","US Dollar",6,"Millions",NA,NA
+"USD","US Dollar","NET","Net","IMC","Immediate counterpart (Immediate investor or immediate host)","P1Y","Annual","USD","US Dollar",6,"Millions","C","Non-publishable and confidential value"
+"USD","US Dollar","NET","Net","IMC","Immediate counterpart (Immediate investor or immediate host)","P1Y","Annual","USD","US Dollar",6,"Millions","N","Non-publishable, but non-confidential value"
+"USD","US Dollar","NET","Net","IMC","Immediate counterpart (Immediate investor or immediate host)","P1Y","Annual","USD","US Dollar",6,"Millions","d","Secondary Confidentiality"
