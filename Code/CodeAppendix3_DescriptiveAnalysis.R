@@ -6,7 +6,7 @@ rm(list=ls())
 
 #USER NOTE: YOU MUST ASSIGN A WORKING DIRECTORY FOR THE CODE TO FUNCTION
 # The WD must have the main CSV file created in code appendix 2 in order to work. 
-setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_economics/Data")
+setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_Economics/Data")
 
 #Used packages 
 #install.packages("readr")

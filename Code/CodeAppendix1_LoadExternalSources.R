@@ -12,7 +12,7 @@ rm(list=ls()) #Clear stored elements
 #install.packages("dplyr")
 
 #USER NOTE: YOU MUST ASSIGN A WORKING DIRECTORY FOR THE CODE TO FUNCTION
-setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_economics\Data")
+setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_Economics/Data")
 
 #################################################################################################################
 

@@ -13,7 +13,7 @@ rm(list=ls())
 
 #USER NOTE: YOU MUST ASSIGN A WORKING DIRECTORY FOR THE CODE TO FUNCTION
 # The WD must have the CSV files created in code appendix 1 in order to work. 
-setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_economics/Data")
+setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_Economics/Data")
 
 #USER NOTE: All datasets from github must be saved in the working directory for the code to run. 
 
