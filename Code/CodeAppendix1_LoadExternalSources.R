@@ -47,6 +47,9 @@ setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_Economi
     rm(dsd)
   
   write.csv(df, file="1. FDI Income (OECD).csv", row.names = FALSE)
+  
+  #Create the zip file manually. 
+  #zip("1. FDI Income (OECD).zip", "1. FDI Income (OECD).csv")
 
   
 #################################################################################################################

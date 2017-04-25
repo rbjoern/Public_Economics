@@ -38,6 +38,7 @@ setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_Economi
     library(readr)
     df <- read_csv("1. FDI Income (OECD).csv")
   
+    
   #FILTER RELEVANT OBSERVATRIONS  
     #Filter: All resident units (as opposed to SPEs and non-SPEs respectively)
     #We end up needing these later, as we replace missing totals with non-SPEs
@@ -57,11 +58,11 @@ setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_Economi
       #Note that the rows are still there with missing values, we just remove the duplicate rows showing theyre missing. 
     
     #Remove observations which are not countries
-      #Country aggregate
+      #World and World unallocated are removed below, after they're added to each COU in a variable. 
     noncountries <- c(
-      "WORLD",
+      #"WORLD",
       "WORLD Excluding OECD countries",
-      "WORLD unallocated and confidential",
+      #"WORLD unallocated and confidential",
       "OECD",
       "EUROPE",
       "EUROPE Excluding OECD countries",
@@ -229,6 +230,28 @@ setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_Economi
                "FDIInc_Out_Total","FDIInc_Inw_Total","FDIInc_Out_Dividends","FDIInc_Inw_Dividends",
                "FDIInc_Out_Equity","FDIInc_Inw_Equity","FDIInc_Out_Debt", "FDIInc_Inw_Debt", 
                "FDIInc_Out_Reinvested", "FDIInc_Inw_Reinvested")]
+    
+    
+    #SAVE WORLD DATA FOR EACH COU, THEN REMOVE THOSE AS ROWS
+     noncountries <- c("WORLD", "WORLD unallocated and confidential")
+  world <- df %>% subset(COUNTERPART_AREA_label.en %in% noncountries)
+  df <- subset(df, !(COUNTERPART_AREA_label.en %in% noncountries)) #Remove the rows
+  rm(noncountries) #remove
+  world <- world[, colnames(world) %in% c("COU", "obsTime", "FDIInc_Out_Total", "COUNTERPART_AREA") ]
+  world$COUNTERPART_AREA[world$COUNTERPART_AREA=="W0"]      <- "World_FDIInc_Out_Total"
+  world$COUNTERPART_AREA[world$COUNTERPART_AREA=="C_W190"]  <- "Unallocated_FDIInc_Out_Total"
+  
+  
+  
+  #Spread data
+  world <- spread(world, "COUNTERPART_AREA", "FDIInc_Out_Total")
+  
+  #Join back as columns in original data
+  df <- left_join(df,world)
+  rm(world)
+  
+  
+  
   
   #SORT DATA AS PANEL DATA
   library(dplyr)
@@ -635,13 +658,56 @@ setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_Economi
     df <- left_join(df,exc, by = c("COU" = "LOCATION", "obsTime" = "obsTime", "COU_label.en" = "LOCATION_label.en"))
     rm(exc)
     
+    
+############################################################################    
+#8. CFC Rules Data
+############################################################################
 
+    library("readr")
+    cfc <- read.csv("8. CFC Rules.csv")
+    
+    df <- inner_join(df, cfc, by =c("COU"="ISO"))
+    rm(cfc)
+    check <- unique(df[, c("COU_label.en", "CFC")]) %>% subset(CFC==1)
+    rm(check)
 
+############################################################################    
+#9. TAX RATES FROM KPMG
+############################################################################
 
-      
+library("readr")
+kpmg <- read.csv("9. Corporate tax rates (KPMG).csv")
 
+#DATA FIX. 
+    #There is no data on 2005. We assume no change from 2005 to 2006. 
+    kpmg$X2005 <- kpmg$X2006
+    
+    #We 
+    kpmg <- gather(kpmg, Aar, CIT_RATE_KPMG, X2006:X2005)
+    #We remove X (first letter) from the years. 
+    kpmg$Aar <- substring(kpmg$Aar,2)
+    
+    #Convert to proper variable types
+    kpmg$Aar <- as.integer(kpmg$Aar)
+    kpmg$ISO <- as.character(kpmg$ISO)
+    
+    #Join data for both countries
+    #Reporting countries (for checking purposes)
+    df <- left_join(df,kpmg, by = c("COU"="ISO", "obsTime" = "Aar"))
+    
+    #Partner countries (most relevant)
+    kpmg <- rename(kpmg, CIT_RATE_KPMG_j = CIT_RATE_KPMG )
+    df <- left_join(df,kpmg, by = c("COUNTERPART_AREA"="ISO", "obsTime" = "Aar"))
+    rm(kpmg)
+    
+    df$
+    
+    #Create variable for difference
+    df$CIT_difference <- df$CIT_RATE - df$CIT_RATE_KPMG_j
+    
+    
 ###########################################################################  
-#8. FINAL CLEANING OF DATA & EXPORT
+#10. FINAL CLEANING OF DATA & EXPORT
 ###########################################################################  
 
 #DATA FIX 
@@ -650,23 +716,44 @@ setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_Economi
     df <- subset(df, df$COU != df$COUNTERPART_AREA)
       
 #DATA FIX
-    #THe dataset has some issues which we fix here, to prevent missing values from cropping up all over. 
-    
-    #Remove Turkey
-    check <- subset(df, df$COU_label.en == "Turkey")
-    rm(check)
-    #TURKEY REPORTS ONLY AGGREGATES FOR FOREIGN DIRECT INVESTMENT INCOME. 
-    #WE CUT THEM FROM THE ANALYSIS
-    df <- subset(df, df$COU_label.en != "Turkey")
-    
-    check <- subset(df, df$COU_label.en == "Austria")
-    rm(check)    
+    #Some countries report only aggregates (or not even that)
+      #Finland
+      check <- subset(df, df$COU_label.en == "Finland")
+      rm(check)
+      df <- subset(df, df$COU_label.en != "Finland")
+      
+      #Luxembourg
+      check <- subset(df, df$COU_label.en == "Luxembourg")
+      rm(check)
+      df <- subset(df, df$COU_label.en != "Luxembourg")
+      
+      #Mexico (already missing)
 
+      #Portugal
+      check <- subset(df, df$COU_label.en == "Portugal")
+      rm(check)
+      df <- subset(df, df$COU_label.en != "Portugal")
+      
+      #Portugal
+      check <- subset(df, df$COU_label.en == "Portugal")
+      rm(check)
+      df <- subset(df, df$COU_label.en != "Portugal")
+      
+      #Switzerland
+      check <- subset(df, df$COU_label.en == "Switzerland")
+      rm(check)
+      df <- subset(df, df$COU_label.en != "Switzerland")
+      
+      #Turkey
+      check <- subset(df, df$COU_label.en == "Turkey")
+      rm(check)
+      df <- subset(df, df$COU_label.en != "Turkey")
+      
+      
 #EXPORT DATA FOR LATER USE
-
-      write.csv(df, file="8. Main Dataset.csv", row.names = FALSE)
-      write.dta(df, file="8. Main Dataset.dta")
-
+      write.csv(df, file="10. Main Dataset.csv", row.names = FALSE)
+      write.dta(df, file="10. Main Dataset.dta")
+      
     
 ###########################################################################  
 #END

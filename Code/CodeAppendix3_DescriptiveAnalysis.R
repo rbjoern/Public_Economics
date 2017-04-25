@@ -1,4 +1,4 @@
-#CODE APPENDIX 2
+#CODE APPENDIX 3
 # THE FOLLOWING APPENDIX LOADS THE MAIN DATASET AND RUNS DESCRIPTIVE ANALYSIS AND DATA CHECKS
 
 cat("\014") 
@@ -16,8 +16,31 @@ setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_Economi
 
 #Load data
 library(readr)
-df <- read_csv("Main_Dataset.csv")
+df <- read_csv("10. Main Dataset.csv")
 
+#####################################################################################################
+# SHARE OF WORLD GDP FEATURED IN INDIVIDUAL COUNTRY DATA
+#####################################################################################################
+  library("dplyr")
+  
+  #First we FDI incomes in indivudal
+  worldshare <- 
+    df %>%
+    group_by(COU_label.en, obsTime) %>%
+    summarise( 
+              World = mean(World_FDIInc_Out_Total, na.rm=TRUE),
+              Unallocated = mean(Unallocated_FDIInc_Out_Total, na.rm=TRUE),
+              Allocated_Share = 100*round((World-Unallocated)/World, digits=2),
+              totalFDI = sum(FDIInc_Out_Total,na.rm = TRUE), 
+              total_share = 100*round(totalFDI / World, 2),
+              Difference = (Allocated_Share - total_share),
+              text = paste(total_share, " (", Allocated_Share, ")")
+              )
+  
+  sharetable <- worldshare[, colnames(worldshare) %in% c("COU_label.en", "obsTime", "text") ]
+  library("tidyr")
+  sharetable <- spread(sharetable, obsTime, text)
+  
 #####################################################################################################
 #NUMBER OF DATA PAIRS
 #####################################################################################################
