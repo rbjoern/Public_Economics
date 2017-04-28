@@ -5,11 +5,11 @@ Small_Haven	Small_Haven	3.754***	3.724***	3.361***
 		(0.553)	(0.552)	(0.538)		
 Large_Haven	Large_Haven	1.905***	1.925***	2.066***		
 		(0.387)	(0.389)	(0.382)		
-CIT_RATE	CIT_RATE	0.033***	0.035***	0.059***	0.043***	0.023***
+CIT_RATE	$ \text{CIT}_{it}$ $(\gamma_1)$	0.033***	0.035***	0.059***	0.043***	0.023***
 		(0.004)	(0.004)	(0.014)	(0.012)	(0.008)
-Small_HavenCIT_RATE	Small Haven.CIT_Rate	-0.062***	-0.060***	-0.043*	-0.026	-0.054+
+Small_HavenCIT_RATE	Small Haven$\times\text{CIT}_{it}$	-0.062***	-0.060***	-0.043*	-0.026	-0.054+
 		(0.023)	(0.023)	(0.022)	(0.018)	(0.037)
-Large_HavenCIT_RATE	Large Haven.CIT_Rate	-0.009	-0.010	-0.017	-0.009	-0.002
+Large_HavenCIT_RATE	Large Haven$\times\text{CIT}_{it}$	-0.009	-0.010	-0.017	-0.009	-0.002
 		(0.014)	(0.014)	(0.014)	(0.013)	(0.019)
 						
 No small haven effect (p)		0.197	0.258	0.518	0.400	0.391

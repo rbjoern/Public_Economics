@@ -11,15 +11,22 @@ setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_Economi
 #Used packages 
 #install.packages("readr")
 #install.packages("dplyr")
+#install.packages("xtable")
 
 #The appendix has the following sections  
+# 1. SHARE OF WORLD FDI FEATURED IN INDIVIDUAL COUNTRY DATA
+# 2. HAVEN SHARE OF WORLD GDP
+# 3. NUMBER OF DATA PAIRS
+# 4. MISSING VALUES PER COUNTRY/YEAR for one variable
+# 5. SIZE OF HAVENS
+# 6. CHECK HAVEN VARIABLES
 
 #Load data
 library(readr)
 df <- read_csv("10. Main Dataset.csv")
 
 #####################################################################################################
-# SHARE OF WORLD GDP FEATURED IN INDIVIDUAL COUNTRY DATA
+# 1. SHARE OF WORLD FDI FEATURED IN INDIVIDUAL COUNTRY DATA
 #####################################################################################################
   library("dplyr")
   
@@ -34,15 +41,106 @@ df <- read_csv("10. Main Dataset.csv")
               totalFDI = sum(FDIInc_Out_Total,na.rm = TRUE), 
               total_share = 100*round(totalFDI / World, 2),
               Difference = (Allocated_Share - total_share),
-              text = paste(total_share, " (", Allocated_Share, ")")
-              )
+              text = paste(total_share, " (",Allocated_Share,")", sep=""),
+              totalFDIHaven = sum(FDIInc_Out_Total[Haven==1],na.rm = TRUE),
+              Haven_share = 100*round(totalFDIHaven/totalFDI, 2),
+              totalFDISmallHaven = sum(FDIInc_Out_Total[Small_Haven==1],na.rm = TRUE),
+              SmallHaven_share = 100*round(totalFDISmallHaven/totalFDI, 2),
+              totalFDILargeHaven = sum(FDIInc_Out_Total[Large_Haven==1],na.rm = TRUE),
+              LargeHaven_share = 100*round(totalFDILargeHaven/totalFDI, 2)
+              ) 
   
+  #CREATE A TABLE WHICH SHOWS THE SHARE OF FDI INCOME REPORTED IN EACH COUNTRY
   sharetable <- worldshare[, colnames(worldshare) %in% c("COU_label.en", "obsTime", "text") ]
   library("tidyr")
   sharetable <- spread(sharetable, obsTime, text)
+  sharetable <- arrange(sharetable,`2005`,`2006`,`2007`,`2008`,`2009`,`2010`,
+                        `2011`, `2012`,`2013`,`2014`,`2015`,desc(COU_label.en))
+
+  sharetable <- arrange(sharetable,COU_label.en)
+    #Output table in latex
+    library(xtable)
+    xtable(sharetable) %>% print(include.rownames=FALSE)
+   
+
+  
+
   
 #####################################################################################################
-#NUMBER OF DATA PAIRS
+# 2. HAVEN SHARE OF WORLD GDP
+#####################################################################################################
+  
+  countrygdp <- 
+    df %>%
+    group_by(COUNTERPART_AREA_label.en, obsTime) %>%
+    summarise(
+      GDP = mean(GDP_j,na.rm = TRUE),
+      Haven = mean(Haven,na.rm = TRUE),
+      Small_Haven = mean(Small_Haven,na.rm = TRUE),
+      Large_Haven = mean(Large_Haven,na.rm = TRUE)
+    )
+    
+    countrygdp$Type <- "Non-Haven"
+    countrygdp$Type[countrygdp$Small_Haven==1] <- "Small Haven" 
+    countrygdp$Type[countrygdp$Large_Haven==1] <- "Large Haven"
+    
+  
+
+   
+  
+    #World GDP from http://databank.worldbank.org/data/reports.aspx?source=2&series=NY.GDP.MKTP.CD&country=
+        obsTime <- c(2005,	2006,	2007,	2008,	2009,	2010,	2011,	2012,	2013,	2014,	2015)
+        WorldGDP <- c(47390843776187, 51309491620617, 57754955756610,	63344394334398,	60043969657081,
+                      65853629844043,	73174667698349,	74681983166315,	76783293108832,	78676353220866,	
+                      74188701246151)
+        worldgdp <- data.frame(obsTime, WorldGDP)
+        worldgdp$WorldGDP <- worldgdp$WorldGDP*10^-6
+        rm(obsTime, WorldGDP)
+    
+    #GDP for havens    
+    havengdp <- 
+          countrygdp %>%
+          group_by(Haven, obsTime) %>%
+          summarise(
+            totalGDP = sum(GDP,na.rm = TRUE)
+            
+          ) %>%
+          arrange(obsTime,Haven)
+          rm(countrygdp)
+          
+          #Add world gdp        
+          library(dplyr)
+          havengdp <- left_join(havengdp, worldgdp)
+          
+          
+          #GDP shares
+          havengdp$Share <- 100*round(havengdp$totalGDP/havengdp$WorldGDP, 3)
+    
+      #GDP for havens by size 
+          havengdpsize <- 
+            countrygdp %>%
+            group_by(Type, obsTime) %>%
+            summarise(
+              totalGDP = sum(GDP,na.rm = TRUE)
+              
+            ) %>%
+            arrange(obsTime,Type)
+          
+          #Add world gdp        
+          library(dplyr)
+          havengdpsize <- left_join(havengdpsize, worldgdp)
+          rm(worldgdp)
+          
+          #GDP shares
+          havengdpsize$Share <- 100*round(havengdpsize$totalGDP/havengdpsize$WorldGDP, 3)
+          
+          
+
+          
+        
+  
+#####################################################################################################
+# 3. NUMBER OF DATA PAIRS
 #####################################################################################################
 
 
@@ -64,7 +162,7 @@ df <- read_csv("10. Main Dataset.csv")
 
 
 #####################################################################################################
-# MISSING VALUES PER COUNTRY/YEAR for one variable
+# 4. MISSING VALUES PER COUNTRY/YEAR for one variable
 ##################################################################################################### 
   
 var <- c("FDIInc_Inw_Total")
@@ -90,7 +188,7 @@ rm(var)
 
 
 #####################################################################################################
-# SIZE OF HAVENS
+# 5. SIZE OF HAVENS
 ##################################################################################################### 
   library("dplyr")
   
@@ -102,7 +200,7 @@ rm(var)
           )
 
 #####################################################################################################
-# Haven variables
+# 6. CHECK HAVEN VARIABLES
 #####################################################################################################  
   library("dplyr")
   
@@ -118,36 +216,6 @@ rm(var)
     ) %>%
     arrange(-All_havens)
     
-#####################################################################################################
-# SHARE IN HAVENS
-#####################################################################################################  
 
-  
-  library("dplyr")
-  
-  relevant <- c("ID", "COU_label.en", "COUNTERPART_AREA_label.en", "DI_T_D4P_F", "DO_T_D4P_F", "Haven")
-  
-  shares <- df %>%
-    #filter(df$obsTime == 2014) %>%
-    group_by(COU_label.en, obsTime) %>%
-    summarise(
-      Primary_Income_Receivable_World = mean(D1_D4FRS2, na.rm = TRUE),
-      Primary_Income_Payable_World = mean(D1_D4TOS2, na.rm = TRUE),
-      Primary_Income_Net_World = mean(D1_D4NFRS2, na.rm = TRUE),
-      FDI_Income_Total_Outward = sum(DO_T_D4P_F, na.rm = TRUE),
-      Haven_FDI_Income_Outward = sum(DO_T_D4P_F[Haven==1], na.rm = TRUE)/sum(DO_T_D4P_F, na.rm = TRUE),
-      NonHaven_FDI_Income_Outward = sum(DO_T_D4P_F[Haven==0], na.rm = TRUE)/sum(DO_T_D4P_F, na.rm = TRUE),
-      FDI_Income_Total_Inward = sum(DI_T_D4P_F, na.rm = TRUE),
-      Haven_FDI_Income_Inward = sum(DI_T_D4P_F[Haven==1], na.rm = TRUE)/sum(DI_T_D4P_F, na.rm = TRUE),
-      NonHaven_FDI_Income_Inward = sum(DI_T_D4P_F[Haven==0], na.rm = TRUE)/sum(DI_T_D4P_F, na.rm = TRUE)
-    ) #%>%
-    #arrange(-Primary_Income_Receivable_World)
-  
-  shares$FDIOutward_Receivable <- shares$FDI_Income_Total_Outward / shares$Primary_Income_Receivable_World
-  shares$FDIInward_Payable <- shares$FDI_Income_Total_Inward / shares$Primary_Income_Payable_World
-  
-  write.csv(shares, file="shares", row.names = FALSE)
-
-  ##################################################################################################### 
   
   

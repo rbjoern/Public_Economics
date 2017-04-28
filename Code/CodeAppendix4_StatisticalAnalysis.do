@@ -40,28 +40,21 @@ local Control1 "contig comlang_off colony comcol" //EXCE
 *Interaction terms 
 *Basic interaction
 gen HavenCIT_RATE = Haven*CIT_RATE
-label variable HavenCIT_RATE "Haven.CIT_Rate "
 
 *Based on size
 gen Small_HavenCIT_RATE = Small_Haven*CIT_RATE
-label variable Small_HavenCIT_RATE "Small Haven.CIT_Rate "
 
 gen Large_HavenCIT_RATE = Large_Haven*CIT_RATE
-label variable Large_HavenCIT_RATE "Large Haven.CIT_Rate "
 
 *Based on the tax differences variable
 gen HavenCIT_difference = Haven*CIT_difference
-label variable HavenCIT_difference "Haven.CIT (difference)"
 
 *CFC interactions
 gen CFCHaven = Haven*CFC
-label variable CFCHaven  "CFC.Haven"
 
 gen CFCHavenCIT_RATE = Haven*CFC*CIT_RATE
-label variable CFCHavenCIT_RATE  "CFC.Haven.CIT_RATE"
 
 gen CFCCIT_RATE = CFC*CIT_RATE
-label variable CFCCIT_RATE   "CFC.CIT_RATE"
 
 *Encode assigns numerical values to each group in a variable
 
@@ -96,90 +89,154 @@ label variable FDIInc_Inw_Dividends 	"FDI income - Dividends (Inwards)"
 label variable FDIInc_Inw_Equity 		"FDI income - Income on Equity (Inwards)"
 label variable FDIInc_Inw_Debt 			"FDI income - Interests from income on debt (Inwards)"
 label variable FDIInc_Inw_Reinvested 	"FDI income - Reinvested earnings (Inwards)"
-label variable ln_GDP_j					"ln(GDP_i)"	
-label variable ln_GDP_j					"$\ln(GDP_j)$"	
+label variable ln_GDP					"$\ln\text{GDP}_{it}$"	
+label variable ln_GDP_j					"$\ln\text{GDP}_{jt}$"	
+label variable ln_distw					"$\ln\text{Distance (w)}$"
+label variable contig 					"Common border"
+label variable colony 					"Colony"
+label variable comcol 					"Common colony"
+label variable comlang_off 				"Common language"
+label variable CIT_RATE					"$ \text{CIT}_{it}$ $(\gamma_1)$"
+label variable Haven 					"Haven $(\gamma_2)$"
+label variable HavenCIT_RATE 			"Haven$\times\text{CIT}_{it}$ $ (\gamma_3)$ "
+label variable Small_HavenCIT_RATE 		"Small Haven$\times\text{CIT}_{it}$"
+label variable Large_HavenCIT_RATE 		"Large Haven$\times\text{CIT}_{it}$"
+label variable HavenCIT_difference 		"Haven$\times\text{CIT}_{it}$ (difference)"
+label variable CFCHaven  				"CFC$\times$Haven"
+label variable CFCHavenCIT_RATE  		"CFC.Haven$\times\text{CIT}_{it}$"
+label variable CFCCIT_RATE   			"CFC$\times\text{CIT}_{it}$ "
 ********************************************************************************
 
 ********************************************************************************
 *ANALYSIS
 ********************************************************************************
 *Without OECD tax havens. 
-*drop if COU == "LUX" // Luxembourg (no real obs)
 *drop if COU == "IRL" // Ireland
 
 *Panel
 xtset Pair_Tal obsTime, yearly
 
-*drop if Haven==0
-
-/*
-*Breusch-Pagan test
-predict uhat, residuals
-gen uhat2=uhat*uhat
-regress uhat2  `Gravity' `Independent1' `Control1' b2015.obsTime
-test  `Gravity' `Independent1' `Control1' 
-*/
-
-*TJEK OP PÅ OM DU BØR BRUGE CLUSTERED STD ERRORS
 
 *********************************************************************************************************
+* REGRESSION TABLE ONE. BASIC REGRESSION
 *********************************************************************************************************
-*********************************************************************************************************
-*********************************************************************************************************
-*********************************************************************************************************
-
-*FIGURE ONE. 
-eststo Check: regress `y' `Gravity' `Independent1' `Control1', robust
+{
+regress `y' `Gravity' `Independent1' `Control1', robust
 	test CIT_RATE + HavenCIT_RATE=0
 		scalar p1 = r(p)
-	outreg2 using OLS, replace ctitle("Basic") ///
+	outreg2 using OLS, replace ctitle("Eq. (\ref{gravity1})") ///
 							tex(frag pretty) word label alpha(0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
-							 addstat("Adj. R-squared", e(r2_a),"No haven effect (p)", p1)  ///
-							 dec(3) keep(`Gravity' `Independent1' `Control1')
-
-*areg `y' `Gravity' `Independent1' `Control1', absorb(obsTime) vce(robust) noomitted							 
+							 addstat("$\gamma_1+\gamma_3 =0$ (p-value)", p1)  ///
+							 dec(3) keep(`Gravity' `Independent1' `Control1')				 					 
+						 
 							 
 regress `y' `Gravity' `Independent1' `Control1' b2015.obsTime, robust
 	test CIT_RATE + HavenCIT_RATE=0
 			scalar p1 = r(p)
-	outreg2 using OLS, append ctitle("Yearly") ///
+	outreg2 using OLS, append ctitle("$+\delta_t$") ///
 							tex(frag pretty) word label alpha(0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
-							 addstat("Adj. R-squared", e(r2_a),"No haven effect (p)", p1)  ///
+							 addstat("$\gamma_1+\gamma_3 =0$ (p-value)", p1)  ///
 							 dec(3) keep(`Gravity' `Independent1' `Control1')
-						
+*Equivalent alternative:
+*areg `y' `Gravity' `Independent1' `Control1', absorb(obsTime) vce(robust) noomitted							
 
 *regress `y' `Gravity' `Independent1' `Control1' b2015.obsTime b6.COU_Tal, robust // Reference group: Germany (most observations)									
 areg `y' `Gravity' `Independent1' `Control1' b2015.obsTime, absorb(COU_Tal) vce(robust)
 	test CIT_RATE + HavenCIT_RATE=0
 			scalar p1 = r(p)
-	outreg2 using OLS, append ctitle("Investor") ///
+	outreg2 using OLS, append ctitle("$+\zeta_i$") ///
 							tex(frag pretty) word label alpha(0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
-							 addstat("Adj. R-squared", e(r2_a),"No haven effect (p)", p1)  ///
-							 dec(3) keep(`Gravity' `Independent1' `Control1')						 
-						 
+							 addstat("$\gamma_1+\gamma_3 =0$ (p-value)", p1)  ///
+							 dec(3) keep(`Gravity' `Independent1' `Control1')				 
+*Equivalent alternative:
 *regress `y' `Gravity' `Independent1' `Control1' b2015.obsTime b6.COU_Tal  b59.COUNTERPART_AREA_Tal, robust //Reference group: Germany
-
 
 areg `y' `Gravity' `Independent1' `Control1' b2015.obsTime  b6.COU_Tal, absorb(COUNTERPART_AREA_Ta) vce(robust) // Reference group: Germany (most observations)												 
 	test CIT_RATE + HavenCIT_RATE=0
 			scalar p1 = r(p)
-	outreg2 using OLS, append ctitle("Partner") ///
+	outreg2 using OLS, append ctitle("$+\eta_j$") ///
 							tex(frag pretty) word label alpha(0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
-							 addstat("Adj. R-squared", e(r2_a),"No haven effect (p)", p1)  ///
+							 addstat("$\gamma_1+\gamma_3 =0$ (p-value)", p1)  ///
 							 dec(3) keep(`Gravity' `Independent1' `Control1')
-
-
+*Equivalent alternative: 
 *regress `y' `Gravity' `Independent1' `Control1' b2015.obsTime b6.COU_Tal  b59.COUNTERPART_AREA_Tal  b1017.Pair_Tal //Reference group: Germany-France (most observations, large flow)
 
 
 areg `y' `Gravity' `Independent1' `Control1' b2015.obsTime, absorb(Pair_Tal) vce(robust) 
 	test CIT_RATE + HavenCIT_RATE=0
 		scalar p1 = r(p)
-	outreg2 using OLS, append ctitle("Pairs") ///
+	outreg2 using OLS, append ctitle("$+\theta_{ij}$ (FE)") ///
 							tex(frag pretty) word label alpha(0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
-							 addstat("Adj. R-squared", e(r2_a),"No haven effect (p)", p1)  ///
+							 addstat("$\gamma_1+\gamma_3 =0$ (p-value)", p1)  ///
 							 dec(3) keep(`Gravity' `Independent1' `Control1')
 
+*Equivalent alternative 
+*xtreg `y' `Gravity' `Independent1' `Control1' b2015.obsTime, fe robust	
+
+/*
+			Time dummies &&X&X&X&X \\
+			Country \textit{i} dummies &&&X&X& \\
+			Country \textit{j} dummies &&&&X& \\
+			Country pair dummies &&&&&X \\	
+*/
+}
+
+*********************************************************************************************************
+* REGRESSION TABLE ONE. BASIC REGRESSION (CLUSTERED STD ERRORS)
+*********************************************************************************************************
+{
+regress `y' `Gravity' `Independent1' `Control1', robust cluster(distw)
+	test CIT_RATE + HavenCIT_RATE=0
+		scalar p1 = r(p)
+	outreg2 using OLSCluster, replace ctitle("Eq. (\ref{gravity1})") ///
+							tex(frag pretty) word label alpha(0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+							 addstat("$\gamma_1+\gamma_3 =0$ (p-value)", p1)  ///
+							 dec(3) keep(`Gravity' `Independent1' `Control1')			 					 
+						 
+							 
+regress `y' `Gravity' `Independent1' `Control1' b2015.obsTime, robust cluster(distw)
+	test CIT_RATE + HavenCIT_RATE=0
+			scalar p1 = r(p)
+	outreg2 using OLSCluster, append ctitle("$+\delta_t$") ///
+							tex(frag pretty) word label alpha(0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+							 addstat("$\gamma_1+\gamma_3 =0$ (p-value)", p1)  ///
+							 dec(3) keep(`Gravity' `Independent1' `Control1')
+*Equivalent alternative:
+*areg `y' `Gravity' `Independent1' `Control1', absorb(obsTime) vce(cluster distw) noomitted							
+
+*regress `y' `Gravity' `Independent1' `Control1' b2015.obsTime b6.COU_Tal, robust // Reference group: Germany (most observations)									
+areg `y' `Gravity' `Independent1' `Control1' b2015.obsTime, absorb(COU_Tal) vce(cluster distw) 
+	test CIT_RATE + HavenCIT_RATE=0
+			scalar p1 = r(p)
+	outreg2 using OLSCluster, append ctitle("$+\zeta_i$") ///
+							tex(frag pretty) word label alpha(0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+							 addstat("$\gamma_1+\gamma_3 =0$ (p-value)", p1)  ///
+							 dec(3) keep(`Gravity' `Independent1' `Control1')			 
+*Equivalent alternative:
+*regress `y' `Gravity' `Independent1' `Control1' b2015.obsTime b6.COU_Tal  b59.COUNTERPART_AREA_Tal, robust //Reference group: Germany
+
+areg `y' `Gravity' `Independent1' `Control1' b2015.obsTime  b6.COU_Tal, absorb(COUNTERPART_AREA_Ta) vce(cluster distw)  // Reference group: Germany (most observations)												 
+	test CIT_RATE + HavenCIT_RATE=0
+			scalar p1 = r(p)
+	outreg2 using OLSCluster, append ctitle("$+\eta_j$") ///
+							tex(frag pretty) word label alpha(0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+							 addstat("$\gamma_1+\gamma_3 =0$ (p-value)", p1)  ///
+							 dec(3) keep(`Gravity' `Independent1' `Control1')
+*Equivalent alternative: 
+*regress `y' `Gravity' `Independent1' `Control1' b2015.obsTime b6.COU_Tal  b59.COUNTERPART_AREA_Tal  b1017.Pair_Tal //Reference group: Germany-France (most observations, large flow)
+
+
+areg `y' `Gravity' `Independent1' `Control1' b2015.obsTime, absorb(Pair_Tal) vce(cluster distw)  
+	test CIT_RATE + HavenCIT_RATE=0
+		scalar p1 = r(p)
+	outreg2 using OLSCluster, append ctitle("$+\theta_{ij}$ (FE)") ///
+							tex(frag pretty) word label alpha(0.01, 0.05, 0.1, 0.15) symbol(***, **, *, +) ///
+							 addstat("$\gamma_1+\gamma_3 =0$ (p-value)", p1)  ///
+							 dec(3) keep(`Gravity' `Independent1' `Control1')
+
+*Equivalent alternative 
+*xtreg `y' `Gravity' `Independent1' `Control1' b2015.obsTime, fe robust								 
+}							 
 *********************************************************************************************************
 *********************************************************************************************************
 *********************************************************************************************************
