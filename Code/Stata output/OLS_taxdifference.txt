@@ -1,32 +1,21 @@
-		(1)	(2)	(3)	(4)	(5)
-VARIABLES	LABELS	Basic	Yearly	Investor	Partner	Pairs
-						
-ln_GDP	$\ln\text{GDP}_{it}$	1.059***	1.047***	1.168**	1.101**	0.429*
-		(0.020)	(0.021)	(0.570)	(0.498)	(0.247)
-ln_GDP_j	$\ln\text{GDP}_{jt}$	0.841***	0.842***	0.832***	0.391**	0.385**
-		(0.017)	(0.017)	(0.017)	(0.174)	(0.150)
-ln_distw	$\ln\text{Distance (w)}$	-0.745***	-0.737***	-0.807***	-1.087***	
-		(0.033)	(0.033)	(0.030)	(0.051)	
-Haven	Haven $(\gamma_2)$	1.833***	1.836***	1.857***		
-		(0.114)	(0.114)	(0.107)		
-CIT_difference	CIT_difference	0.012***	0.013***	0.008**	0.002	0.009*
-		(0.003)	(0.003)	(0.004)	(0.006)	(0.005)
-HavenCIT_difference	Haven$\times\text{CIT}_{it}$ (difference)	-0.011	-0.012+	-0.010	-0.015	-0.022
-		(0.008)	(0.008)	(0.007)	(0.011)	(0.016)
-contig	Common border	0.232**	0.214*	0.347***	0.127	
-		(0.114)	(0.114)	(0.112)	(0.113)	
-comlang_off	Common language	0.876***	0.890***	0.769***	0.672***	
-		(0.099)	(0.099)	(0.102)	(0.100)	
-colony	Colony	1.229***	1.237***	0.977***	1.041***	
-		(0.117)	(0.117)	(0.105)	(0.108)	
-comcol	Common colony	2.692***	2.677***	3.258***	3.658***	
-		(0.329)	(0.328)	(0.390)	(0.409)	
-Constant	Constant	-15.389***	-15.332***	-16.386**	-7.715	-6.741*
-		(0.375)	(0.380)	(7.872)	(7.699)	(3.780)
-						
-Observations		5,118	5,118	5,118	5,118	5,118
-R-squared		0.537	0.537	0.635	0.732	0.951
-Adj. R-squared		0.536	0.536	0.632	0.722	0.928
-No haven effect (p)		0.858	0.874	0.830	0.287	0.399
-Robust standard errors in parentheses						
-*** p<0.01, ** p<0.05, * p<0.1, + p<0.15						
+		(1)	(2)	(3)
+VARIABLES	LABELS		$+\delta_t+\zeta_i$	$+\theta_{ij}$
+				
+ln_GDP	$\ln\text{GDP}_{it}$	1.059***	1.169**	0.429*
+		(0.020)	(0.570)	(0.247)
+ln_GDP_j	$\ln\text{GDP}_{jt}$	0.841***	0.832***	0.385**
+		(0.017)	(0.017)	(0.151)
+ln_distw	$\ln\text{Distance (w)}$	-0.745***	-0.807***	
+		(0.033)	(0.030)	
+Haven	Haven $(\gamma_2)$	1.833***	1.857***	
+		(0.114)	(0.107)	
+CIT_difference	$ \text{DCIT}_{ijt}$ $(\gamma_1)$	0.012***	0.008**	0.009*
+		(0.003)	(0.004)	(0.005)
+HavenCIT_difference	Haven$\times\text{DCIT}_{ijt}$ $(\gamma_3)$	-0.011	-0.010	-0.022
+		(0.008)	(0.007)	(0.016)
+				
+Observations		5,118	5,118	5,118
+R-squared		0.537	0.635	0.951
+$\gamma_1+\gamma_3 =0$ (p)		0.859	0.830	0.398
+All models include $ D_{ij}$ and intercept. FE drops $\zeta_i$.				
+Robust standard errors in parantheses. *** p<0.01, ** p<0.05, * p<0.1				

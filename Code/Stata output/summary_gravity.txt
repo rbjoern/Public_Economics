@@ -1,0 +1,30 @@
+		(1)	(2)	(3)	(4)	(5)	(6)
+VARIABLES	LABELS	N	mean	p50	sd	p1	p99
+							
+FDIInc_Out_Total	FDI income - Total	19,252.0	279.3	0.0	2,141.5	-90.3	6,410.1
+FDIInc_Out_Dividends	FDI income - Dividends	16,580.0	133.9	0.0	938.4	0.0	3,540.1
+FDIInc_Out_Reinvested	FDI income - Reinv. earnings	16,111.0	123.1	0.0	1,652.9	-569.5	2,575.0
+FDIInc_Out_Debt	FDI income - Debt income	15,172.0	7.6	0.0	248.0	-16.9	203.1
+ln_FDIInc_Out_Total	ln FDI income - Total	5,930.0	3.5	3.7	3.1	-4.2	9.7
+IHS_FDI	IHS FDI income - Total	19,252.0	1.2	0.0	2.8	-5.2	9.5
+ln_FDIInc_Out_Dividends	ln FDI income - Dividends	3,689.0	3.4	3.4	3.0	-3.4	9.1
+ln_FDIInc_Out_Reinvested	ln FDI income - Reinv. earnings	3,461.0	3.5	3.6	2.9	-3.8	9.6
+ln_FDIInc_Out_Debt	ln FDI income - Debt income	2,816.0	1.0	1.2	2.9	-6.2	7.6
+CIT_RATE	$ \text{CIT}_{it}$ $(\gamma_1)$	23,778.0	24.2	22.0	6.8	12.5	38.0
+CIT_RATE_KPMG_j	$ \text{CIT}_{jt}$	13,922.0	21.6	24.2	10.8	0.0	40.7
+CIT_difference	$ \text{DCIT}_{ijt}$ $(\gamma_1)$	13,922.0	2.7	1.1	12.8	-22.5	34.9
+Haven	Haven $(\gamma_2)$	23,778.0	0.2	0.0	0.4	0.0	1.0
+Small_Haven	Small_Haven	23,778.0	0.1	0.0	0.3	0.0	1.0
+Large_Haven	Large_Haven	23,778.0	0.1	0.0	0.2	0.0	1.0
+CFC	$\text{CFC}_i$$ (\iota_1)$	23,778.0	0.5	1.0	0.5	0.0	1.0
+GDP	GDP	23,778.0	1,875,825.1	545,159.0	3,431,822.1	16,779.6	17,393,103.0
+GDP_j	GDP_j	21,996.0	353,148.3	20,265.6	1,451,567.6	49.2	6,100,620.4
+distw	distw	22,386.0	7,241.1	7,139.3	4,484.8	442.9	17,337.2
+ln_GDP	$\ln\text{GDP}_{it}$	23,778.0	13.2	13.2	1.8	9.7	16.7
+ln_GDP_j	$\ln\text{GDP}_{jt}$	21,996.0	10.0	9.9	2.6	3.9	15.6
+ln_distw	$\ln\text{Distance (w)}$	22,386.0	8.6	8.9	0.9	6.1	9.8
+contig	Common border	22,386.0	0.0	0.0	0.1	0.0	1.0
+comlang_off	Common language	22,386.0	0.1	0.0	0.3	0.0	1.0
+colony	Colony	22,386.0	0.0	0.0	0.2	0.0	1.0
+comcol	Common colony	22,386.0	0.0	0.0	0.1	0.0	0.0
+							

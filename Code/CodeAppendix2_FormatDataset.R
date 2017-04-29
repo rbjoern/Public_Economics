@@ -25,7 +25,9 @@ setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_Economi
   #5. GDP DATA FROM WORLD BANK  
   #6. LIST OF TAX HAVENS
   #7. EXCHANGE RATES FOR OECD COUNTRIES
-  #8. FINAL CLEANING OF DATA & EXPORT
+  #8. CFC Rules Data
+  #9. TAX RATES FROM KPMG
+  #10. FINAL CLEANING OF DATA & EXPORT
 
 ############################################################################
 #1. FDI INCOME BY PARTNER COUNTRY FROM OECD. 
@@ -378,7 +380,7 @@ setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_Economi
     tax <- spread(tax, "CORP_TAX", "obsValue")  
     
   #MERGE THE DATASETS
-  #We use an inner join on country and year to merge in the various tax rate measures
+  #We use a left join on country and year to merge in the various tax rate measures
   df <- left_join(df,tax)
   rm(tax) #drop tax data set
 
@@ -666,7 +668,7 @@ setwd("C:/Users/rbjoe/Dropbox/Kugejl/8. semester/Public Economics/Public_Economi
     library("readr")
     cfc <- read.csv("8. CFC Rules.csv")
     
-    df <- inner_join(df, cfc, by =c("COU"="ISO"))
+    df <- left_join(df, cfc, by =c("COU"="ISO"))
     rm(cfc)
     check <- unique(df[, c("COU_label.en", "CFC")]) %>% subset(CFC==1)
     rm(check)
@@ -700,8 +702,6 @@ kpmg <- read.csv("9. Corporate tax rates (KPMG).csv")
     df <- left_join(df,kpmg, by = c("COUNTERPART_AREA"="ISO", "obsTime" = "Aar"))
     rm(kpmg)
     
-    df$
-    
     #Create variable for difference
     df$CIT_difference <- df$CIT_RATE - df$CIT_RATE_KPMG_j
     
@@ -713,7 +713,7 @@ kpmg <- read.csv("9. Corporate tax rates (KPMG).csv")
 #DATA FIX 
     #The OECD data features zeros from country to itself (e.g. Denmark to Denmark).
     #These should be removed before modelling 
-    df <- subset(df, df$COU != df$COUNTERPART_AREA)
+    df <- subset(df, COU != COUNTERPART_AREA)
       
 #DATA FIX
     #Some countries report only aggregates (or not even that)

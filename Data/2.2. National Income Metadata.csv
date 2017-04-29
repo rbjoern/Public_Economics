@@ -1,5 +1,5 @@
 "MEASURE","MEASURE_label.en","REFERENCEPERIOD","REFERENCEPERIOD_label.en","TIME_FORMAT","TIME_FORMAT_label.en","UNIT","UNIT_label.en","POWERCODE","POWERCODE_label.en","OBS_STATUS","OBS_STATUS_label.en"
 "CXC","Current prices, current exchange rates",NA,NA,"P1Y","Annual","USD","US Dollar",6,"Millions",NA,NA
-"CXC","Current prices, current exchange rates",NA,NA,"P1Y","Annual","USD","US Dollar",6,"Millions","B","Break"
 "CXC","Current prices, current exchange rates",NA,NA,"P1Y","Annual","USD","US Dollar",6,"Millions","E","Estimated value"
+"CXC","Current prices, current exchange rates",NA,NA,"P1Y","Annual","USD","US Dollar",6,"Millions","B","Break"
 "CXC","Current prices, current exchange rates",NA,NA,"P1Y","Annual","USD","US Dollar",6,"Millions","P","Provisional value"

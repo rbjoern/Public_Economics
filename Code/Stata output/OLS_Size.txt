@@ -1,19 +1,18 @@
-		(1)	(2)	(3)	(4)	(5)
-VARIABLES	LABELS	Basic	Yearly	Investor	Partner	Pairs
-						
-Small_Haven	Small_Haven	3.754***	3.724***	3.361***		
-		(0.553)	(0.552)	(0.538)		
-Large_Haven	Large_Haven	1.905***	1.925***	2.066***		
-		(0.387)	(0.389)	(0.382)		
-CIT_RATE	$ \text{CIT}_{it}$ $(\gamma_1)$	0.033***	0.035***	0.059***	0.043***	0.023***
-		(0.004)	(0.004)	(0.014)	(0.012)	(0.008)
-Small_HavenCIT_RATE	Small Haven$\times\text{CIT}_{it}$	-0.062***	-0.060***	-0.043*	-0.026	-0.054+
-		(0.023)	(0.023)	(0.022)	(0.018)	(0.037)
-Large_HavenCIT_RATE	Large Haven$\times\text{CIT}_{it}$	-0.009	-0.010	-0.017	-0.009	-0.002
-		(0.014)	(0.014)	(0.014)	(0.013)	(0.019)
-						
-No small haven effect (p)		0.197	0.258	0.518	0.400	0.391
-No large haven effect (p)		0.0827	0.0742	0.0257	0.0415	0.254
-Robust standard errors in parentheses						
-*** p<0.01, ** p<0.05, * p<0.1, + p<0.15						
-Intercept, GDP, distance and common variables featured in all models						
+		(1)	(2)	(3)
+VARIABLES	LABELS	Eq. (\ref{gravitysize})	$+\delta_t+\zeta_i$	$+\theta_{ij}$ (FE)
+				
+Small_Haven	Small_Haven	3.754***	3.361***	
+		(0.553)	(0.538)	
+Large_Haven	Large_Haven	1.905***	2.066***	
+		(0.387)	(0.382)	
+CIT_RATE	$ \text{CIT}_{it}$ $(\gamma_1)$	0.033***	0.059***	0.023***
+		(0.004)	(0.014)	(0.008)
+Small_HavenCIT_RATE	Small Haven$\times\text{CIT}_{it}$	-0.062***	-0.043*	-0.054
+		(0.023)	(0.022)	(0.037)
+Large_HavenCIT_RATE	Large Haven$\times\text{CIT}_{ijt}$	-0.009	-0.017	-0.002
+		(0.014)	(0.014)	(0.019)
+				
+$\gamma_1+\gamma^S_3 =0$ (p-value)		0.196	0.519	0.391
+$\gamma_1+\gamma^L_3 =0$ (p-value)		0.0828	0.0258	0.254
+All models include gravity variables and intercept.				
+Robust standard errors in parantheses. *** p<0.01, ** p<0.05, * p<0.1				
