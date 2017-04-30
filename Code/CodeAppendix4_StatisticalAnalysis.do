@@ -38,8 +38,8 @@ log using log.txt, replace text
 local y "ln_FDIInc_Out_Total"
 local y_ejlog "FDIInc_Out_Total"
 local yy "ln_FDIInc_Out_Dividends ln_FDIInc_Out_Reinvested ln_FDIInc_Out_Debt" //ln_FDIInc_Out_Equity 
-local Y "FDIInc_Out_Total FDIInc_Out_Equity FDIInc_Out_Dividends FDIInc_Out_Reinvested FDIInc_Out_Debt"
-local Gravity_Nlog "GDP GDP_j distw"
+local yy_ejlog "FDIInc_Out_Dividends FDIInc_Out_Reinvested FDIInc_Out_Debt" //FDIInc_Out_Equity 
+local Gravity_ejlog "GDP GDP_j distw"
 local Gravity "ln_GDP ln_GDP_j ln_distw"
 local Independent1 "Haven CIT_RATE HavenCIT_RATE"
 local Independent2 "Small_Haven Large_Haven CIT_RATE Small_HavenCIT_RATE Large_HavenCIT_RATE"
@@ -48,8 +48,6 @@ local Independent4 "CFC Haven CFCHaven CIT_RATE CFCCIT_RATE HavenCIT_RATE CFCHav
 local Control1 "contig comlang_off colony comcol" //EXCE
 }
 ********************************************************************************
-
-summarize GDP GDP_j distw, detail  
 
 ********************************************************************************
 * GENERATE VARIABLES
@@ -78,7 +76,7 @@ gen CFCCIT_RATE = CFC*CIT_RATE
 gen IHS_FDI = log(FDIInc_Out_Total +(FDIInc_Out_Total^2+1)^(1/2))
 
 *Create necessary logged variables
-foreach var in `Y' `Gravity_Nlog' {
+foreach var in `y_ejlog' `yy_ejlog' `Gravity_ejlog' {
 gen ln_`var' = log(`var')
 }
 *Encode assigns numerical values to each group in a variable
@@ -94,11 +92,16 @@ encode(Pair)				, gen(Pair_Tal)
 ********************************************************************************
 {
 *Dependent variabkes
-label variable FDIInc_Out_Total 		"FDI income - Total (Outwards)"
-label variable FDIInc_Out_Dividends 	"FDI income - Dividends (Outwards)"
-label variable FDIInc_Out_Equity 		"FDI income - Income on Equity (Outwards)"
-label variable FDIInc_Out_Debt 			"FDI income - Interests from income on debt (Outwards)"
-label variable FDIInc_Out_Reinvested 	"FDI income - Reinvested earnings (Outwards)"
+label variable FDIInc_Out_Total 		"FDI income - Total"
+label variable ln_FDIInc_Out_Total 		"ln FDI income - Total"
+label variable IHS_FDI 					"IHS FDI income - Total"
+label variable FDIInc_Out_Dividends 	"FDI income - Dividends"
+label variable ln_FDIInc_Out_Dividends 	"ln FDI income - Dividends"
+label variable FDIInc_Out_Equity 		"FDI income - Income on Equity"
+label variable FDIInc_Out_Debt 			"FDI income - Debt income"
+label variable ln_FDIInc_Out_Debt 		"ln FDI income - Debt income"
+label variable FDIInc_Out_Reinvested 	"FDI income - Reinv. earnings"
+label variable ln_FDIInc_Out_Reinvested	"ln FDI income - Reinv. earnings"
 label variable FDIInc_Inw_Total 		"FDI income - Total (Inwards)"
 label variable FDIInc_Inw_Dividends 	"FDI income - Dividends (Inwards)"
 label variable FDIInc_Inw_Equity 		"FDI income - Income on Equity (Inwards)"
@@ -120,13 +123,15 @@ label variable HavenCIT_RATE 			"Haven$\times\text{CIT}_{it}$ $ (\gamma_3)$ "
 label variable Small_HavenCIT_RATE 		"Small Haven$\times\text{CIT}_{it}$"
 label variable Large_HavenCIT_RATE 		"Large Haven$\times\text{CIT}_{ijt}$"
 *Difference
-label variable CIT_difference 		"$ \text{DCIT}_{ijt}$ $(\gamma_1)$"
+label variable CIT_RATE_KPMG_j 			"$ \text{CIT}_{jt}$"
+label variable CIT_difference 			"$ \text{DCIT}_{ijt}$ $(\gamma_1)$"
 label variable HavenCIT_difference 		"Haven$\times\text{DCIT}_{ijt}$ $(\gamma_3)$ "
 * CFC
 label variable CFC 						"$\text{CFC}_i$$ (\iota_1)$"
 label variable CFCHaven  				"$\text{CFC}_i\times\text{Haven}_j$$ (\iota_2)$"
 label variable CFCCIT_RATE   			"$\text{CFC}_i\times\text{CIT}_{it}$$ (\iota_3)$"
 label variable CFCHavenCIT_RATE  		"$\text{CFC}_i\times\text{Haven}_j\times\text{CIT}_{it}$$ (\iota_4)$"
+
 }
 ********************************************************************************
 *format dataset as panel. 
@@ -136,7 +141,26 @@ xtset Pair_Tal obsTime, yearly
 * DESCRIPTIVE STATISTICS TABLE
 *********************************************************************************************************
 
+/*
+		\vspace{2pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+\multicolumn{7}{l}{\textbf{Dependent variables (transformations)}} \\\hline
+*/
 
+quietly outreg2 using summary_gravity, sum(detail) replace label tex(frag pretty) word dec(1) ///
+				keep(`y_ejlog' `yy_ejlog'  `y' IHS_FDI `yy' ////
+				CIT_RATE  CIT_RATE_KPMG_j CIT_difference ///
+				Haven Small_Haven Large_Haven  CFC ///				
+				`Gravity_ejlog' `Gravity' `Control1' ///
+				) ///
+				sortvar(`y_ejlog' `yy_ejlog'  `y' IHS_FDI `yy' ////
+				CIT_RATE  CIT_RATE_KPMG_j CIT_difference ///
+				Haven Small_Haven Large_Haven  CFC ///				
+				`Gravity_ejlog' `Gravity' `Control1' ///
+				) /// 
+				eqkeep(N mean p50 sd p1  p99 ) 
+			
+				
+				
 *********************************************************************************************************
 * REGRESSION TABLE ONE. 	BASIC REGRESSION
 *********************************************************************************************************
@@ -275,7 +299,7 @@ areg `y' `Gravity' `Independent1' `Control1' b2015.obsTime, absorb(Pair_Tal) vce
 * REGRESSION TABLE TWO.		POISSON 
 ********************************************************************************************************						 
 {
-/*
+
 *Creates dummies manually (needed for ppml)
 quietly ta COU_Tal, gen(COU_Tal_)
 quietly ta Pair_Tal, gen(Pair_Tal_)
@@ -370,7 +394,7 @@ drop COU_Tal_*
 drop Pair_Tal_*
 drop obsTime_*
 
-*/
+
 }						 
 
 

@@ -50,6 +50,8 @@ df <- read_csv("10. Main Dataset.csv")
               LargeHaven_share = 100*round(totalFDILargeHaven/totalFDI, 2)
               ) 
   
+  write.csv(worldshare, "10.1 Data for figure 1.csv")
+  
   #CREATE A TABLE WHICH SHOWS THE SHARE OF FDI INCOME REPORTED IN EACH COUNTRY
   sharetable <- worldshare[, colnames(worldshare) %in% c("COU_label.en", "obsTime", "text") ]
   library("tidyr")
@@ -106,7 +108,7 @@ df <- read_csv("10. Main Dataset.csv")
             
           ) %>%
           arrange(obsTime,Haven)
-          rm(countrygdp)
+
           
           #Add world gdp        
           library(dplyr)
