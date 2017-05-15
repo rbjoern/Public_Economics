@@ -7,12 +7,12 @@ ln_GDP_j	$\ln\text{GDP}_{jt}$	0.837***	0.837***	0.820***	0.315	0.180
 		(0.024)	(0.024)	(0.024)	(0.212)	(0.258)
 ln_distw	$\ln\text{Distance (w)}$	-0.792***	-0.782***	-0.840***	-1.091***	
 		(0.054)	(0.054)	(0.050)	(0.085)	
-Haven	Haven $(\gamma_2)$	2.598***	2.601***	2.568***		
+Haven	$\text{Haven}_j$ $(\gamma_1)$	2.598***	2.601***	2.568***		
 		(0.619)	(0.619)	(0.609)		
-CIT_RATE	$ \text{CIT}_{it}$ $(\gamma_1)$	0.033***	0.035***	0.060***	0.043***	0.023*
+NonHavenCIT_RATE	$\text{Non-haven}_j\times\text{CIT}_{it}$ $ (\gamma_2)$	0.033***	0.035***	0.060***	0.043***	0.023*
 		(0.008)	(0.008)	(0.013)	(0.013)	(0.013)
-HavenCIT_RATE	Haven$\times\text{CIT}_{it}$ $ (\gamma_3)$	-0.030	-0.030	-0.029	-0.014	-0.022
-		(0.024)	(0.024)	(0.024)	(0.019)	(0.028)
+HavenCIT_RATE	$\text{Haven}_j\times\text{CIT}_{it}$ $ (\gamma_3)$	0.003	0.005	0.030	0.029	0.001
+		(0.023)	(0.023)	(0.023)	(0.020)	(0.028)
 contig	Common border	0.212	0.183	0.377*	0.176	
 		(0.202)	(0.203)	(0.201)	(0.191)	
 comlang_off	Common language	0.789***	0.806***	0.671***	0.587***	
@@ -26,6 +26,6 @@ Constant	Constant	-14.666***	-14.559***	-21.183***	-12.463**	-6.993
 						
 Observations		5,850	5,850	5,850	5,850	5,850
 R-squared		0.540	0.542	0.638	0.735	0.949
-$\gamma_1+\gamma_3 =0$ (p-value)		0.893	0.834	0.193	0.150	0.970
-Dummies are added as specified above. FE drops $\zeta_i+\eta_j$. Robust standard errors in parantheses.						
-*** p<0.01, ** p<0.05, * p<0.1						
+$\gamma_2=\gamma_3 $ (p-value)		0.211	0.208	0.217	0.474	0.430
+Dummies are added as specified above. FE drops $\zeta_i+\eta_j$. Standard errors in parantheses.						
+Standard errors are robust and clustered by distance. *** p<0.01, ** p<0.05, * p<0.1						

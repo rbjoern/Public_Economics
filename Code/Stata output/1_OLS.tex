@@ -9,12 +9,12 @@ $\ln\text{GDP}_{jt}$ & 0.837*** & 0.837*** & 0.820*** & 0.315 & 0.180 \\
 \vspace{4pt} & \begin{footnotesize}(0.024)\end{footnotesize} & \begin{footnotesize}(0.024)\end{footnotesize} & \begin{footnotesize}(0.024)\end{footnotesize} & \begin{footnotesize}(0.212)\end{footnotesize} & \begin{footnotesize}(0.258)\end{footnotesize} \\
 $\ln\text{Distance (w)}$ & -0.792*** & -0.782*** & -0.840*** & -1.091*** &  \\
 \vspace{4pt} & \begin{footnotesize}(0.054)\end{footnotesize} & \begin{footnotesize}(0.054)\end{footnotesize} & \begin{footnotesize}(0.050)\end{footnotesize} & \begin{footnotesize}(0.085)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
-Haven $(\gamma_2)$ & 2.598*** & 2.601*** & 2.568*** &  &  \\
+$\text{Haven}_j$ $(\gamma_1)$ & 2.598*** & 2.601*** & 2.568*** &  &  \\
 \vspace{4pt} & \begin{footnotesize}(0.619)\end{footnotesize} & \begin{footnotesize}(0.619)\end{footnotesize} & \begin{footnotesize}(0.609)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
-$ \text{CIT}_{it}$ $(\gamma_1)$ & 0.033*** & 0.035*** & 0.060*** & 0.043*** & 0.023* \\
+$\text{Non-haven}_j\times\text{CIT}_{it}$ $ (\gamma_2)$ & 0.033*** & 0.035*** & 0.060*** & 0.043*** & 0.023* \\
 \vspace{4pt} & \begin{footnotesize}(0.008)\end{footnotesize} & \begin{footnotesize}(0.008)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} \\
-Haven$\times\text{CIT}_{it}$ $ (\gamma_3)$ & -0.030 & -0.030 & -0.029 & -0.014 & -0.022 \\
-\vspace{4pt} & \begin{footnotesize}(0.024)\end{footnotesize} & \begin{footnotesize}(0.024)\end{footnotesize} & \begin{footnotesize}(0.024)\end{footnotesize} & \begin{footnotesize}(0.019)\end{footnotesize} & \begin{footnotesize}(0.028)\end{footnotesize} \\
+$\text{Haven}_j\times\text{CIT}_{it}$ $ (\gamma_3)$ & 0.003 & 0.005 & 0.030 & 0.029 & 0.001 \\
+\vspace{4pt} & \begin{footnotesize}(0.023)\end{footnotesize} & \begin{footnotesize}(0.023)\end{footnotesize} & \begin{footnotesize}(0.023)\end{footnotesize} & \begin{footnotesize}(0.020)\end{footnotesize} & \begin{footnotesize}(0.028)\end{footnotesize} \\
 Common border & 0.212 & 0.183 & 0.377* & 0.176 &  \\
 \vspace{4pt} & \begin{footnotesize}(0.202)\end{footnotesize} & \begin{footnotesize}(0.203)\end{footnotesize} & \begin{footnotesize}(0.201)\end{footnotesize} & \begin{footnotesize}(0.191)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
 Common language & 0.789*** & 0.806*** & 0.671*** & 0.587*** &  \\
@@ -28,8 +28,8 @@ Constant & -14.666*** & -14.559*** & -21.183*** & -12.463** & -6.993 \\
 \vspace{4pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
 Observations & 5,850 & 5,850 & 5,850 & 5,850 & 5,850 \\
 $R^2$ & 0.540 & 0.542 & 0.638 & 0.735 & 0.949 \\
- $\gamma_1+\gamma_3 =0$ (p-value) & 0.893 & 0.834 & 0.193 & 0.150 & 0.970 \\ \hline
-\multicolumn{6}{c}{\begin{footnotesize} Dummies are added as specified above. FE drops $\zeta_i+\eta_j$. Robust standard errors in parantheses.\end{footnotesize}} \\
-\multicolumn{6}{c}{\begin{footnotesize} *** p$<$0.01, ** p$<$0.05, * p$<$0.1\end{footnotesize}} \\
+ $\gamma_2=\gamma_3 $ (p-value) & 0.211 & 0.208 & 0.217 & 0.474 & 0.430 \\ \hline
+\multicolumn{6}{c}{\begin{footnotesize} Dummies are added as specified above. FE drops $\zeta_i+\eta_j$. Standard errors in parantheses.\end{footnotesize}} \\
+\multicolumn{6}{c}{\begin{footnotesize} Standard errors are robust and clustered by distance. *** p$<$0.01, ** p$<$0.05, * p$<$0.1\end{footnotesize}} \\
 \end{tabular}
 \end{center}

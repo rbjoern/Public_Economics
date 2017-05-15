@@ -1,0 +1,21 @@
+		(1)	(2)	(3)
+VARIABLES	LABELS		$+\delta_t+\zeta_i$	$+\theta_{ij}$
+				
+ln_GDP	$\ln\text{GDP}_{it}$	1.059***	1.169***	0.429
+		(0.036)	(0.389)	(0.313)
+ln_GDP_j	$\ln\text{GDP}_{jt}$	0.841***	0.832***	0.385
+		(0.030)	(0.031)	(0.255)
+ln_distw	$\ln\text{Distance (w)}$	-0.745***	-0.807***	
+		(0.057)	(0.053)	
+Haven	$\text{Haven}_j$ $(\gamma_1)$	1.833***	1.857***	
+		(0.207)	(0.195)	
+NonHavenCIT_difference	Non-haven$\times\text{DCIT}_{ijt}$ $(\gamma_3)$	0.012**	0.008	0.009
+		(0.005)	(0.006)	(0.007)
+HavenCIT_difference	Haven$\times\text{DCIT}_{ijt}$ $(\gamma_3)$	0.001	-0.001	-0.013
+		(0.013)	(0.013)	(0.023)
+				
+Observations		5,118	5,118	5,118
+R-squared		0.537	0.635	0.951
+$\gamma_2=\gamma_3 $ (p-value)		0.434	0.478	0.343
+All models include $ D_{ij}$ and intercept. FE drops $\zeta_i$. S.e. in parantheses.				
+S.e. are robust and clustered by distance. *** p<0.01, ** p<0.05, * p<0.1				

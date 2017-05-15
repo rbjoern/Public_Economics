@@ -1,0 +1,20 @@
+		(1)	(2)	(3)	(4)	(5)	(6)	(7)	(8)	(9)
+VARIABLES	LABELS	Eq. (\ref{gravity1})	$+\delta_t+\zeta_i$	FE	Eq. (\ref{gravity1})	$+\delta_t+\zeta_i$	FE	Eq. (\ref{gravity1})	$+\delta_t+\zeta_i$	FE
+										
+ln_GDP	$\ln\text{GDP}_{it}$	0.976***	1.435***	0.567*	0.860***	0.581**	0.443*	0.933***	0.538**	0.444*
+		(0.036)	(0.408)	(0.310)	(0.085)	(0.274)	(0.235)	(0.083)	(0.271)	(0.235)
+ln_GDP_j	$\ln\text{GDP}_{jt}$	0.837***	0.820***	0.180	0.617***	0.629***	0.923***	0.685***	0.687***	0.924***
+		(0.024)	(0.024)	(0.258)	(0.049)	(0.047)	(0.163)	(0.044)	(0.042)	(0.163)
+ln_distw	$\ln\text{Distance (w)}$	-0.792***	-0.840***		-0.536***	-0.567***		-0.608***	-0.609***	
+		(0.054)	(0.050)		(0.084)	(0.083)		(0.083)	(0.086)	
+Haven	$\text{Haven}_j$ $(\gamma_1)$	2.598***	2.568***		0.551	0.395		0.602	0.416	
+		(0.619)	(0.609)		(0.758)	(0.742)		(0.783)	(0.765)	
+NonHavenCIT_RATE	$\text{Non-haven}_j\times\text{CIT}_{it}$ $ (\gamma_2)$	0.033***	0.060***	0.023*	0.010	-0.009	0.001	0.008	-0.008	0.001
+		(0.008)	(0.013)	(0.013)	(0.011)	(0.013)	(0.010)	(0.011)	(0.013)	(0.010)
+HavenCIT_RATE	$\text{Haven}_j\times\text{CIT}_{it}$ $ (\gamma_3)$	0.003	0.030	0.001	0.042*	0.029	0.005	0.041	0.032	0.005
+		(0.023)	(0.023)	(0.028)	(0.025)	(0.021)	(0.008)	(0.026)	(0.021)	(0.008)
+										
+Observations		5,850	5,850	5,850	5,850	5,850	5,475	15,764	15,764	6,327
+R-squared		0.540	0.638	0.949	0.314	0.393		0.335	0.412	
+All models include $ D_{ij}$ and a constant term. Dummies are added as specified above. Standard errors in parantheses.										
+Standard errors are robust and clustered by \textit{distw}. *** p<0.01, ** p<0.05, * p<0.1										
