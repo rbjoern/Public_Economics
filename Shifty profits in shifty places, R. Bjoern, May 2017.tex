@@ -1,0 +1,986 @@
+%General document settings
+\documentclass[twoside,a4paper,11pt]{article}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+%Generel formatering
+\usepackage{lmodern}
+\usepackage[nodisplayskipstretch]{setspace}
+	%\setstretch{1.5}
+	\setlength{\textfloatsep}{0.2cm}
+	%\addtolength{\parskip}{-1.5mm}
+	\onehalfspacing
+\usepackage[left=2.5cm, right=2.5cm, top=2cm, bottom=3cm]{geometry} % Justerer margin
+\renewcommand{\familydefault}{\rmdefault} % Skrifttype sandserif: \sfdefault, roman: \rmdefault
+\usepackage{enumitem}
+\setlist{nosep} %Mindre lister
+\renewcommand\labelitemi{--}
+\setcounter{tocdepth}{2} % hide subsubsections in TOC 
+
+
+%Diverse pakker
+\usepackage{xcolor} % Flere farver
+	\definecolor{farven}{RGB}{0,0,0} % Grå {191,191,191}
+\usepackage{blindtext} % random text
+\usepackage{csquotes} % Referencer?
+\usepackage{graphicx} %Figurer
+\usepackage{multicol} %Kolonner
+\usepackage{amsmath}
+	\allowdisplaybreaks % Allow page breaks in equations
+\usepackage{amssymb}
+\usepackage{booktabs} % tabeller
+\usepackage{array,booktabs,tabularx} %tables
+\usepackage{verbatim} %Adds comment environment\
+%\usepackage[hidelinks]{hyperref} %Links
+\usepackage{makecell} %Allows better formatting of cells
+	\renewcommand{\cellalign}{bl} %alignment of cellhead
+\usepackage[justification=justified,singlelinecheck=false]{caption}
+ %allows captions of tabular
+ 	\captionsetup[table]{labelfont={bf},textfont={it}}
+ 	\captionsetup[figure]{labelfont={bf},textfont={it}}
+\usepackage{chngcntr} %captions by section
+	\counterwithin{table}{section}
+	\counterwithin{figure}{section}
+\usepackage{array} %Allows tables with fixed sizes
+	\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+	\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+	\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
+\usepackage{pdfpages}
+
+%Formatering af titler
+\usepackage{titlesec} % Funky nye titler 
+	\titleformat{\section}
+		{\normalfont\large\bfseries\color{farven}}{\thesection. }{0em}{}[\color{farven}{\titlerule[0.8pt]}]
+	\titleformat{\subsection}
+		{\normalfont\bfseries\color{farven}}{\thesubsection. }{0em}{}[{\color{farven}\titlerule[0.8pt]}]
+	\titleformat{\subsubsection}
+		{\normalfont\small\bfseries\color{farven}}{\thesubsubsection. }{0em}{}[{\color{farven}\titlerule[0.8pt]}]
+
+% Bibliography
+%% Bibliography
+\usepackage[style=authoryear-ibid,backend=biber, doi=false,isbn=false,url=false]{biblatex}
+\bibliography{C:/Users/rbjoe/Dropbox/Kugejl/Polit/bib/PublicEconomics}
+
+%Header, footer 
+\usepackage{fancyhdr} % Fancy headings/footers. 
+	\usepackage{lastpage}
+	\fancypagestyle{minheader}{%
+		\fancyhf{} % clear all headers and footers
+		\fancyfoot[R]{Page \textbf{\thepage} of \textbf{\pageref{LastPage}}} %
+		\fancyhead[LE, LO]{R. Bjørn, Spring 2017}%
+		%\fancyhead[RO]{\nouppercase{\rightmark}}
+		%\fancyhead[RE]{Public economics}
+		\fancyhead[R]{Public economics}
+		\renewcommand{\footrulewidth}{1pt}
+		\renewcommand{\headrulewidth}{1pt}
+		\renewcommand{\headrule}{{\color{black}%
+			\hrule width\headwidth height\headrulewidth}}
+		\renewcommand{\footrule}{{\color{black}%
+				\vskip-\footruleskip\vskip-\footrulewidth
+				\hrule width\headwidth height\footrulewidth\vskip\footruleskip}}
+		\headheight 1.25cm
+		\headsep 0.5 cm
+		}
+	\pagestyle{minheader}	
+
+\usepackage[hidelinks, pdfstartpage=3]{hyperref} %Links
+%\usepackage[hidelinks]{hyperref} %Links
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\includepdf[pages={1,2}]{front.pdf}
+	
+\begin{titlepage}
+	\begin{center}
+		\noindent{\rule{\textwidth}{0.5pt}}\par
+		\LARGE	 
+		\textbf{Shifty profits in shifty places}
+		
+		\vspace*{0.2cm}
+		
+		\large 
+		A study of the sensitivity of profit shifting to changes in the corporate tax rate by looking at FDI income inside and outside of tax havens in a gravity model. 
+		
+		\vspace*{1cm}
+		
+		\normalsize	
+		A seminar paper in \textit{Public Economics} at Copenhagen University in May 2017 by	
+		
+		\large
+		\textbf{R. Bjørn}
+		\noindent{\rule{\textwidth}{0.5pt}}\par
+		
+		\vspace*{0.5cm}
+		
+		\textbf{Abstract.} 
+ 	\end{center}
+This paper studies whether the presence of \textit{profit shifting} can be expected to intensify or dampen \textit{international tax competition}. I provide new empirical evidence on the relationship between corporate tax rates and realized profits. The analysis is based on a yearly panel dataset of OECD countries, who report the net income generated on their foreign direct investments in individual partner countries. I find evidence for the main premise of tax competition using OLS on a gravity model, as profits realized abroad decrease as the corporate tax rate falls at home, indicating countries may attract investment by lowering rates. I argue that one may compare the responsiveness of real and shifted profits by comparing tax havens and non-havens, because profits in the former will to a large degree be shifted profits, which the evidence supports. I find that profits in havens are less sensitive to tax rates, and might not respond to altered tax rates at all. However, the results are uncertain.  I provide a number of robustness checks for my findings. I use PPML estimation and IHS transformation to include zeroes and negatives, and i expand the gravity model with data on partner tax rates, haven size, types of income and CFC legislation. Even so, the validity of the analysis remains threatened by endogeneity, and could be followed by IV estimation. In the study at hand, the evidence suggests shifted profits are insensitive to corporate tax rates and thus should not affect international tax competition. 
+
+\end{titlepage}
+\tableofcontents
+\newpage
+
+\section{Introduction: Does profit shifting respond to corporate tax rates?}
+This paper will seek to convince you of two things, one of them perhaps new. First, the race to the bottom of corporate income taxes rates in recent years is driven by real economic forces, where firms move capital around in response to tax rates. Second, the fact that firms also use \textit{profit shifting} to avoid taxes do not necessarily intensify these competition effects, as shifted profits in tax havens may be insensitive to changes in tax rates. 
+
+These are questions relevant to the real world. President Trump has suggested slashing the US corporate income tax (CIT) rate from 35\% to 15\%  \autocite{the_atlantic_comprehensive_2017}. Our results suggest he may bring real investment back home, but will not dissuade the use of tax havens. The considered change is massive, but I expect results will still hold as rates remain above havens. 
+
+\textbf{Approach}. Rather than survey all available evidence, this paper adds one new piece to the empirical puzzle. I use a heretofore less explored approach and analyse a panel of OECD countries, who report the net \textit{income} of their \textit{foreign direct investments} (FDI) in partner countries\footnote{While FDI stocks and flows have long existed and been analysed extensively, the income metric is newer.}. The usual approach has been to look at microdata based on firm accounts. My approach has less analytical precision, but may achieve better coverage as I consider \textit{all} FDI income. 
+ 
+My research design is based on the claim that excess  profits located in tax havens, which cannot be accounted for by basic economic forces, are likely shifted profits. Therefore I may explore the relative sensitivity of real and shifted profits by comparing the relationship between tax rates and profits in havens and non-havens respectively. I do so using a gravity model. The research question and design are described in section \ref{setup}, resulting in four hypotheses. 
+
+\textbf{Models}. Section \ref{analysisI} first estimates the traditional log-based model, which generally supports my hypotheses. I then consider whether it would be beneficial to expand the sample to include non-positive profits using Poisson PML and inverse hyperbolic sine transformation. This yields odd results and poor model fit, so I argue for using the  restricted sample. H
+
+The second analytical section therefore continue to use the log-based model. I find further support for my research design, as even accounting for the tax rates of partner countries,  profits in tax havens remain well above what is expected based on economic forces. Finally, I find that isolation of shifted profits may be done even more precisely if one accounts for the size of havens, CFC rules and possibly the type of FDI income, but that results continue to hold. 
+
+Section \ref{discussion} lists a few of the identification concerns one could raise. Mainly, I might have endogeneity because of causality loops, measurement error or omitted variables, where the study only really tries to answer the last one. Even so, the study contributes with a new design and data, and i am confident that I capture enough of reality for the results to be interesting. 
+
+\textbf{Contribution}. While i interpret results within the framework of competition theory, I make no theoretical contributions, and any interpretations are simply musings on why the results are interesting. One might explore which costs would be consistent with the evidence, or the ranges of tax rates where results hold. For now, the contribution is the empirical pattern described.
+
+This empirical pattern is neatly summarized in the conclusion. There is even a nice table which summarizes all seven estimations and whether they support  my hypotheses. Thus, you need not take notes (unless you'd like to fact-check). I argue that evidence is all in all supportive of the statements I began this section with, although there is uncertainty. Let's see if you agree. 
+
+
+
+\section{Set-up: Honestly, we know where to find shifty firms.}\label{setup}
+This section describes the research design. First, I motivate the research question, and then translate this into a proper design. Finally, I (briefly) describe the data used. 
+
+\subsection{Question: Does profit shifting affect tax competition?}
+Source-based corporate income taxes (CIT) are challenged by at least two aspects of international taxation. First, by the very nature of being \textit{source}-based, they drive international tax competition, where countries compete for mobile capital, driving down tax rates \autocite{keen_theory_2013}. The competition is based on a trade-off: Lowering CIT rates mechanically lowers revenue, but may attract capital and increase the tax base. Equilibrium occurs where the effects balance out, so no country has an incentive to lower rates further \autocite[267]{keen_theory_2013}. This is determined by the relationship between tax rates and attracted capital.
+
+The second challenge to source-based taxation is the quite challenging definition of where profits are generated. Theoretically, this is solved by \textit{arm's length pricing} where all national entities computes profits separately, pricing internal flows at market prices. However, two issues arise. First, bilateral tax treaties have created quite a few loopholes for diligent multinational companies. Second, it is often difficult to determine the proper prices of goods and particularly services, and firms may (illegally) misstate transfer prices or cleverly use debt instruments \autocite{zucman_taxing_2014}. In short, this is the presence of incentives and possibilities for \textit{profit shifting}. 
+
+How does shifting affect the tax competition implied above? My main claim here is that there is reason to believe different costs and gains apply for moving capital and shifting profits.
+
+The basic gain is the same for either: On similar profits, one earns the tax differential between territories. Yet real investment also depend on investment returns, while shifted profits labour under no such restrictions. The gain of shifting profits does not diminish as you move more profits. With no costs, the only case where a tax change would alter the amount of shifted profits would be in the exact case where you match your opponents tax rate. 
+
+Yet we do not observe similar tax rates in all countries. Particularly, we observe \textit{tax havens}, where the revenue earned by  taxing shifted profits at low rates dwarfs the revenue they could raise by taxing domestic firms. The same is unlikely to hold for countries with larger tax bases. Thus, the game of competition could possibly be divided into havens and 'real' economies, which compete only with each other. Since firms in 'real' economies will always prefer to shift to havens,  the relationship between taxes and profit shifting must be determined by costs.  
+
+The costs of investing abroad basically follow the usual costs of investment. The costs of profit shifting are less clear-cut. They may be variable, and shifting would then respond marginally to tax changes. Alternatively, if costs are largely fixed (e.g. one needs to set up a Luxembourg office, but may then shift at no cost), then shifting would not respond to tax changes except at the rate where shifting becomes optimal \autocite{johannesen_are_2016}. The reality is likely some hybrid, but there is no reason costs should follow exactly those of real investment, and shifted profits need not respond to taxes (in all tax ranges). 
+
+This is merely a brief exploration of the relevant theoretical concepts. The main claim is that profit shifting only affects tax competition if the semi-elasticity between shifted profits and tax rates is not zero, and that this need not  be true. Thus, estimating it should be of interest. 
+
+\subsection{Design: Foreign direct investment income in a gravity model}
+How do we estimate this semi-elasticity?\footnote{For an excellent, if slightly older, review of the empirical literature on this, see \textcite{devereux_impact_2007}.} I propose leveraging the existence of havens. The basic reason for becoming a tax haven is to attract shifted profits, and the main incentive for doing so is a small domestic tax base. This suggests shifted profits form the preponderance of profits realized in havens.  Figure \ref{havenshare} provides some evidence of this claim. The average country included there realizes 20.5\% of the income on their foreign direct investments in tax havens. Comparably, haven share of world GDP was 2.7\%. Profits in havens seem larger than one would expect, indicating that much of it is shifted there artificially. I propose this design: Estimate the relationship between corporate tax rates and profits in non-havens and havens. If the relationship is weaker in the latter, the relationship is weaker for shifted profits. 
+\begin{figure}
+	\centering
+	\captionof{figure}{Share of FDI income realized in tax havens in 2015. }\label{havenshare}
+	\includegraphics[width= 0.9\textwidth ]{Figure1}
+\end{figure}
+
+I take a macroeconomic approach. Official statistics tracks the affiliates multinational companies work through as \textit{foreign direct investment} (FDI), where resident entities in economy \textit{i} establish a lasting interest in enterprises located in economy \textit{j} \autocite[22]{oecd_oecd_2008}. Since there are few havens among the reporting countries we must work with \textit{outwards} FDI, where a country tracks the investments of nationally based companies. Select OECD countries provide the \textit{income} generated from FDI allocated to the (first non-SPE) partner country \autocite[31]{oecd_oecd_2008}. Profits shifted from the reporting country to another should show up in this flow. 
+
+This flow also tracks profits from real investments. One cannot assume that all profits in havens are shifted, as there is evidence havens do produce actual services (e.g. \textcite{hebous_at_2016}). I account for  expected profits using the simple but successful gravity model, which mimics Newton's law of gravity, letting economic flows be proportional to the economic 'mass' (GDP) of countries.  It is often used in international trade \autocite{shepherd_gravity_2012}, but has been applied to portfolio holdings \autocite{zucman_missing_2013} and indeed FDI flows  \autocite{blonigen_review_2005}. 
+\begin{equation}\label{gravity1}
+\begin{aligned}
+\ln\text{FDIInc}_{ijt} &= \alpha_0 + \alpha_1\ln\text{GDP}_{it}+\alpha_2\ln\text{GDP}_{jt}+ \alpha_3\ln\text{Distance}_{ij}+\beta D_{ij} \\
+&\quad + \gamma_1 \text{Haven}_j+\gamma_2\text{Non-haven}_j\times\text{CIT}_\text{it}  + \gamma_3 \text{Haven}_j\times \text{CIT}_\text{it}   + \epsilon_{ijt}
+\end{aligned}
+\end{equation}
+The basic gravity model is featured in the first line in (\ref{gravity1}). The dependent variable is the profits realized by residents in reporting country \textit{i} in affiliates in partner country \textit{j} in the year \textit{t}. One would expect this to increase in both GDP terms, and to decrease in the investment cost proxies\footnote{The main investment cost proxy is distance, where I use weighted distances from the CEPII GeoDist, as specified in \textcite{mayer_notes_2011}. I also include four pairwise dummies in $ D_{ij} $ as specified in table \ref{codebook}, a somewhat basic set-up based on  \textcite[16]{shepherd_gravity_2012}.}.
+
+\begin{table}
+	\captionof{table}{Hypotheses}\label{hypotheses}
+		\begin{tabular}{llll} 
+			\textbf{Hypothesis I} & Level effect for havens & $ H_0: \gamma_1 \le0 $ & $ H_A: \gamma_1 >0  $ \\
+			\textbf{Hypothesis II} & Real profits respond to tax rates & $ H_0: \gamma_2 \le0 $ & $ H_A: \gamma_2 >0  $ \\
+			\textbf{Hypothesis III} & Shifted profits do not respond to tax rates & $ H_0: \gamma_3 \le0 $ & $ H_A: \gamma_3 >0  $ \\
+			\textbf{Hypothesis IV} & Difference in response to tax rates & $ H_0: \gamma_2=\gamma_3 $ & $ H_A: \gamma_2\ne\gamma_3 $ 
+		\end{tabular}
+\end{table}
+
+The second line feature the variables of main interest. I form four hypotheses on these, summarized formally in table \ref{hypotheses}. The first of these is on $ Haven_j $ which defines whether the partner country is a tax haven. The research design depends on a large share of shifted profits in havens. If this is the case, we would expect higher profits than can be accounted for by basic economic forces ($ \gamma_1 >0 $). I test this in hypothesis I.
+
+$ CIT_{it} $ defines the corporate income tax rate in the reporting country\footnote{You may squint at this formula, and look critically for a tax rate for \textit{j}. Indeed, firms are interested in tax differentials. However, data on tax rates for partner countries is sketchy at best, especially for havens. I discuss this and include them as a robustness check in section \ref{sectaxdiff}.}. I feature this through two separate terms, rather than a basegroup and an interaction term, since this eases interpretation. Thus, $ \gamma_2 $ specifies how profit in a non-haven \textit{j} by  reporting country \textit{i} changes when corporate tax rates in \textit{i} change. For non-havens, I expect the predictions of tax competition to hold. That is, I believe that if domestic investments becomes more attractive ($ CIT_{it}\downarrow $), then domestic firms invest more at home, and thus realize fewer profits abroad ($ \text{FDIInc}_{ijt} \downarrow $): $ \gamma_2 >0 $. 
+
+The main interest of this paper is then whether this effect is different for havens. The effect for havens is captured by $ \gamma_3 $. I perform two tests. First, in hypothesis III I check  check whether a (positive) relationship exists at all for havens, so that $ \gamma_3 >0 $. This is easily read from regression tables in the set-up I use. I also, less demandingly, consider whether the relationship between taxes and profits is simply different in havens, not necessarily zero (hypothesis IV).  An F-test is implemented for this in all models. 
+
+
+
+\subsection{Data:  $27 \times 212 $ country pairs per year (ideally)}
+Don't skip ahead! I promise to move swiftly through the mandatorily boring data section, and handle most data concerns as they become relevant. The paper analyses data reported by 27 (of 35) OECD countries on up to 212 (of 235) partner countries (see table \ref{coveredcountries} for which countries leave the dataset and why). Of these 212 countries, I have identified 48 tax havens by combining lists compiled by previous authors (see table \ref{haventable}). 
+
+Data is naturally a panel, since I observe country statistics reported yearly. It is unfortunately not the longest panel and quite unbalanced. Most countries report FDI income only for 2013-2015, although a few report for longer periods (see table \ref{panellength} for individual lengths). This adds uncertainty to my results, and it would be interesting to repeat the analysis in a few years.
+
+The FDI data is enriched with eight other datasets. Data sources are nicely summarized in appendix \ref{AppSources}, including a lovely figure showing all the featured datasets. Appendix \ref{AppCode} and \ref{AppFixes} further expands on the data process, and all datasets and code are provided via GitHub.  
+
+The final dataset has 23.778 pairwise, yearly observations and 54 variables. However, this includes missing values, zeroes and negative profits, as will be discussed intermittently (see subsections \ref{poisson}, \ref{IHS} and \ref{dissconsistency}). Table \ref{codebook} provides a list of the used variables. Descriptive statistics can be seen in table \ref{descriptive}, if the reader should start to worry on the data. If not, let's analyse! 
+\begin{table}
+	\captionof{table}{Codebook}\label{codebook}
+	\scalebox{0.75}{
+	\begin{tabular}{lllllll}
+	\multicolumn{3}{l}{\textbf{Gravity variables}} &&
+	\multicolumn{3}{l}{\textbf{Other variables}}  \\
+	\textbf{Variable} & \textbf{Description} & \textbf{Values}&\qquad\qquad &
+	\textbf{Variable} & \textbf{Description} & \textbf{Values}  
+	\\ \hline
+	$ \text{GDP}_{it} $ & Reporting country & Current USD (mio.) 
+	&& Haven & Partner is a haven & Dummy
+	\\
+	$ \text{GDP}_{jt} $ & Partner country & Current USD (mio.) 
+	&&$ \text{CIT}_{it} $ & Statutory tax rate & $\{13,38\} $
+	\\
+	Distance (weighted) & Between countries & Kilometers. 
+	&& Small Haven & Population $ < $ 0.4m & Dummy
+	\\
+	Common border & Share land border & Dummy 
+	&& Large Haven & Population $ > $ 0.4m & Dummy
+	\\
+	Common language & Share language & Dummy 
+	&& $ \text{DCIT}_{ijt} $ & $ \text{CIT}_{it} - \text{CIT}_{jt} $ & $ \{-43,38\} $ 
+	\\
+	Colony & Former colony & Dummy 
+	&& $ \text{CFC}_{i} $ & Has CFC legislation & Dummy
+	\\
+	Common colony & Colonized by same & Dummy \\	
+	\end{tabular}
+	}
+\end{table}
+
+\section{Analysis I: Wait, what happens in tax havens?}\label{analysisI}
+The first analytical section estimates equation (\ref{gravity1}) directly. The first subsection estimates it by OLS (and FE). The next two incorporate zeroes and negative values into the estimation. 
+
+\subsection{Estimation: A first step in our gravitational journey.}
+\textbf{Identification}. Let's get right down to it - Table \ref{main} estimates equation (\ref{gravity1}) by OLS\footnote{I observe 5.930 positive profit values - see table \ref{coveredcountries} for why a few of these drop out}. Identification rests on the assumption that the error term is uncorrelated with the regressors, typically ensured by contemporary exogeneity $ E[\epsilon_{ijt}|\textbf{x}_{ijt}] $. I discuss whether this might be violated due to endogeneity in section \ref{discussion}. For now, identification rests on the fact that I account for  all variables which are relevant and correlated with the regressors we're interested in.  
+
+\begin{table}[t]
+	\captionof{table}{A first step in our estimation journey!}\label{main}
+	\centering
+	\scalebox{0.75}{
+\begin{tabular}{lccccc} \hline
+	& (1) & (2) & (3) & (4) & (5) \\
+	 & Eq. (\ref{gravity1}) & $+\delta_t$ & $+\zeta_i$ & $+\eta_j$ & $+\theta_{ij}$ (FE) \\ \hline
+	\vspace{4pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+	$\ln\text{GDP}_{it}$ & 0.976*** & 0.955*** & 1.435*** & 1.409*** & 0.567* \\
+	\vspace{4pt} & \begin{footnotesize}(0.036)\end{footnotesize} & \begin{footnotesize}(0.037)\end{footnotesize} & \begin{footnotesize}(0.408)\end{footnotesize} & \begin{footnotesize}(0.373)\end{footnotesize} & \begin{footnotesize}(0.310)\end{footnotesize} \\
+	$\ln\text{GDP}_{jt}$ & 0.837*** & 0.837*** & 0.820*** & 0.315 & 0.180 \\
+	\vspace{4pt} & \begin{footnotesize}(0.024)\end{footnotesize} & \begin{footnotesize}(0.024)\end{footnotesize} & \begin{footnotesize}(0.024)\end{footnotesize} & \begin{footnotesize}(0.212)\end{footnotesize} & \begin{footnotesize}(0.258)\end{footnotesize} \\
+	$\ln\text{Distance (w)}$ & -0.792*** & -0.782*** & -0.840*** & -1.091*** &  \\
+	\vspace{4pt} & \begin{footnotesize}(0.054)\end{footnotesize} & \begin{footnotesize}(0.054)\end{footnotesize} & \begin{footnotesize}(0.050)\end{footnotesize} & \begin{footnotesize}(0.085)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+	$\text{Haven}_j$ $(\gamma_1)$ & 2.598*** & 2.601*** & 2.568*** &  &  \\
+	\vspace{4pt} & \begin{footnotesize}(0.619)\end{footnotesize} & \begin{footnotesize}(0.619)\end{footnotesize} & \begin{footnotesize}(0.609)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+	$\text{Non-haven}_j\times\text{CIT}_{it}$ $ (\gamma_2)$ & 0.033*** & 0.035*** & 0.060*** & 0.043*** & 0.023* \\
+	\vspace{4pt} & \begin{footnotesize}(0.008)\end{footnotesize} & \begin{footnotesize}(0.008)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} \\
+	$\text{Haven}_j\times\text{CIT}_{it}$ $ (\gamma_3)$ & 0.003 & 0.005 & 0.030 & 0.029 & 0.001 \\
+	\vspace{4pt} & \begin{footnotesize}(0.023)\end{footnotesize} & \begin{footnotesize}(0.023)\end{footnotesize} & \begin{footnotesize}(0.023)\end{footnotesize} & \begin{footnotesize}(0.020)\end{footnotesize} & \begin{footnotesize}(0.028)\end{footnotesize} \\
+	Common border & 0.212 & 0.183 & 0.377* & 0.176 &  \\
+	\vspace{4pt} & \begin{footnotesize}(0.202)\end{footnotesize} & \begin{footnotesize}(0.203)\end{footnotesize} & \begin{footnotesize}(0.201)\end{footnotesize} & \begin{footnotesize}(0.191)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+	Common language & 0.789*** & 0.806*** & 0.671*** & 0.587*** &  \\
+	\vspace{4pt} & \begin{footnotesize}(0.193)\end{footnotesize} & \begin{footnotesize}(0.192)\end{footnotesize} & \begin{footnotesize}(0.191)\end{footnotesize} & \begin{footnotesize}(0.177)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+	Colony & 1.236*** & 1.248*** & 0.968*** & 1.006*** &  \\
+	\vspace{4pt} & \begin{footnotesize}(0.199)\end{footnotesize} & \begin{footnotesize}(0.201)\end{footnotesize} & \begin{footnotesize}(0.171)\end{footnotesize} & \begin{footnotesize}(0.177)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+	Common colony & 2.587*** & 2.557*** & 3.157*** & 3.529*** &  \\
+	\vspace{4pt} & \begin{footnotesize}(0.626)\end{footnotesize} & \begin{footnotesize}(0.619)\end{footnotesize} & \begin{footnotesize}(0.754)\end{footnotesize} & \begin{footnotesize}(0.752)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+	Constant & -14.666*** & -14.559*** & -21.183*** & -12.463** & -6.993 \\
+	& \begin{footnotesize}(0.667)\end{footnotesize} & \begin{footnotesize}(0.666)\end{footnotesize} & \begin{footnotesize}(5.773)\end{footnotesize} & \begin{footnotesize}(5.960)\end{footnotesize} & \begin{footnotesize}(4.959)\end{footnotesize} \\
+	\vspace{4pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+	Observations & 5,850 & 5,850 & 5,850 & 5,850 & 5,850 \\
+	$R^2$ & 0.540 & 0.542 & 0.638 & 0.735 & 0.949 \\
+	$\gamma_2=\gamma_3 $ (p-value) & 0.211 & 0.208 & 0.217 & 0.474 & 0.430 \\ \hline
+	\multicolumn{6}{c}{\begin{footnotesize} Dummies are added as specified above. FE drops $\zeta_i+\eta_j$. Standard errors in parantheses.\end{footnotesize}} \\
+	\multicolumn{6}{c}{\begin{footnotesize} Standard errors are robust and clustered by distance. *** p$<$0.01, ** p$<$0.05, * p$<$0.1\end{footnotesize}} \\
+\end{tabular}
+}	
+\end{table}
+
+Unfortunately, there is ample reason to expect there are other factors relevant for both profits and tax rates. Fortunately, another venue is open to us.  Panel data allows us to hold dimensions of data fixed, and consider subsets of variation at a time. If the source of the bias is fixed across the same dimension, the bias evaporates. Consider, as an example, that Danes might have a preference for higher tax rates, and for investing mainly at home.  Adding a dummy $ \zeta_i $ allowing a level difference for each reporting country accounts for this effect. 
+
+The next four models adds an increasing number of dummies, limiting the variation I consider. First I add a time dummy $ \delta_t $\footnote{One might allow time effects for individual countries (or pairs), but this would not just vastly increase the number of parameters to be estimated, but indeed be quite hard to isolate from the effects of changes to tax rates.}, which accounts for overall economic conditions although this does not alter estimates or $ R^2 $ much, possibly because 2013-2015 saw little economic change. Next, I add the aforementioned reporter-specific dummy $ \zeta_i $, which implies I only consider variation across time and partner countries.Although $ R^2 $ increases, I see few changes in parameters.  The next model restricts this model further by adding a partner dummy $ \eta_j $. Although I control for level effects of either country, I still compare parameters across pairs of countries.  
+
+\textbf{Fixed effects}. The final model shuts this down, shifting into fixed effects estimation (FE)  by replacing $ \zeta_i $ and $ \eta_j $ with country-specific dummies $ \theta_{ij} $ \autocite[479]{wooldridge_introductory_2009}\footnote{$R^2$ appears very high, but this is a given for FE estimation \autocite[471]{wooldridge_introductory_2009}.}. This implies I only use time variation \textit{within} each country pair to estimate parameters. Whilst this accounts for any bias caused by time-constant effects for a given pair, it also restricts the variation considered by the model. Variation within pairs is theoretically appealing (we are interested in the effects of changes to tax rates), but it is unclear it leaves enough variation to estimate parameters, due to the limited changes to the tax rates which have occurred in the panel period. Thus, I continue to also consider the models exploiting cross-sectional variation. 
+
+\textbf{Clustered standard errors.} For inference to be valid, I need to identify standard errors. I follow the standards of the gravity literature and use standard errors robust to heteroscedasticity and clustered by distance \autocite[28]{shepherd_gravity_2012}. The latter eliminates downwards bias by allowing for  correlation of error terms within country pairs \autocite[312]{angrist_mostly_2009}.
+
+\textbf{Results}. There is evidence that profits realized in tax havens exceed what we would expect based solely on the economic forces modelled in the gravity equation ($ \hat{\gamma}_1>0  $). Indeed, 
+by the usual approximation, we expect profits to be 257 pct. higher in havens than in non-havens\footnote{The exact percentage difference between predictions over Haven is $ 100(\exp(\hat{\gamma_1})-1)$ and indicates profits are \textit{twelve times higher} in havens. However, this is sensitive to choice of reference group \autocite[225]{wooldridge_introductory_2009}}. 
+
+These level effects exist on top of the fact that the gravity model seems to fit the model pretty well. $ R^2 $ is decently high, and signs on all gravity variables follow expectations, mostly significantly. The gravity model seems decently suited to account for expected profits. 
+
+The expectations of tax competition hold for non-havens ($ \hat{\gamma}_2>0 $), indicating that as taxes fall at home, firms tend to realize fewer profits abroad. This is significant on a 10 pct. level in all models. However, I observe no effect for havens $ (\hat{\gamma_3}\approx0) $. To put this in practical terms, model (1) expects  a one pp. reduction of CIT to reduce profits by 3.3\% in non-havens and 0.3\% in havens. Standard errors are high for the last estimate though, and the estimates are not significantly different (see F-test below table). Although uncertain, the results are consistent with a weaker relationship between shifted profits and tax rates (in observed ranges of tax rates).
+
+\subsection{Robustness: Poisson estimation (PPML) -- From hero to zero}\label{poisson}
+Our model encounters a classical gravity nemesis: zeroes in the dataset. Because the gravity model is log-based these observations drop out of the estimation. The horror! The problem is actually exacerbated compared to trade since I also observe negative profits. The tragedy! I observe 11.961 zeroes of the FDI income variable and 1.361 negative values. The inhumanity! 
+\begin{table}
+	\captionof{table}{Poisson pseudo-maximum likelihood estimator}\label{regpoisson}
+	\centering
+	\scalebox{0.75}{
+		\begin{tabular}{lccc|ccc|ccc} \hline
+			& \multicolumn{9}{c}{} \\
+			& \multicolumn{3}{c}{OLS, $ \text{FDI Income}>0 $} & 
+			\multicolumn{3}{c}{Poisson PML, $ \text{FDI Income}>0 $} & \multicolumn{3}{c}{Poisson PML, $ \text{FDI Income}\geq0 $} \\
+			\cline{2-10}	
+			& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9) \\
+			 & Eq. (\ref{gravity1}) & $+\delta_t+\zeta_i$ & FE & Eq. (\ref{gravity1}) & $+\delta_t+\zeta_i$ & FE & Eq. (\ref{gravity1}) & $+\delta_t+\zeta_i$ & FE \\ \hline
+			\vspace{4pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			$\ln\text{GDP}_{it}$ & 0.976*** & 1.435*** & 0.567* & 0.860*** & 0.581** & 0.443* & 0.933*** & 0.538** & 0.444* \\
+			\vspace{4pt} & \begin{footnotesize}(0.036)\end{footnotesize} & \begin{footnotesize}(0.408)\end{footnotesize} & \begin{footnotesize}(0.310)\end{footnotesize} & \begin{footnotesize}(0.085)\end{footnotesize} & \begin{footnotesize}(0.274)\end{footnotesize} & \begin{footnotesize}(0.235)\end{footnotesize} & \begin{footnotesize}(0.083)\end{footnotesize} & \begin{footnotesize}(0.271)\end{footnotesize} & \begin{footnotesize}(0.235)\end{footnotesize} \\
+			$\ln\text{GDP}_{jt}$ & 0.837*** & 0.820*** & 0.180 & 0.617*** & 0.629*** & 0.923*** & 0.685*** & 0.687*** & 0.924*** \\
+			\vspace{4pt} & \begin{footnotesize}(0.024)\end{footnotesize} & \begin{footnotesize}(0.024)\end{footnotesize} & \begin{footnotesize}(0.258)\end{footnotesize} & \begin{footnotesize}(0.049)\end{footnotesize} & \begin{footnotesize}(0.047)\end{footnotesize} & \begin{footnotesize}(0.163)\end{footnotesize} & \begin{footnotesize}(0.044)\end{footnotesize} & \begin{footnotesize}(0.042)\end{footnotesize} & \begin{footnotesize}(0.163)\end{footnotesize} \\
+			$\ln\text{Distance (w)}$ & -0.792*** & -0.840*** &  & -0.536*** & -0.567*** &  & -0.608*** & -0.609*** &  \\
+			\vspace{4pt} & \begin{footnotesize}(0.054)\end{footnotesize} & \begin{footnotesize}(0.050)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}(0.084)\end{footnotesize} & \begin{footnotesize}(0.083)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}(0.083)\end{footnotesize} & \begin{footnotesize}(0.086)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			$\text{Haven}_j$ $(\gamma_1)$ & 2.598*** & 2.568*** &  & 0.551 & 0.395 &  & 0.602 & 0.416 &  \\
+			\vspace{4pt} & \begin{footnotesize}(0.619)\end{footnotesize} & \begin{footnotesize}(0.609)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}(0.758)\end{footnotesize} & \begin{footnotesize}(0.742)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}(0.783)\end{footnotesize} & \begin{footnotesize}(0.765)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			$\text{Non-haven}_j\times\text{CIT}_{it}$ $ (\gamma_2)$ & 0.033*** & 0.060*** & 0.023* & 0.010 & -0.009 & 0.001 & 0.008 & -0.008 & 0.001 \\
+			\vspace{4pt} & \begin{footnotesize}(0.008)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} & \begin{footnotesize}(0.011)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} & \begin{footnotesize}(0.010)\end{footnotesize} & \begin{footnotesize}(0.011)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} & \begin{footnotesize}(0.010)\end{footnotesize} \\
+			$\text{Haven}_j\times\text{CIT}_{it}$ $ (\gamma_3)$ & 0.003 & 0.030 & 0.001 & 0.042* & 0.029 & 0.005 & 0.041 & 0.032 & 0.005 \\
+			& \begin{footnotesize}(0.023)\end{footnotesize} & \begin{footnotesize}(0.023)\end{footnotesize} & \begin{footnotesize}(0.028)\end{footnotesize} & \begin{footnotesize}(0.025)\end{footnotesize} & \begin{footnotesize}(0.021)\end{footnotesize} & \begin{footnotesize}(0.008)\end{footnotesize} & \begin{footnotesize}(0.026)\end{footnotesize} & \begin{footnotesize}(0.021)\end{footnotesize} & \begin{footnotesize}(0.008)\end{footnotesize} \\
+			\vspace{4pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			Observations & 5,850 & 5,850 & 5,850 & 5,850 & 5,850 & 5,475 & 15,764 & 15,764 & 6,327 \\
+			$R^2$ & 0.540 & 0.638 & 0.949 & 0.314 & 0.393 &  & 0.335 & 0.412 &  \\ \hline
+			\multicolumn{10}{c}{\begin{footnotesize} All models include $ D_{ij}$ and a constant term. Dummies are added as specified above. Standard errors in parantheses.\end{footnotesize}} \\
+			\multicolumn{10}{c}{\begin{footnotesize} Standard errors are robust and clustered by distance. *** p$<$0.01, ** p$<$0.05, * p$<$0.1\end{footnotesize}} \\
+		\end{tabular}
+	}
+\end{table}
+
+\textbf{Missing values}. The eerily acute reader may have noticed that the provided numbers do not add up - indeed, I also observe 4.526 missing values. Some of these are excluded due to confidentiality concerns, and may therefore be close to zero, and could be replaced as such. 
+
+However, a simple check suggest this is not so wise. Countries routinely report a large share of FDI income as 'unallocated' (Canada, for instance, never allocates more than 52 pct). Furthermore, even when countries do not report profits as unallocated, a discrepancy between their reported overall FDI income and the income they assign to individual countries can sometimes be observed (table \ref{panellength} report both these shares for each country in each year). This suggest that, for some countries, statistics do not cover all partners, and 'zeroes' need not be actual zeroes. Even though many countries provide the full allocation, I do not reassign missing values. 
+
+\textbf{Poisson}. Returning to the task at hand, Poisson pseudo-maximum likelihood estimation (PPML) was suggested as an alternative allowing zeroes by \textcite{silva_log_2006}. The formal requirement for consistency is $ E[y_i|x]=\exp(x_i\beta) $, but the assumption actually just implies that the gravity model include the correct set of explanatory variables effects \autocite[52]{shepherd_gravity_2012}. Parameters are interpreted as (semi)elasticities, just as in OLS. 
+
+Table \ref{regpoisson} estimates the model by PPML\footnote{I use the package \textit{ppml} developed by \textcite{silva_poisson:_2011}. Fixed effects is implemented by \textit{xtpoisson}} for both the same sample as before, and extended with zeroes. At first glance, the new estimates do not spell well for my hypotheses. The haven and CIT effects are both much lower and insignificant. Indeed, I actually observe a stronger CIT effect for havens, which is definitely not what I expected.
+
+Despite this, there is not necessarily reason to panic. $ R^2 $ is far lower in this new estimation, where we might actually expect it to increase if PPML captured significant features of the data \autocite[53]{shepherd_gravity_2012}. Furthermore, the number of observations increase by less than a thousand for fixed effects, suggesting that most zeroes remain zeroes in all periods (and thus do not seem to matter for (observed) profit shifting). Finally, Poisson estimates are quite similar in both samples, which suggest differences occur because of the estimation technique, not because I incorporate zeroes. Let's continue looking for a solution, shall we?
+
+\subsection{Robustness: Inverse hyperbolic sine transformation -- Its fine to be define(d).}\label{IHS}
+There is an alternative: \textit{inverse hyperbolic sine} (IHS) transformation. This also allows negative profits, which may by itself be enough to make it more fitting than PPML. It is however less common in the gravity literature, even though it has apparently been around since 1949  \autocite{burbidge_alternative_1988}.The transformation\footnote{I use the simplest case of IHS. For more parameters in the transformation, see  \textcite{burbidge_alternative_1988} and  \textcite{mackinnon_transforming_1990}.}  yields $ \sinh^{-1}(y_i)=\ln(y_i+(y_i^2+1)^{\frac{1}{2}}) $, which is zero at zero. This is approximately equal to $ \ln(2)+\ln(y_i) $ except for very small values of $ y_i $, so we may interpret as in the logged models. That's just easy.  Table \ref{regIHS} estimates.
+
+\begin{table}
+	\captionof{table}{Inverse hyperbolic sine transformation}\label{regIHS}
+	\centering
+	\scalebox{0.75}{
+		\begin{tabular}{lccc|ccc|ccc} \hline
+			& \multicolumn{9}{c}{} \\
+			& \multicolumn{3}{c}{Log, $ \text{FDI Income}>0 $} & 
+			\multicolumn{3}{c}{IHS, $ \text{FDI Income}>0 $} & \multicolumn{3}{c}{IHS, $ \text{FDI Income}\in \mathbb{R} $} \\
+			\cline{2-10}
+		 & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9) \\
+		 & Eq. (\ref{gravity1}) & $+\delta_t+\zeta_i$ & FE & Eq. (\ref{gravity1}) & $+\delta_t+\zeta_i$ & FE & Eq. (\ref{gravity1}) & $+\delta_t+\zeta_i$ & FE \\ \hline
+		\vspace{4pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+		$\ln\text{GDP}_{it}$ & 0.976*** & 1.435*** & 0.567* & 0.878*** & 1.019*** & 0.354 & 0.496*** & -0.680*** & -0.259 \\
+		\vspace{4pt} & \begin{footnotesize}(0.036)\end{footnotesize} & \begin{footnotesize}(0.408)\end{footnotesize} & \begin{footnotesize}(0.310)\end{footnotesize} & \begin{footnotesize}(0.032)\end{footnotesize} & \begin{footnotesize}(0.367)\end{footnotesize} & \begin{footnotesize}(0.260)\end{footnotesize} & \begin{footnotesize}(0.024)\end{footnotesize} & \begin{footnotesize}(0.221)\end{footnotesize} & \begin{footnotesize}(0.228)\end{footnotesize} \\
+		$\ln\text{GDP}_{jt}$ & 0.837*** & 0.820*** & 0.180 & 0.776*** & 0.759*** & 0.335 & 0.462*** & 0.452*** & 0.437 \\
+		\vspace{4pt} & \begin{footnotesize}(0.024)\end{footnotesize} & \begin{footnotesize}(0.024)\end{footnotesize} & \begin{footnotesize}(0.258)\end{footnotesize} & \begin{footnotesize}(0.022)\end{footnotesize} & \begin{footnotesize}(0.022)\end{footnotesize} & \begin{footnotesize}(0.224)\end{footnotesize} & \begin{footnotesize}(0.018)\end{footnotesize} & \begin{footnotesize}(0.018)\end{footnotesize} & \begin{footnotesize}(0.268)\end{footnotesize} \\
+		$\ln\text{Distance (w)}$ & -0.792*** & -0.840*** &  & -0.700*** & -0.737*** &  & -0.343*** & -0.285*** &  \\
+		\vspace{4pt} & \begin{footnotesize}(0.054)\end{footnotesize} & \begin{footnotesize}(0.050)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}(0.050)\end{footnotesize} & \begin{footnotesize}(0.047)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}(0.057)\end{footnotesize} & \begin{footnotesize}(0.056)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+		$\text{Haven}_j$ $(\gamma_1)$ & 2.598*** & 2.568*** &  & 2.363*** & 2.343*** &  & 1.473*** & 1.452*** &  \\
+		\vspace{4pt} & \begin{footnotesize}(0.619)\end{footnotesize} & \begin{footnotesize}(0.609)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}(0.579)\end{footnotesize} & \begin{footnotesize}(0.571)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}(0.342)\end{footnotesize} & \begin{footnotesize}(0.342)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+		$\text{Non-haven}_j\times\text{CIT}_{it}$ $ (\gamma_2)$ & 0.033*** & 0.060*** & 0.023* & 0.030*** & 0.043*** & 0.019 & 0.019** & 0.105*** & -0.004 \\
+		\vspace{4pt} & \begin{footnotesize}(0.008)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} & \begin{footnotesize}(0.007)\end{footnotesize} & \begin{footnotesize}(0.012)\end{footnotesize} & \begin{footnotesize}(0.012)\end{footnotesize} & \begin{footnotesize}(0.008)\end{footnotesize} & \begin{footnotesize}(0.018)\end{footnotesize} & \begin{footnotesize}(0.020)\end{footnotesize} \\
+		$\text{Haven}_j\times\text{CIT}_{it}$ $ (\gamma_3)$ & 0.003 & 0.030 & 0.001 & 0.005 & 0.018 & -0.007 & -0.007 & 0.077*** & 0.018 \\
+		& \begin{footnotesize}(0.023)\end{footnotesize} & \begin{footnotesize}(0.023)\end{footnotesize} & \begin{footnotesize}(0.028)\end{footnotesize} & \begin{footnotesize}(0.022)\end{footnotesize} & \begin{footnotesize}(0.022)\end{footnotesize} & \begin{footnotesize}(0.026)\end{footnotesize} & \begin{footnotesize}(0.014)\end{footnotesize} & \begin{footnotesize}(0.020)\end{footnotesize} & \begin{footnotesize}(0.026)\end{footnotesize} \\
+		\vspace{4pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+		Observations & 5,850 & 5,850 & 5,850 & 5,850 & 5,850 & 5,850 & 17,108 & 17,108 & 17,108 \\
+		$R^2$ & 0.540 & 0.638 & 0.949 & 0.568 & 0.656 & 0.958 & 0.345 & 0.401 & 0.822 \\
+		$\gamma_2=\gamma_3 $ (p-value) & 0.211 & 0.217 & 0.430 & 0.284 & 0.277 & 0.318 & 0.0796 & 0.0668 & 0.431 \\ \hline
+		\multicolumn{10}{c}{\begin{footnotesize} Dummies are added as specified above. FE drops $\zeta_i+\eta_j$. Standard errors in parantheses.\end{footnotesize}} \\
+		\multicolumn{10}{c}{\begin{footnotesize} Standard errors are robust and clustered by distance. *** p$<$0.01, ** p$<$0.05, * p$<$0.1\end{footnotesize}} \\
+	\end{tabular}
+	}
+\end{table}
+
+Notice first that the IHS transformations performs similarly to the log when used on the same sample. Coefficients are lower, both on the gravity variables, haven and CIT, but generally not enough to alter significance. Furthermore, $ R^2 $ is hardly altered, indicating a similar fit. This implies that this transformation fits my analysis better than PPML did. 
+
+\textbf{Results}. This finally allows us to consider the effects of expanding the sample, which I almost triple (by adding mainly zeroes, but also 1.344 negative profits). The gravity variables are the best for judging whether the model accounts well for zeroes and negative profits. Unfortunately, it behaves oddly. The coefficients on $ GDP_{it} $ becomes negative after reporter-specific dummies $ \zeta_i $ are added, which makes little sense. Note that $ R^2 $ is markedly lower than for the smaller sample. It may be that the model is simply not well-suited for explaining zeroes and negative profits. A theoretical exploration of why this is the case might be of interest. In this paper, I continue using the log-based model due to the better apparent fit. However, the reader should keep these troubles in mind when interpreting results. 
+
+\section{Analysis II: What else might we plausibly account for?}
+This section estimates alterations of equation \ref{gravity1}. First, I perform another robustness check, but next I seek to highlight new features of the relationship between havens and tax rates. 
+
+\subsection{Robustness: Putting the \textit{j} back in tax rates}\label{sectaxdiff}
+I mentioned earlier that what companies are really interested in when shifting profits is the difference in tax rates, $ DCIT_{ijt}=CIT_{it}-CIT_{jt} $. If shifting was costless, this is the income they would earn by the mere act of shifting. This section incorporates this into the model, replacing $ CIT_{it} $ with $ DCIT_{ijt} $. 
+
+\begin{table}[t!]
+	\captionof{table}{Tax differences}\label{regdiff}
+	\centering
+	\scalebox{0.75}{
+		\begin{tabular}{lccc} \hline
+			& (1) & (2) & (3) \\
+			 &  & $+\delta_t+\zeta_i$ & $+\theta_{ij}$ \\ \hline
+			\vspace{4pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			$\ln\text{GDP}_{it}$ & 1.059*** & 1.169*** & 0.429 \\
+			\vspace{4pt} & \begin{footnotesize}(0.036)\end{footnotesize} & \begin{footnotesize}(0.389)\end{footnotesize} & \begin{footnotesize}(0.313)\end{footnotesize} \\
+			$\ln\text{GDP}_{jt}$ & 0.841*** & 0.832*** & 0.385 \\
+			\vspace{4pt} & \begin{footnotesize}(0.030)\end{footnotesize} & \begin{footnotesize}(0.031)\end{footnotesize} & \begin{footnotesize}(0.255)\end{footnotesize} \\
+			$\ln\text{Distance (w)}$ & -0.745*** & -0.807*** &  \\
+			\vspace{4pt} & \begin{footnotesize}(0.057)\end{footnotesize} & \begin{footnotesize}(0.053)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			$\text{Haven}_j$ $(\gamma_1)$ & 1.833*** & 1.857*** &  \\
+			\vspace{4pt} & \begin{footnotesize}(0.207)\end{footnotesize} & \begin{footnotesize}(0.195)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			Non-haven$\times\text{DCIT}_{ijt}$ $(\gamma_3)$ & 0.012** & 0.008 & 0.009 \\
+			\vspace{4pt} & \begin{footnotesize}(0.005)\end{footnotesize} & \begin{footnotesize}(0.006)\end{footnotesize} & \begin{footnotesize}(0.007)\end{footnotesize} \\
+			Haven$\times\text{DCIT}_{ijt}$ $(\gamma_3)$ & 0.001 & -0.001 & -0.013 \\
+			& \begin{footnotesize}(0.013)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} & \begin{footnotesize}(0.023)\end{footnotesize} \\
+			\vspace{4pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			Observations & 5,118 & 5,118 & 5,118 \\
+			$R^2$ & 0.537 & 0.635 & 0.951 \\
+			$\gamma_2=\gamma_3 $ (p-value) & 0.434 & 0.478 & 0.343 \\ \hline
+			\multicolumn{4}{c}{\begin{footnotesize} All models include $ D_{ij}$ and intercept. FE drops $\zeta_i$. S.e. in parantheses.\end{footnotesize}} \\
+			\multicolumn{4}{c}{\begin{footnotesize} S.e. are robust and clustered by distance. *** p$<$0.01, ** p$<$0.05, * p$<$0.1\end{footnotesize}} \\
+		\end{tabular}
+	}
+\end{table}
+
+So, why didn't I do this at first? There are two main reasons. First, trustworthy data. $ CIT_{it} $ is provided by OECD -- $ CIT_{jt} $ is provided by a private auditing firm. Coverage is also far from complete: Tax rates lack for 9.856 observations (in 101 partner territories).
+
+Second, statutory tax rates are imprecise measure of the marginal taxes firms actually face. This problem is also present for $ CIT_{it} $, but the rates in tax havens are particularly untrustworthy. The tax rate for Luxembourg for instance is 29\%, but  foreign profits are taxed at a far lower rate. However, the statutory rate for a number of tax havens is zero, so the data may be of use. 
+
+Table \ref{regdiff} estimates. I only lose 732 observations, indicating that partners with missing tax rates observe non-positive profits, or are missing on other parameters as well. It makes sense that some countries are systematically missing from international considerations, and that these tend to be places with little economic activity. Thus, I lose little information.   
+
+\textbf{Results}. Parameters maintain signs, but their magnitude changes. The level effect of havens is lower, because we account for some of the effect through tax rates. This indicates that more profits are shifted to havens than can even be accounted for through their low tax rates.
+
+The effect of DCIT follows expectations: An effect manifests in non-havens, but not in havens. However, the effect outside havens is far weaker in this model than previously, and insignificant after I add reporter-fixed effects. Even so, there is clearly no effect for havens, so results are hardly rosy for people who expect lower rates to bring shifted profits home. 
+
+\subsection{Extension: Are all sizes of havens created equally?}
+Do we observe the same effect in all havens? Recall that identification of shifted profits rests on the assumption that they dwarf the real economy in the haven. Yet, some havens boost significant business of their own. The GDP of Ireland, a haven, was \$287bn in 2015, far higher than Iceland's \$16bn for instance. Clearly, Ireland also sports a large real economy. 
+
+\begin{table}[t!]
+	\captionof{table}{Size of havens}\label{sizereg}
+	\centering
+	\scalebox{0.75}{
+		\begin{tabular}{lccc} \hline
+			& (1) & (2) & (3) \\
+			 & Eq. (\ref{gravitysize}) & $+\delta_t+\zeta_i$ & $+\theta_{ij}$ (FE) \\ \hline
+			\vspace{4pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			Small haven & 3.754*** & 3.361*** &  \\
+			\vspace{4pt} & \begin{footnotesize}(1.006)\end{footnotesize} & \begin{footnotesize}(0.993)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			Large haven & 1.905** & 2.066*** &  \\
+			\vspace{4pt} & \begin{footnotesize}(0.766)\end{footnotesize} & \begin{footnotesize}(0.762)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			$\text{Non-haven}_j\times\text{CIT}_{it}$ $ (\gamma_2)$ & 0.033*** & 0.059*** & 0.023* \\
+			\vspace{4pt} & \begin{footnotesize}(0.008)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} \\
+			Small haven$\times\text{CIT}_{it}$ & -0.029 & 0.016 & -0.031 \\
+			\vspace{4pt} & \begin{footnotesize}(0.041)\end{footnotesize} & \begin{footnotesize}(0.041)\end{footnotesize} & \begin{footnotesize}(0.054)\end{footnotesize} \\
+			Large haven$\times\text{CIT}_{ijt}$ & 0.024 & 0.042 & 0.021 \\
+			& \begin{footnotesize}(0.028)\end{footnotesize} & \begin{footnotesize}(0.028)\end{footnotesize} & \begin{footnotesize}(0.027)\end{footnotesize} \\
+			\vspace{4pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			$\gamma_2=\gamma^S_3$ (p-value) & 0.141 & 0.293 & 0.314 \\
+			$\gamma_2=\gamma^L_3 $ (p-value) & 0.745 & 0.548 & 0.953 \\ \hline
+			\multicolumn{4}{c}{\begin{footnotesize} All models include $ D_{ij}$ and intercept. FE drops $\zeta_i$. S.e. in parantheses.\end{footnotesize}} \\
+			\multicolumn{4}{c}{\begin{footnotesize} S.e. are robust and clustered by distance. *** p$<$0.01, ** p$<$0.05, * p$<$0.1\end{footnotesize}} \\
+		\end{tabular}
+	}
+\end{table}
+
+I assume population reflect the size of the real economies (based on the seemingly reasonable assumption that economies are run by people), and divide havens into two (arbitrary) groups: Large havens with more than 400 thousand people, and smaller havens with fewer. There are 34 smaller havens, and 14 larger ones (cf. table \ref{haventable}). These havens can be quite small: Guernsey hosts less than 70k people, but OECD countries realized an FDI income there of \$760m in 2015.
+\begin{equation}\label{gravitysize}
+\begin{aligned}
+\ln\text{FDIInc}_{ijt} &= \alpha_0 + \alpha_1\ln\text{GDP}_{it}+\alpha_2\ln\text{GDP}_{jt}+ \alpha_3\ln\text{Distance}_{ij}+\beta D_{ij} \\
+&\quad + \gamma_1^S \text{Haven}^\text{Small}_j
++ \gamma_1^L \text{Haven}^\text{Large}_j +
+\gamma_2\text{Non-haven}_j\times\text{CIT}_\text{it} \\
+&\quad  
++ \gamma^S_3 \text{Haven}^\text{Small}_j\times \text{CIT}_\text{it}
++ \gamma^L_3 \text{Haven}^\text{Large}_j\times \text{CIT}_\text{it}
++ \epsilon_{ijt}
+\end{aligned}
+\end{equation}
+\textbf{Results}. Equation (\ref{gravitysize}) replaces haven with new dummies, and is estimated in table \ref{sizereg}. The size of havens affects results: Models adds 330 pct. to the profits of small havens, and only 200 pct. to larger havens. This may indicate a greater share of profits in large havens are from real activities, and accounted for by the model. Even so, a level effect still exists for larger havens. 
+
+Consider our theoretical expectations here: I expect that shifted profits are less sensitive to tax rates, and that these form a larger share of the response in smaller havens. This is exactly what I observe: There is a large correction of the effect of $ CIT_{it} $ for smaller havens so that there is no effect (or a negative one), and a smaller correction for larger havens, so there is a positive but weaker relationship. This suggests we may further isolate shifted profits by considering mainly smaller havens, which might be interesting to explore further\footnote{One caveat is that profits were mainly realized in the larger havens, as seen in figure \ref{havenshare}.}. 
+
+\subsection{Extension: Are all types of income created equally?}
+Until now we have considered total income generated on foreign assets. Such income may be of several types, and it turns out OECD actually distinguishes between these in their statistics. This allows us to divide income into three categories: Dividends, reinvested earnings and debt income. The first two collectively form income on equity, which tends to be the lion's share of FDI income. Table \ref{regtype} estimates the original gravity equation separately for each type of income. Observations drop quite heavily, as not all countries report the subcategories. 
+
+\begin{table}
+	\captionof{table}{Types of FDI income}\label{regtype}
+	\centering
+	\scalebox{0.75}{
+		\begin{tabular}{lccccccccc} \hline
+				& \multicolumn{9}{c}{} \\
+				& \multicolumn{3}{c}{Dividends} & \multicolumn{3}{c}{Reinvested earnings} & \multicolumn{3}{c}{Debt income}  \\
+			\cline{2-10}
+			  & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9) \\
+			  & Eq. (\ref{gravity1}) & $+\delta_t+\zeta_i$ & $+\theta_{ij}$ & Eq. (\ref{gravity1}) & $+\delta_t+\zeta_i$ & $+\theta_{ij}$ & Eq. (\ref{gravity1}) & $+\delta_t+\zeta_i$ & $+\theta_{ij}$ \\ \hline
+			 \vspace{4pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			 $\ln\text{GDP}_{it}$ & 1.024*** & 0.594 & 1.567** & 0.981*** & 0.389 & 0.259 & 0.846*** & 2.688*** & 2.261** \\
+			 \vspace{4pt} & \begin{footnotesize}(0.049)\end{footnotesize} & \begin{footnotesize}(0.783)\end{footnotesize} & \begin{footnotesize}(0.685)\end{footnotesize} & \begin{footnotesize}(0.042)\end{footnotesize} & \begin{footnotesize}(0.540)\end{footnotesize} & \begin{footnotesize}(0.510)\end{footnotesize} & \begin{footnotesize}(0.055)\end{footnotesize} & \begin{footnotesize}(1.018)\end{footnotesize} & \begin{footnotesize}(0.907)\end{footnotesize} \\
+			 $\ln\text{GDP}_{jt}$ & 0.807*** & 0.756*** & -0.071 & 0.711*** & 0.661*** & 0.419 & 0.816*** & 0.683*** & 0.386 \\
+			 \vspace{4pt} & \begin{footnotesize}(0.035)\end{footnotesize} & \begin{footnotesize}(0.035)\end{footnotesize} & \begin{footnotesize}(0.338)\end{footnotesize} & \begin{footnotesize}(0.029)\end{footnotesize} & \begin{footnotesize}(0.030)\end{footnotesize} & \begin{footnotesize}(0.277)\end{footnotesize} & \begin{footnotesize}(0.042)\end{footnotesize} & \begin{footnotesize}(0.041)\end{footnotesize} & \begin{footnotesize}(0.280)\end{footnotesize} \\
+			 $\ln\text{Distance (w)}$ & -0.699*** & -0.727*** &  & -0.659*** & -0.718*** &  & -0.856*** & -0.777*** &  \\
+			 \vspace{4pt} & \begin{footnotesize}(0.072)\end{footnotesize} & \begin{footnotesize}(0.063)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}(0.058)\end{footnotesize} & \begin{footnotesize}(0.058)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}(0.077)\end{footnotesize} & \begin{footnotesize}(0.065)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			 $\text{Haven}_j$ $(\gamma_1)$ & 2.366*** & 2.421*** &  & 2.666*** & 2.629*** &  & 2.280*** & 1.275* &  \\
+			 \vspace{4pt} & \begin{footnotesize}(0.738)\end{footnotesize} & \begin{footnotesize}(0.724)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}(0.709)\end{footnotesize} & \begin{footnotesize}(0.645)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}(0.781)\end{footnotesize} & \begin{footnotesize}(0.694)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			 $\text{Non-haven}_j\times\text{CIT}_{it}$ $ (\gamma_2)$ & 0.056*** & 0.078*** & 0.058*** & 0.045*** & 0.007 & -0.015 & 0.047*** & 0.125 & 0.094 \\
+			 \vspace{4pt} & \begin{footnotesize}(0.010)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} & \begin{footnotesize}(0.013)\end{footnotesize} & \begin{footnotesize}(0.008)\end{footnotesize} & \begin{footnotesize}(0.016)\end{footnotesize} & \begin{footnotesize}(0.020)\end{footnotesize} & \begin{footnotesize}(0.011)\end{footnotesize} & \begin{footnotesize}(0.107)\end{footnotesize} & \begin{footnotesize}(0.078)\end{footnotesize} \\
+			 $\text{Haven}_j\times\text{CIT}_{it}$ $ (\gamma_3)$ & 0.030 & 0.051* & 0.049 & 0.007 & -0.030 & -0.070** & 0.013 & 0.127 & 0.168* \\
+			 & \begin{footnotesize}(0.028)\end{footnotesize} & \begin{footnotesize}(0.027)\end{footnotesize} & \begin{footnotesize}(0.034)\end{footnotesize} & \begin{footnotesize}(0.027)\end{footnotesize} & \begin{footnotesize}(0.028)\end{footnotesize} & \begin{footnotesize}(0.031)\end{footnotesize} & \begin{footnotesize}(0.030)\end{footnotesize} & \begin{footnotesize}(0.109)\end{footnotesize} & \begin{footnotesize}(0.093)\end{footnotesize} \\
+			 \vspace{4pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+			 Observations & 3,652 & 3,652 & 3,652 & 3,444 & 3,444 & 3,444 & 2,785 & 2,785 & 2,785 \\
+			 $R^2$ & 0.492 & 0.626 & 0.913 & 0.562 & 0.625 & 0.938 & 0.421 & 0.592 & 0.940 \\
+			 $\gamma_2=\gamma_3$ (p) & 0.369 & 0.336 & 0.800 & 0.175 & 0.135 & 0.0409 & 0.268 & 0.940 & 0.204 \\ \hline
+			 \multicolumn{10}{c}{\begin{footnotesize} All models include $ D_{ij}$ and a constant term. Dummies are added as specified above. FE drops $\zeta_i$. Robust standard errors in parantheses.\end{footnotesize}} \\
+			 \multicolumn{10}{c}{\begin{footnotesize} Standard errors are robust and clustered by distance. *** p$<$0.01, ** p$<$0.05, * p$<$0.1, + p$<$0.15\end{footnotesize}} \\
+		 \end{tabular}
+	}
+\end{table}
+
+\textbf{Results}. A first observation might be that all types of income are realized in havens, as the level effect of haven is highly significant in all models.  All profits welcome beneath sunny skies!
+
+The effect of tax rates at home are especially strong for dividends. This could make theoretical sense, as dividends from tax havens might be subject to some taxation (not necessarily the CIT, but perhaps one correlated with it). It could also be that tax reductions are expected by firms, so they withhold profits until taxes are lowered, and then pay them out as dividends. The effects of $ CIT_{it} $ for non-havens also appear for the other types of income, although  uncertainly.  
+
+I actually observe effects of CIT in havens for dividends and debt income on a 10 pct. significance level in a few models. For reinvested earnings on the other hand, I observe a significantly negative effect of tax rates on profit in havens! This could indicate that when modelling profit shifting, one should consider the type of profits. 
+
+\subsection{Extension: What happens when one legislates on CFCs?}
+The final expansion of the paper will consider legislation on \textit{controlled foreign corporations} (CFCs). This is used by some countries to 'counter abusive deferral or
+profit-shifting by multinational groups' \autocite[1067]{voget_relocation_2011}, which is exactly what I study. The intent is that profits diverted to a CFC are still taxed at the CIT rate in the reporting country, effectively eliminating the incentive for profit shifting. I do not discuss how CFC rules work in practice or in particular countries, but simply check whether their inclusion affects the model. Table \ref{CFCrules} provides a list of the 14 of our 27 reporting countries which had CFC rules in place in 2008. I interact haven and CIT in equation (\ref{gravity1}) with a dummy for this. 
+\begin{equation}\label{gravityCFC}
+\begin{aligned}
+\ln\text{FDIInc}_{ijt} &= \alpha_0 + \alpha_1\ln\text{GDP}_{it}+\alpha_2\ln\text{GDP}_{jt}+ \alpha_3\ln\text{Distance}_{ij}+\beta D_{ij} \\
+&\quad + 
+\iota_1\text{CFC}_i\times\text{Non-haven}_j +\gamma_1\text{Non-CFC}_i\times \text{Haven}_j  +  \iota_2\text{CFC}_i\times\text{Haven}_j \\
+&\quad + \gamma_2\text{Non-CFC}_i\times\text{Non-haven}_j\times\text{CIT}_\text{it} 
++ \iota_3 \text{CFC}_i\times\text{Non-haven}_j\times \text{CIT}_\text{it}  \\
+&\quad + \gamma_3 \text{Non-CFC}_i\times\text{Haven}_j\times \text{CIT}_\text{it} 
++ \iota_4 \text{CFC}_i\times\text{Haven}_j\times \text{CIT}_\text{it} 
+ + \epsilon_{ijt}
+\end{aligned}
+\end{equation}
+The equation is again constructed so that each parameter captures the effect for a separate group (so you never have to sum different terms). Thus, while the equation may look confusing, interpretation is actually quite easy. For instance $ \gamma_2 $ now captures the effect of CIT for countries which are neither havens nor have CFC rules. The equation is estimated in table \ref{gravityCFC}. 
+
+\begin{table}
+	\captionof{table}{Controlled foreign corporation (CFC) legislation.}\label{regcfc}
+	\centering
+	\scalebox{0.75}{
+	\begin{tabular}{lccc} \hline
+		& (1) & (2) & (3) \\
+		 & Eq. (\ref{gravityCFC}) & $+\delta_t+\zeta_i$ & $+\theta_{ij}$ \\ \hline
+		\vspace{4pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+		$\text{CFC}_i\times\text{Non-haven}_j$$ (\iota_1)$ & 3.024*** &  &  \\
+		\vspace{4pt} & \begin{footnotesize}(0.503)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+		$\text{Non-CFC}_i\times\text{Haven}_j$$ (\gamma_2)$ & 5.059*** & 5.127*** &  \\
+		\vspace{4pt} & \begin{footnotesize}(1.425)\end{footnotesize} & \begin{footnotesize}(1.259)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+		$\text{CFC}_i\times\text{Haven}_j$$ (\iota_2)$ & 4.530*** & 1.413** &  \\
+		\vspace{4pt} & \begin{footnotesize}(0.794)\end{footnotesize} & \begin{footnotesize}(0.682)\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+		$\text{Non-CFC}_i\times\text{Non-haven}_j\times\text{CIT}_{it}$ $ (\gamma_2)$ & 0.140*** & 0.111 & -0.029 \\
+		\vspace{4pt} & \begin{footnotesize}(0.019)\end{footnotesize} & \begin{footnotesize}(0.149)\end{footnotesize} & \begin{footnotesize}(0.076)\end{footnotesize} \\
+		$\text{CFC}_i\times\text{Non-haven}_j\times\text{CIT}_{it}$$ (\iota_3)$ & 0.011 & 0.051*** & 0.025* \\
+		\vspace{4pt} & \begin{footnotesize}(0.009)\end{footnotesize} & \begin{footnotesize}(0.012)\end{footnotesize} & \begin{footnotesize}(0.014)\end{footnotesize} \\
+		$\text{Non-CFC}_i\times\text{Haven}_j\times\text{CIT}_{it}$ $ (\gamma_3)$ & 0.025 & -0.007 & -0.042 \\
+		\vspace{4pt} & \begin{footnotesize}(0.057)\end{footnotesize} & \begin{footnotesize}(0.153)\end{footnotesize} & \begin{footnotesize}(0.087)\end{footnotesize} \\
+		$\text{CFC}_i\times\text{Haven}_j\times\text{CIT}_{it}$$ (\iota_4)$ & 0.015 & 0.057** & 0.003 \\
+		& \begin{footnotesize}(0.025)\end{footnotesize} & \begin{footnotesize}(0.025)\end{footnotesize} & \begin{footnotesize}(0.028)\end{footnotesize} \\
+		\vspace{4pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+		$\gamma_2=\gamma_3$ (p) & 0.0511 & 0.0215 & 0.904 \\
+		$\iota_3=\iota_4$ (p) & 0.894 & 0.814 & 0.427 \\ \hline
+		\multicolumn{4}{c}{\begin{footnotesize} All models include gravity variables and intercept. FE drops $\zeta_i$.\end{footnotesize}} \\
+		\multicolumn{4}{c}{\begin{footnotesize} S.e. are robust and clustered by distance. *** p$<$0.01, ** p$<$0.05, * p$<$0.1\end{footnotesize}} \\
+	\end{tabular}	
+	}
+\end{table}
+
+\textbf{Results}. CFC legislation does seem to affect how much countries use tax havens. Consider that for reporters without CFC rules, we expect profits in havens to be 500\% higher ($ \gamma_1 $), whilst for CFC reporters, we only expect an increase of 150 pct. ($ \iota_2-\iota_1 $)\footnote{The first three dummies are interpreted versus a reference group of countries which are neither havens nor have CFC legislation. For CFC countries, the featured dummies must therefore be compared with each other.}. This suggests that CFC rules are successful in preventing profits from flowing to tax havens, but not completely so. 
+
+The importance of CFC for the relationship between tax rates and profits is muddled. Non-haven flows do follow our predictions both with and without CFC rules, although some models falter. Theoretically, if we isolate shifted profits better by only considering countries without CFC rules, we would expect a stronger relationship with CFC rules. I observe some evidence for this ($ \iota_3 $ is significant in (2)), but generally the effects seem similar. CFC rules may be relevant, but I cannot definitely conclude so. 
+Again there is little evidence that shifted profits are sensitive to changes in the tax rate, and  CFC apparently does not influence this much.  
+
+\section{Discussion: Concerns on identification}\label{discussion}
+It is understandable if you've lost track of what each model said about our hypotheses. I will summarize neatly in just a moment (honestly), but first we may confuse you somewhat further by discussing whether results are actually valid. The first subsection considers the consistency of the models estimated, while the second discusses the research design and data used. 
+
+\subsection{Consistency: Can we say what happens in tax havens? }\label{dissconsistency}
+As is always the case in econometrics, it is wise to be sceptical of whether one has identified parameters. I perform a number of robustness checks, but do not answer other concerns. 
+
+\textbf{Endogeneity}. The ever-present spectre of endogeneity also looms large over the study. In short, if there is correlation between the error term and the regressors, OLS is inconsistent. I attempt to account for omitted relevant variables through fixed effects, but there may be others which also vary within country pairs (and I also use cross-sectional variation, as FE lacks variation). Reverse causality is a grave concern in gravity models with policy variables \autocite[41]{shepherd_gravity_2012}. Here, competition implies that tax rates are set partly to attract real profits, indicating a causality loop in my panel. Even the decision to be a haven is affected by whether it attracts profits. Thus, there is good reason to fear endogeneity. It would be relevant to continue this study with an IV based estimation, checking whether the results still hold.
+
+\textbf{Reliability of data}. There may be problems with reliability of data. Since full allocations are not always provided, some zeroes may not be real zeroes (cf. section \ref{poisson}). I also observe obvious errors for some countries (for instance, New Zealand reported total profits in 2015 as \$492m with \$4m unallocated, but the sum of their profits on partner countries was  \$534m). I discussed that statutory rates need not accurately reflect actual marginal rates. Finally, there is even disagreement over which countries are tax havens. As long as measurement is random, error in the dependent variable does not violate consistency, but measurement error in regressors \textit{may} cause bias \autocite[307-313]{wooldridge_introductory_2009}. This is certainly a concern.
+
+\textbf{Nonrandom sample}. However, it is not even clear that measurement error can be considered random. Particularly for the missing values, there is ample reason to think that poorer, smaller countries are the ones for whom data tends to be missing or erroneous. As an added caveat, these are likely candidates for tax havens, an entity which might even enjoy a little secrecy. While sample  selection on regressors does not cause bias, removing observations based on a cutoff in the dependent variable does \autocite[315]{wooldridge_introductory_2009}. Again, this study seems a likely candidate. Error in the data is worrisome, but there is little we can do about it. In the end, we must trust that statistical agencies provide decent data (or at least random error).
+
+\subsection{Contribution: What does this really tell us?}
+Before I conclude it is relevant to stop up, take a breath, and consider what we have actually looked at in this paper. Basically, I provide two novelties to the literature. 
+
+\textbf{Design}. First, I argue that we may isolate shifted profits by considering havens. There may be other differences between havens and non-havens, which create the observed difference in sensitivity to tax rates. Furthermore, shifting also likely occurs between non-haven countries, which could further muddle the picture. Fortunately, our results may be interesting even so. As long as consistency holds, we do observe how profits in havens respond to tax rates. This may be interesting in and of itself, even if you are unconvinced that this reflects on shifted profits. 
+
+A caveat on this is the fact that the estimates for havens and non-havens on CIT are generally not significantly different. This insignificance is caused by high standard errors, not by estimates which are similar. Indeed, the estimates for havens are close to zero, just as I expected. I believe this reflects that the simple models used do not capture all relevant factors of the relationship (or that shifting is highly stochastic), but that I do characterize the overall relationship correctly. Further work incorporating more factors could check whether my belief holds true. 
+
+\textbf{Data}. Secondly, I use macroeconomic flows. These should capture the same relationship as holds for individual firms (on average), but presents some unique challenges and opportunities. 
+
+One challenge is that I cannot observe exactly what happens when profits change. Consider, for instance, what happens if  firms move between countries. This would lower profits in one country and increase them in another. If firms move in response to tax rates (which is plausible), this could be problematic. One could assess the impact of such bias by looking at microdata. All in all though, I would not expect many firms to move based on marginal changes to taxes. 
+
+Another challenge is the fact I do not observe domestic profits.  Our argument is based on the expectation that as foreign profits fall, domestic profits rise because profits and investment are scarce resources. Fortunately, we mainly see tax rates decline, which should not lower overall profits.  Therefore, domestic profits should rise relatively  when foreign profits fall. 
+
+The approach also has one clear benefits: I cover the entire population of firms in the reporting countries. All major firms report their FDI income to national agencies, likely truthfully\footnote{Since firms are mainly implicated in tax avoidance (rather than evasion), they have little reason to misreport. Indeed, since the same information is supplied to tax agencies, misreporting does not seem feasible.}.  This may yield better coverage than the microdata traditionally used in the literature.
+
+The discussion should tell you two things. First, formal identification may be questioned, and we should hope for further research on this (preferably through IV set-ups). Secondly, I have decent confidence that my design and data still capture some features of the world, but definitely not all. Results should be considered interesting, but uncertain.  
+
+\section{Conclusion: Profit shifting appears not to respond to corporate tax rates.}
+Table \ref{summary} summarizes all the estimated models. So, how do our hypotheses hold up?
+
+\textbf{Haven}. All models support a level effect for havens, indicating  that more profits are realized in havens than accounted for by basic economic forces. I interpret this as evidence for shifting, rather than their economies being uniquely productive. This validates my research design, as it suggests we may compare real and shifted profits by comparing havens and non-havens.
+
+\textbf{Corporate tax rates and non-havens}. The second hypothesis is supported by most estimations. The FE estimation cannot always recreate this, possibly due to the limited variation available to it. Even so, there is decent evidence for the relationship, which suggest the forces underlying international tax competition are real. When countries lower their corporate tax rate, they should expect domestic profits  to rise. This yields the competitive incentive to do so.
+
+\begin{table}[t!]
+	\captionof{table}{Model estimation summary}\label{summary}
+	\centering
+	\scalebox{0.75}{
+		\begin{tabular}{ll|llll}
+			&& \textbf{Hypothesis I} & \textbf{Hypothesis II} & \textbf{Hypothesis II} & \textbf{Hypothesis IV}	 \\
+			&& $  \text{Haven}_j $ & $ \text{Non-haven}_j\times\text{CIT}_{it} $ &  $ \text{Haven}_j\times\text{CIT}_{it}  $ & $  $ \\ 
+			& & $ H_A:\gamma_1>0 $ & $H_A: \gamma_2 >0 $ & $H_A: \gamma_3>0 $ & $H_A:\gamma_2\ne\gamma_3 $ \\ \hline 
+			&&&&& \\
+			Basic gravity & \ref{main} & Significant effect & Sign. effect & No effect & Cannot reject \\
+			Poisson PML & \ref{regpoisson}& Insign. effect & No effect  & Insign. effect & -- \\
+			IHS  & \ref{regIHS} & Sign. effect & Sign. effect until FE  & Sign. effect with $ \zeta_i $ & Can reject \\
+			Tax differences & \ref{regdiff} & Weaker effect & Weaker effect  & No effect & Cannot reject \\
+			Haven size & \ref{sizereg} & Especially small &Sign. effect &  No effect for small & Cannot reject \\
+			Type of income & \ref{regtype} & Sign. supp. (all)   & Especially dividends &  Especially not  reinv. earn. & Cannot reject or negative \\
+			CFC legislation & \ref{regcfc} & Especially non-CFC & Partially significant effect & Mainly no effect  & Reject for non-CFC
+			\\ \multicolumn{6}{l}{ }
+		\end{tabular}
+	}
+\end{table}
+
+\textbf{Corporate tax rates and havens}. I generally observe a weaker effect in havens. Indeed, I often observe no relationship with corporate tax rates at all. The evidence is consistent with the notion that (shifted) profits in havens are insensitive to small changes in tax rates.
+
+However, I cannot conclusively reject other naratives, as I rarely find that the estimates for the two types of partners are significantly different. However, this due to large standard errors, not similar estimates.  This suggests that either that profits in havens are highly stochastic, or that there are confounding factors which I do not identify. The latter could imply that I have not completely isolated shifted profits in my set-up. Even so, it would be wrong to claim that results does not point towards insensitive shifted profits. 
+
+\textbf{Extensions}. The extended models attempt to account for other factors, and provide evidence that one may isolate shifted profits further. First, haven effects are stronger for small havens, which is consistent with shifted profits being a larger part of their economy. Second, haven effects appear different for various types of income, with reinvested earnings in havens particularly untouched by tax rates. Finally, the relationship may be affected by CFC legislation. All extensions continue to show that haven profits respond weakly, possibly not at all. 
+
+\textbf{Overall}. In short, there is good evidence that allocation of investment and real profits between countries is affected by corporate tax rates. Data is also consistent with the notion that havens possess a large share of shifted profits. Finally, data is consistent, although not conclusively so, with the notion that profits in tax havens respond weakly to small changes in corporate tax rates. They may not even respond at all. The last conclusion should be regarded carefully until recreated with more data or new designs, but is quite interesting even so. 
+
+It suggests that countries should not expect to dissuade the use of tax havens by lowering tax rates, at least as long as they stay inside the observed ranges. By the argument that these differences reflect that \textit{profit shifting} is insensitive to marginal changes in corporate tax rates, this suggests that countries should disregard shifted profits when competing over tax rates. That could slow the race toward the bottom, if realized by world leaders.  
+
+Perhaps someone should tell Mr. Trump, before he initiates the next sprint. 
+
+\newpage
+\renewcommand*{\bibfont}{\footnotesize}
+\printbibliography[heading=bibnumbered]
+
+\newpage
+\section{Appendices}
+\subsection{Data sources}\label{AppSources}
+The analysis features FDI income reported by 27 OECD countries on 212 partner countries (see \ref{coveredcountries}). This dataset is enriched with a number of other data sets, as shown in figure \ref{dataprocess}. Below you will find sources and a short description of what each brings to the table. All used datasets are available at \url{https://github.com/rbjoern/Public_Economics/tree/master/Data}. 
+
+\begin{figure}[ht!]
+	\centering
+	\captionof{figure}{Data process}\label{dataprocess}
+	\includegraphics[width= 0.9\textwidth ]{PEDataTable}
+\end{figure}
+\noindent \textbf{1.} OECD countries provides both outwards and inwards FDI income against partner countries. \textit{Source:}  \url{https://stats.oecd.org/Index.aspx?DataSetCode=FDI_INC_CTRY}. 
+
+\noindent \textbf{2.} Data on GNI and GDP for each reporting country. I wound up using World Bank data for them as well. \textit{Source:} \url{https://stats.oecd.org/Index.aspx?DataSetCode=SNA_TABLE2}..
+
+\noindent \textbf{3.} \textit{Source:} \url{https://stats.oecd.org/Index.aspx?DataSetCode=TABLE_II1}.
+
+\noindent \textbf{4.} Dyadic dataset based on the GeoDist database from CEPII, which includes standard gravity variables. \textit{Source:} \url{http://www.cepii.fr/CEPII/en/bdd_modele/presentation.asp?id=8}.
+
+\noindent \textbf{5.} GDP data from the World Bank WDI data tables. \textit{Source:} \url{http://databank.worldbank.org/data/reports.aspx?source=2&series=NY.GDP.MKTP.CD}
+
+\noindent \textbf{6.} The list of tax havens featured in table \ref{haventable}. Sources are listed there.
+ 
+\noindent \textbf{7.} Insignificant. \textit{Source:} \url{https://stats.oecd.org/Index.aspx?DataSetCode=SNA_TABLE4}.
+
+\noindent \textbf{8.} The list of CFC-rules featured in \ref{CFCrules}. Sources are listed there. 
+
+\noindent \textbf{9.} CIT rates in 137 countries. \textit{Source:} \url{https://home.kpmg.com/xx/en/home/services/tax/tax-tools-and-resources/tax-rates-online/corporate-tax-rates-table.html}. 
+
+\noindent \textbf{10.} The final dataset contains the data pairs from the OECD data, enriched with the listed information. Table \ref{coveredcountries} specifies for which pairs data was available.
+
+\subsection{Code appendices}\label{AppCode}
+All code used for the paper is available at GitHub:  \url{https://github.com/rbjoern/Public_economics/tree/master/Code}. A short description of each is provided here, but the ones of most interest are likely two and four. The used software is marked in parentheses. 
+\\\\
+\textbf{Code Appendix 1 \textit{(R, ~120 lines):} Load external data sources}. The code automatically downloads new versions of datasets 1,2,3 5 and 7 from the OECD and World Bank databases. It uses the SDMX framework. Code is saved as CSV files, which are loaded in the next appendix. 
+\\\\
+\textbf{Code Appendix 2 \textit{(R, ~760 lines):} Format dataset}. This code provides all formatting and changes and outputs the main dataset. Data is loaded from CSV files, and joined to the main dataset on FDI income. All actual changes to the data (rather than mere formatting) is clearly marked by '\#DATA FIX.' Each section loads a new dataset, performs formatting and data manipulation, and then joins it to the main dataset, which is finally saved in CSV and DTA formats. 
+\\\\
+\textbf{Code Appendix 3 \textit{(R, ~220 lines):} Descriptive analysis}. This code generates data for tables and figures, and performs various checks. It is not required for the 4th appendix.
+\\\\
+\textbf{Code Appendix 4 \textit{(Stata, ~620 lines):} Statistical Analysis}. The statistical analysis is performed in Stata. All the regression tables are generated in this appendix. 
+\\\\ 
+All code should run if working directories are updated, and mentioned packages installed. 
+
+\subsection{Major data changes}\label{AppFixes}
+All changes to the data is done in code appendix 2, and clearly marked with the label \#DATA FIX. Here, I provide a list of the changes to the data which implied larger assumptions. \begin{itemize}
+	\item Some countries report FDI Income only for resident operating units (Non-SPEs) and no totals (since SPEs are confidential). Here, I simply set totals equal to non-SPEs.
+	\item  GDP is often missing for partner countries in some years. I replaced these with GDP from earlier/later years as possible (i.e. assumed zero growth from year to year).
+	\item GDP was manually added for some countries as specified in table \ref{coveredcountries}. Some were missing completely (see appended file), others only had missing values (see code appendix 2).
+	\item Gravity data s manually added for some countries as specified in table \ref{coveredcountries}. 	Manually added distances (see table \ref{coveredcountries}) are simple distances, rather than weighted.
+	\item Tax rates for partner countries are only reported for 2006-2015. I assume no change from 2005 to 2006. 
+\end{itemize}
+
+
+\subsection{Supplementary tables}\label{AppTables}
+Supplementary tables, as referenced in the text, are provided below. 
+\newpage
+%Table - Sample
+\noindent\begin{minipage}{\linewidth}
+	\captionof{table}{Covered countries}\label{coveredcountries}
+	\begin{tabular}{L{7cm}L{1cm}L{7cm}}
+		\textbf{Reporting countries} & \qquad  & \textbf{Partner countries} \\ \hline \
+		\footnotesize 27 of the 35 OECD members report useful FDI income data, and are featured in the analysis.&& 
+		\footnotesize The OECD collects data on 237 countries and territories. I have data on 212, excluding 25.  \\
+		&&\\
+		\footnotesize \textbf{Featured OECD-countries} &&
+		\footnotesize \textbf{Excluded, missing from CEPII data.} \\
+		\footnotesize Australia,  Austria, Belgium, Canada, Czech Republic, Denmark, Estonia, France, Germany, Greece, Hungary, Iceland, Ireland, Italy, Japan, Korea, Latvia, Netherlands, New Zealand, Norway, Poland, Slovak Republic, Slovenia, Spain, Sweden, United Kingdom, United States
+		&&
+		\footnotesize Antarctica, Bouvet Island, British Indian Ocean Territory, French Southern Territories, Guam, Heard islands and Mc Donald Islands, Montenegro, Palestinian Territory, Serbia and Montenegro, South Georgia \& South Sandwich Islands, South Sudan, U.S. Virgin Islands , Vatican,American Samoa
+		\\
+		&&\\
+		\footnotesize \textbf{Excluded, they only provide aggregates (or not even that)}
+		&&\footnotesize \textbf{Included, missing from CEPII data} \newline \textbf{(added manually) }
+		\\
+		\footnotesize Finland, Luxembourg, Mexico, Portugal, Switzerland, Turkey && 	
+		\footnotesize Bonaire, Saint Eustatius and Saba, Curacao, Isle of Man, Guernsey, Jersey, Liechtenstein, Sint Maarten
+		\\
+		&&\\
+		\footnotesize \textbf{Excluded, they do not report the statistic.}&&
+		\footnotesize \textbf{Excluded, missing from WB GDP data }\\
+		\footnotesize Chile, Israel && 
+		\footnotesize Christmas islands, French Polynesia, New Caledonia, Norfolk Island, North Korea, Pitcairn, Saint Helena, Tokelau, US Minor Outlying islands, Wallis and Futuna,Cocos islands
+		\\
+		&&\\
+		&& \footnotesize \textbf{Included, added manually to GDP data} \\ 
+		&& \footnotesize Anguilla, Bonaire, Saint Eustatius and Saba,  Cook Islands, Guernsey,  Jersey, Montserrat, Netherlands Antilles, Niue
+				\\
+		&&\\
+		&& \footnotesize \textbf{Included, missing GDP replaced} \\ 
+		&& \footnotesize British Virgin Islands, Curacao, Sint Maarten, Turks and Caicos Islands, Gibraltar
+		\\
+		&&\\
+		&& \footnotesize \textbf{Included, but no non-zeroes reported}. \\
+		&& \footnotesize Montserrat, Niue, Somalia, Tonga,Grenada
+		\\
+		&&\\
+		&& \footnotesize \textbf{Included, but no positive values reported}. \\		&& \footnotesize  Sao Tome and Principe, Tajikistan, Tuvalu	
+		\\ 	
+				&&\\
+		\multicolumn{3}{l}{
+			\makecell{\scriptsize \textit{Notes}: \scriptsize Countries missing from both CEPII and GDP are listed only under CEPII. \\
+			\scriptsize Other partner countries exist with few positive values, but like the ones above, this is likely realistic. \\
+			\scriptsize Some reporting countries do not report all FDI income, as indicated in table \ref{panellength}}}  \\
+	\end{tabular}
+\end{minipage}
+
+%Table - list of tax havens
+\begin{minipage}{\linewidth}
+
+	\captionof{table}{List of tax havens}\label{haventable}
+	\scalebox{0.6}{
+	\begin{tabular}{ll|lllll|llll} 
+		\textbf{Country or territory} & \textbf{ISO} &  
+		\makecell{Tax Haven \\(D\&H 2006)}   & 
+		\makecell{Tax Haven \\(OECD 2000)} & 
+		\makecell{Tax Haven \\\autocite{nielsen_preventing_2016-1}} & 
+		\makecell{Tax Haven \\\autocite{gravelle_tax_2015}} & 
+		\makecell {OFC \\(IMF 2007)} & 
+		Share & 
+		\makecell{\textbf{Included?}\\(3 or more)} & Small & Large \\ \hline
+		Andorra & AND & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Anguilla & AIA & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Antigua and Barbuda & ATG & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Aruba & ABW & 0 & 1 & 1 & 1 & 1 & 4 of 5 & 1 & 1 & 0 \\ 
+		Bahamas & BHS & 1 & 1 & 0 & 1 & 1 & 4 of 5 & 1 & 1 & 0 \\ \hline
+		Bahrain & BHR & 1 & 1 & 0 & 1 & 1 & 4 of 5 & 1 & 0 & 1 \\ 
+		Barbados & BRB & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Belize & BLZ & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Bermuda & BMU & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Cayman Islands & CYM & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ \hline
+		Cook Islands & COK & 1 & 1 & 0 & 1 & 1 & 4 of 5 & 1 & 1 & 0 \\ 
+		Costa Rica & CRI & 0 & 0 & 1 & 1 & 1 & 3 of 5 & 1 & 0 & 1 \\ 
+		Cyprus & CYP & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 0 & 1 \\ 
+		Dominica & DMA & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Gibraltar & GIB & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ \hline
+		Grenada & GRD & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Guernsey & GGY & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Hong Kong & HKG & 1 & 0 & 1 & 1 & 1 & 4 of 5 & 1 & 0 & 1 \\ 
+		Ireland & IRL & 1 & 0 & 0 & 1 & 1 & 3 of 5 & 1 & 0 & 1 \\ 
+		Isle of Man & IMN & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ \hline
+		Jersey & JEY & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Jordan & JOR & 1 & 0 & 0 & 1 & 0 & 2 of 5 & 0 &  &  \\ 
+		Lebanon & LBN & 1 & 0 & 1 & 1 & 1 & 4 of 5 & 1 & 0 & 1 \\ 
+		Liberia & LBR & 1 & 1 & 1 & 1 & 0 & 4 of 5 & 1 & 0 & 1 \\ 
+		Liechtenstein & LIE & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ \hline
+		Luxembourg & LUX & 1 & 0 & 0 & 1 & 1 & 3 of 5 & 1 & 0 & 1 \\ 
+		Macao & MAC & 1 & 0 & 1 & 1 & 1 & 4 of 5 & 1 & 0 & 1 \\ 
+		Malaysia (Labuan) & MYS & 0 & 0 & 0 & 0 & 1 & 1 of 5 & 0 &  &  \\ 
+		Maldives & MDV & 1 & 1 & 1 & 1 & 0 & 4 of 5 & 1 & 1 & 0 \\ 
+		Malta & MLT & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 0 & 1 \\ \hline
+		Marshall Islands & MHL & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Mauritius & MUS & 0 & 1 & 1 & 1 & 1 & 4 of 5 & 1 & 0 & 1 \\ 
+		Monaco & MCO & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 &  &  \\ 
+		Montserrat & MSR & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Nauru & NRU & 0 & 1 & 0 & 1 & 1 & 3 of 5 & 1 & 1 & 0 \\ \hline
+		Netherlands Antilles & ANT & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Niue & NIU & 0 & 1 & 0 & 1 & 1 & 3 of 5 & 1 & 1 & 0 \\ 
+		Palau & PLW & 0 & 0 & 0 & 0 & 1 & 1 of 5 & 0 &  &  \\ 
+		Panama & PAN & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 0 & 1 \\ 
+		Saint Kitts and Nevis & KNA & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ \hline
+		Saint Lucia & LCA & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		\makecell[l]{Saint Vincent and\\the Grenadines} & VCT & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Samoa & WSM & 0 & 1 & 0 & 1 & 1 & 3 of 5 & 1 & 1 & 0 \\ 
+		San Marino & SMR & 0 & 1 & 0 & 1 & 0 & 2 of 5 & 0 &  &  \\ 
+		Seychelles & SYC & 0 & 1 & 0 & 1 & 1 & 3 of 5 & 1 & 1 & 0 \\ \hline
+		Singapore & SGP & 1 & 0 & 1 & 1 & 1 & 4 of 5 & 1 & 0 & 1 \\ 
+		Switzerland & CHE & 1 & 0 & 1 & 1 & 1 & 4 of 5 & 1 & 0 & 1 \\ 
+		Tonga & TON & 0 & 1 & 0 & 1 & 0 & 2 of 5 & 0 &  &  \\ 
+		\makecell[l]{Turks and\\Caicos Islands} & TCA & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Uruguay & URY & 0 & 0 & 1 & 0 & 0 & 1 of 5 & 0 &  &  \\ \hline
+		Vanuatu & VUT & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Virgin Islands, British & VGB & 1 & 1 & 1 & 1 & 1 & 5 of 5 & 1 & 1 & 0 \\ 
+		Virgin Islands, U.S. & VIR & 0 & 1 & 0 & 1 & 0 & 2 of 5 & 0 &  &  \\ 
+		&  &  &  &  &  &  &  &  &  &  \\ 
+		\multicolumn{11}{l}{\textbf{States created when the Netherlands Antilles dissolved in 2010.}}  \\ \hline
+		\makecell[l]{Bonaire, Saint\\Eustatius and Saba} & BES &  &  &  &  &  &  & 1 & 1 & 0 \\ 
+		Curacao & CUW &  &  &  &  &  &  & 1 & 1 & 0 \\ 
+		Sint Maarten & SXM &  &  &  &  &  &  & 1 & 1 & 0 \\ \hline 
+		\textbf{Totals (of 56):}		&  &  &  &  &  &  &  
+		& 49 & 34 & 14 \\ 
+				\multicolumn{11}{l}{
+					\makecell{\textit{Notes}: 
+		Countries are coded as havens in this study if they are included in three or more of the featured lists. \\
+		Included havens are coded as large if their average population from 2005-2015 exceeded 400 thousand. If not, they are coded as small. \\
+		Monaco is not featured by itself in the OECD dataset, and thus is not a part of the analysis.\\
+		\textit{Sources:} The lists from \textcite{dharmapala_which_2006} and \textcite{oecd_towards_2000} were taken from \textcite{dharmapala_what_2008}. \\ The IMF list of offshore financial centers (OFC) was provided by \textcite{zorome_concept_2007}. The rest were taken from the texts specified. }}  
+	\end{tabular}	
+	}
+\end{minipage}
+
+
+%Table - Panel length and coverage
+\begin{minipage}{\linewidth}
+	\captionof{table}{Panel length \& share of FDI income which is observed in partner countries.}\label{panellength}
+	\scalebox{0.6}{
+	\noindent	\begin{tabular}{llllllllllll}
+			\textbf{Country} & 2005 & 2006 & 2007 & 2008 & 2009 & 2010 & 2011 & 2012 & 2013 & 2014 & 2015 \\ 
+			\hline
+			Australia &  &  &  &  & 58 (NaN) & 55 (55) & 39 (39) & 60 (60) & 54 (54) & 73 (73) & 61 (61) \\ 
+			Austria &  &  &  &  &  &  &  & 89 (NaN) & 86 (100) & 50 (100) & 79 (100) \\ 
+			Belgium &  &  &  &  &  &  &  &  & 94 (100) & 94 (100) & 81 (100) \\ 
+			Canada &  &  &  &  &  &  & 46 (48) & 40 (40) & 49 (49) & 44 (44) & 52 (52) \\ 
+			Czech Republic &  &  &  &  &  &  &  &  & 89 (NaN) & 99 (NaN) & 100 (NaN) \\ \hline
+			Denmark &  &  &  &  &  &  &  &  & 98 (100) & 90 (100) & 97 (100) \\ 
+			Estonia &  &  &  &  &  & 102 (100) & 100 (NaN) & 100 (100) & 100 (100) & 101 (100) & 100 (100) \\ 
+			France & 86 (NaN) & 86 (NaN) & 87 (NaN) & 80 (NaN) & 85 (NaN) & 85 (NaN) & 82 (NaN) & 82 (NaN) & 81 (NaN) & 83 (NaN) & 79 (NaN) \\ 
+			Germany & 97 (100) & 98 (100) & 98 (100) & 96 (100) & 98 (100) & 98 (100) & 98 (100) & 100 (100) & 100 (100) & 100 (100) & 100 (100) \\ 
+			Greece &  &  &  &  &  &  &  &  & 100 (100) & 100 (100) & 100 (100) \\ \hline
+			Hungary &  &  &  &  &  &  & 100 (100) & 100 (100) & 94 (100) & 99 (100) & 99 (100) \\ 
+			Iceland &  &  &  &  &  &  &  &  & 100 (100) & 100 (100) & 100 (100) \\ 
+			Ireland &  &  &  &  &  &  &  & 43 (99) & 55 (101) & 69 (102) & 103 (140) \\ 
+			Italy &  &  &  &  &  &  &  &  & 100 (100) & 100 (100) & 100 (100) \\ 
+			Japan &  &  &  &  &  &  &  &  &  & 92 (100) & 96 (100) \\ \hline
+			Korea &  &  &  &  &  &  &  &  & 100 (100) & 101 (100) & -262 (100) \\ 
+			Latvia &  &  &  &  &  &  &  &  & 89 (82) & 102 (97) & 34 (NaN) \\ 
+			Netherlands &  &  &  &  &  &  &  &  & 100 (100) & 100 (100) & 100 (100) \\ 
+			New Zealand &  &  &  &  &  &  &  &  & 94 (100) & 98 (100) & 109 (99) \\ 
+			Norway &  &  &  &  &  &  &  &  & 100 (100) & 100 (100) & 100 (100) \\ \hline
+			Poland &  &  &  &  &  &  &  &  & 100 (100) & 100 (100) & 100 (100) \\ 
+			Slovak Republic &  &  &  &  &  &  &  &  &  & 100 (95) &  \\ 
+			Slovenia &  &  &  &  & 102 (100) & 100 (100) & 95 (100) & 101 (100) & 99 (100) & 100 (100) & 77 (100) \\ 
+			Spain &  &  &  &  &  &  &  &  & 39 (NaN) & 15 (NaN) & 15 (NaN) \\ 
+			Sweden &  &  &  &  &  &  &  &  & 100 (100) & 100 (100) & 100 (100) \\ \hline
+			United Kingdom &  &  &  &  &  &  &  &  & 94 (100) & 92 (100) & 99 (100) \\ 
+			United States &  &  &  &  &  &  & 99 (99) & 99 (100) & 99 (99) & 99 (99) & 98 (100) \\ 
+			\hline 
+			\multicolumn{12}{l}{\makecell{
+			\textit{Notes:} The table compares how much FDI income we observe on individual partner countries,  to what the reporting country claim to allocate. \\ 
+			The first number is the sum of observed FDI income in partner countries, as a share of FDI income reported on '\textit{W0: World}'. \\
+			The parentheses reports the share of '\textit{W0: World}' which is not '\textit{C\_W190: WORLD unallocated and confidential}' (i.e. $ (W0-\textit{\text{C\_W190}})/W0 $) \\
+			This share is negative if unallocated profits are negative, which implies income on partner countries must be above world profits. \\
+			NaN implies the country has either not reported '\textit{W0}', or more likely not reported '\textit{C\_W190}'.}} 
+			\end{tabular}
+	}	
+\end{minipage}
+\\\\
+
+%Table - CFC rules
+\begin{minipage}{\linewidth}
+	\captionof{table}{CFC Rules}\label{CFCrules}
+	\scalebox{0.6}{
+	\begin{tabular}{lllllllll}
+	\multicolumn{4}{l}{\textbf{Featured countries}}  & \qquad\qquad\qquad & \multicolumn{4}{l}{\textbf{Non-featured countries}}   \\ 
+	\textbf{Country} & \textbf{ISO} & \textbf{CFC-rule}s & Introduced &  & \textbf{Country} & \textbf{ISO} & \textbf{CFC-rules} & Introduced \\ \hline 
+	Australia & AUS & 1 & 1990 &  & Argentina & ARG & 1 & 1999 \\ 
+	Austria & AUT & 0 &  &  & Finland & FIN & 1 & 1995 \\ 
+	Belgium & BEL & 0 &  &  & Indonesia & IDN & 1 & 1995 \\ 
+	Canada & CAN & 1 & 1976 &  & Israel & ISR & 1 & 2002 \\ 
+	Czech Republic & CZE & 0 &  &  & Lithuania & LTU & 1 & 2002 \\ 
+	Denmark & DNK & 1 & 1995 &  & Mexico & MEX & 1 & 1997 \\ 
+	Estonia & EST & 0 &  &  & Portugal & PRT & 1 & 1995 \\ 
+	France & FRA & 1 & 1980 &  & South Africa & ZAF & 1 & 1997 \\ 
+	Germany & DEU & 1 & 1972 &  &  &  &  &  \\ 
+	Greece & GRC & 0 &  &  &  &  &  &  \\ 
+	Hungary & HUN & 0 &  &  &  &  &  &  \\ 
+	Iceland & ISL & 0 &  &  &  &  &  &  \\ 
+	Ireland & IRL & 0 &  &  &  &  &  &  \\ 
+	Italy & ITA & 1 & 2002 &  &  &  &  &  \\ 
+	Japan & JPN & 1 & 1978 &  &  &  &  &  \\ 
+	Korea, Republic of & KOR & 1 & 1997 &  &  &  &  &  \\ 
+	Latvia & LVA & 0 &  &  &  &  &  &  \\ 
+	Netherlands & NLD & 0 &  &  &  &  &  &  \\ 
+	New Zealand & NZL & 1 & 1988 &  &  &  &  &  \\ 
+	Norway & NOR & 1 & 1992 &  &  &  &  &  \\ 
+	Poland & POL & 0 &  &  &  &  &  &  \\ 
+	Slovakia & SVK & 0 &  &  &  &  &  &  \\ 
+	Slovenia & SVN & 0 &  &  &  &  &  &  \\ 
+	Spain & ESP & 1 & 1995 &  &  &  &  &  \\ 
+	Sweden & SWE & 1 & 2004 &  &  &  &  &  \\ 
+	United kingdom & GBR & 1 & 1984 &  &  &  &  &  \\ 
+	United States & USA & 1 & 1962 &  &  &  &  & \\\hline
+	\multicolumn{9}{l}{\makecell{
+		\textit{Notes:} All CFC rules were implemented prior to our panel's start in 2005. The table is from 2008, so later CFC rules are not covered. \\
+		\textit{Source:} Table 4 in \textcite[1072]{voget_relocation_2011}. }}
+	\end{tabular}
+	}
+\end{minipage}
+
+%Table - Descriptive statistics
+\begin{minipage}{\linewidth}
+	\captionof{table}{Descriptive statistics}\label{descriptive}
+\scalebox{0.8}{
+	\begin{tabular}{lccc|ccc} \hline
+		& (1) & (2) & (3) & (4) & (5) & (6) \\
+		 & N & mean & p50 & sd & p1 & p99 \\ \hline
+		\vspace{2pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+		\multicolumn{7}{l}{\textbf{Dependent variables}} \\\hline
+		FDI income - Total & 19,252.0 & 279.3 & 0.0 & 2,141.5 & -90.3 & 6,410.1 \\
+		FDI income - Dividends & 16,580.0 & 133.9 & 0.0 & 938.4 & 0.0 & 3,540.1 \\
+		FDI income - Reinv. earnings & 16,111.0 & 123.1 & 0.0 & 1,652.9 & -569.5 & 2,575.0 \\
+		FDI income - Debt income & 15,172.0 & 7.6 & 0.0 & 248.0 & -16.9 & 203.1 \\
+		\vspace{2pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+\multicolumn{7}{l}{\textbf{Dependent variables (transformations)}} \\\hline
+		ln FDI income - Total & 5,930.0 & 3.5 & 3.7 & 3.1 & -4.2 & 9.7 \\
+		IHS FDI income - Total & 19,252.0 & 1.2 & 0.0 & 2.8 & -5.2 & 9.5 \\
+		ln FDI income - Dividends & 3,689.0 & 3.4 & 3.4 & 3.0 & -3.4 & 9.1 \\
+		ln FDI income - Reinv. earnings & 3,461.0 & 3.5 & 3.6 & 2.9 & -3.8 & 9.6 \\
+		ln FDI income - Debt income & 2,816.0 & 1.0 & 1.2 & 2.9 & -6.2 & 7.6 \\
+		\vspace{2pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+\multicolumn{7}{l}{\textbf{Independent variables}} \\\hline
+		$ \text{CIT}_{it}$ $(\gamma_2)$ & 23,778.0 & 24.2 & 22.0 & 6.8 & 12.5 & 38.0 \\
+		$ \text{CIT}_{jt}$ & 13,922.0 & 21.6 & 24.2 & 10.8 & 0.0 & 40.7 \\
+		$ \text{DCIT}_{ijt}$ $(\gamma_2)$ & 13,922.0 & 2.7 & 1.1 & 12.8 & -22.5 & 34.9 \\
+		Haven $(\gamma_1)$ & 23,778.0 & 0.2 & 0.0 & 0.4 & 0.0 & 1.0 \\
+		Small\_Haven & 23,778.0 & 0.1 & 0.0 & 0.3 & 0.0 & 1.0 \\
+		Large\_Haven & 23,778.0 & 0.1 & 0.0 & 0.2 & 0.0 & 1.0 \\
+		$\text{CFC}_i$$ (\iota_1)$ & 23,778.0 & 0.5 & 1.0 & 0.5 & 0.0 & 1.0 \\
+		\vspace{2pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+\multicolumn{7}{l}{\textbf{Gravity variables}} \\\hline
+		GDP & 23,778.0 & 1,875,825.1 & 545,159.0 & 3,431,822.1 & 16,779.6 & 17,393,103.0 \\
+		GDP\_j & 21,996.0 & 353,148.3 & 20,265.6 & 1,451,567.6 & 49.2 & 6,100,620.4 \\
+		distw & 22,386.0 & 7,241.1 & 7,139.3 & 4,484.8 & 442.9 & 17,337.2 \\
+		\vspace{2pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+\multicolumn{7}{l}{\textbf{Gravity variables (transformations)}} \\\hline
+		$\ln\text{GDP}_{it}$ & 23,778.0 & 13.2 & 13.2 & 1.8 & 9.7 & 16.7 \\
+		$\ln\text{GDP}_{jt}$ & 21,996.0 & 10.0 & 9.9 & 2.6 & 3.9 & 15.6 \\
+		$\ln\text{Distance (w)}$ & 22,386.0 & 8.6 & 8.9 & 0.9 & 6.1 & 9.8 \\
+		\vspace{2pt} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\
+\multicolumn{7}{l}{\textbf{Gravity dummies $ D_{ij} $}} \\\hline
+		Common border & 22,386.0 & 0.0 & 0.0 & 0.1 & 0.0 & 1.0 \\
+		Common language & 22,386.0 & 0.1 & 0.0 & 0.3 & 0.0 & 1.0 \\
+		Colony & 22,386.0 & 0.0 & 0.0 & 0.2 & 0.0 & 1.0 \\
+		Common colony & 22,386.0 & 0.0 & 0.0 & 0.1 & 0.0 & 0.0 \\
+		& \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} & \begin{footnotesize}\end{footnotesize} \\ \hline
+	\end{tabular}
+}
+
+\end{minipage}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
